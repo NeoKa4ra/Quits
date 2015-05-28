@@ -61,7 +61,131 @@ public class IA {
 			
 		return CJ;
 	}
-
+	/************************************* IA easy *************************************/
+		public CoupJouable niveau1(Plateau plateau){
+			CoupJouable coupJouable = new CoupJouable();
+			boolean res = false;
+			CoupJouable temp = new CoupJouable();
+			Plateau plateau2;
+			Point as = new Point(-1,-1);
+			Point s = new Point(-1,-1);
+			CoupJouable[] coupJouables = new CoupJouable[3];
+			int cmpt=0;
+			Point pDep = new Point(-1,-1);
+			Point pArr = new Point(-1,-1);
+			if (plateau.jBlanc){
+			s = plateau.sortieblanche();
+			if(plateau.echiquier[s.x][s.y].estLibre()){
+			if(plateau.echiquier[s.x-1][s.y].estBlanc()){
+			as.x = s.x-1;
+			as.y = s.y;
+			coupJouable.joueRDroite(s.y);
+			res = true;
+			}
+			else if(plateau.echiquier[s.x][s.y-1].estBlanc()){
+			as.x = s.x;
+			as.y = s.y-1;
+			coupJouable.joueCHaut(s.x);
+			res = true;
+			}
+			else if(plateau.echiquier[s.x-1][s.y-1].estBlanc()){
+			as.x = s.x-1;
+			as.y = s.y-1;
+			coupJouable.joueCase(as,s);
+			res = true;
+			}
+			}
+			else{
+			if(!plateau.echiquier[s.x][s.y].estLibre()){
+			for (int i=0;i<largeurPt;i++) {
+			for (int j=0;j<longueurPt;j++) {
+			for(int k=0; k<7; k++){
+			// Choisit un coup
+			if(k<3){ // test des points
+			pArr = plateau.pointLibre(pDep,k);
+			coupJouable.joueCase(pDep,pArr);
+			}
+			else if(k<5) // test des colonnes
+			coupJouable.joueCBas(i);
+			else	// test des rangees
+			coupJouable.joueRGauche(j);;
+			// Si le coup est valide
+			if(coupJouable.estValide(plateau)){
+			if(k<3)
+			coupJouables[cmpt].joueCase(pDep,pArr);
+			else if(k<5)
+			coupJouables[cmpt].joueCBas(i);
+			else
+			coupJouables[cmpt].joueRGauche(j);
+			cmpt++;
+			}
+			Random r = new Random();
+			coupJouable= coupJouables[r.nextInt(cmpt-1)];
+			}
+			}
+			}
+			}
+			}
+			}
+			else if (!plateau.jBlanc){
+			s = plateau.sortiemarron();
+			if(plateau.echiquier[s.x][s.y].estLibre()){
+			if(plateau.echiquier[s.x][s.y+1].estMarron()){
+			as.x = s.x;
+			as.y = s.y+1;
+			coupJouable.joueCBas(s.x);
+			res = true;
+			}
+			else if(plateau.echiquier[s.x+1][s.y].estMarron()){
+			as.x = s.x+1;
+			as.y = s.y;
+			coupJouable.joueRGauche(s.y);
+			res = true;
+			}
+			else if(plateau.echiquier[s.x+1][s.y+1].estMarron()){
+			as.x = s.x+1;
+			as.y = s.y+1;
+			coupJouable.joueCase(as,s);
+			res = true;
+			}
+			}
+			else{
+			if(!plateau.echiquier[s.x][s.y].estLibre()){
+			for (int i=0;i<largeurPt;i++) {
+			for (int j=0;j<longueurPt;j++) {
+			for(int k=0; k<7; k++){
+			// Choisit un coup
+			if(k<3){ // test des points
+			pArr = plateau.pointLibre(pDep,k);
+			coupJouable.joueCase(pDep,pArr);
+			}
+			else if(k<5) // test des colonnes
+			coupJouable.joueCHaut(i);
+			else	// test des rangees
+			coupJouable.joueRDroite(j);;
+			// Si le coup est valide
+			if(coupJouable.estValide(plateau)){
+			if(k<3)
+			coupJouables[cmpt].joueCase(pDep,pArr);
+			else if(k<5)
+			coupJouables[cmpt].joueCHaut(i);
+			else
+			coupJouables[cmpt].joueRDroite(j);
+			cmpt++;
+			}
+			Random r = new Random();
+			coupJouable= coupJouables[r.nextInt(cmpt-1)];
+			}
+			}
+			}
+			}
+			}
+			}
+			if(res == false){
+			temp = niveau0(plateau);
+			}
+			return coupJouable;
+}
 	/************************************* IA Normal *************************************/
 	public CoupJouable normal(Plateau pT){
 		int indiceInitial = pT.calculIndicePoid();

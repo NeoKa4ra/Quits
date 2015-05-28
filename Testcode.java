@@ -21,13 +21,13 @@ public class Testcode {
 		int nbParties = 10;
 		while(ia1 != nbParties && ia2 != nbParties && plateau.position<2000){
 			System.out.println("ia2 :");
-			CJ = bot.normal(plateau);
+			CJ = bot.niveau0(plateau);
 			plateau.Joue(CJ,false);
 			plateau.afficher();
 			
 			
 			System.out.println("ia1 :");
-			CJ = bot.hard(plateau,3);
+			CJ = bot.niveau1(plateau);
 			plateau.Joue(CJ,false);
 			plateau.afficher();
 			
