@@ -619,6 +619,84 @@ public class Plateau {
 		return res;
 		
 	}
+	// Retourne le point aux coordonnees ciblant la direction dir : 0 = Gauche, 1 = Droite, 2 = Biais(diagonale)
+	// p = position de la bille
+	// Si le point vaut (-1,-1), c'est qu'il est inaccessible ou occupe ou erreur
+	public Point pointLibre(Point p, int dir){
+		Point pRes = new Point(-1,-1);
+		Point s = new Point(-1,-1);
+		// Coordonnees a ajouter
+		int x = 0, y = 0;
+		if(dir == 0)
+			y = 1;
+		else if(dir == 1)
+			x = 1;
+		else if(dir == 2){
+			x = 1;
+			y = 1;
+		}
+		else
+			System.out.println("dir non valide (0 : Gauche, 1 : Droite, 2 : Biais(Diagonale)");
+		
+		// Si la bille donnee est blanche
+		if(echiquier[p.x][p.y].estBlanc()){
+			s = sortieblanche();
+			if(s.x >= p.x && s.y >= p.y && p.x+x <= 4 && p.y+y <= 4 && echiquier[p.x+x][p.y+y].estLibre())
+				pRes = new Point (p.x+x, p.y+y);
+			else if (s.x <= p.x && s.y <= p.y && p.x-x >= 0 && p.y-y >= 0 && echiquier[p.x-x][p.y-y].estLibre())
+				pRes = new Point (p.x-x, p.y-y);
+		}
+		else{
+			s = sortiemarron();
+			if(s.x >= p.x && s.y >= p.y && p.x+x <= 4 && p.y+y <= 4 && echiquier[p.x+x][p.y+y].estLibre())
+				pRes = new Point (p.x+x, p.y+y);
+			else if (s.x <= p.x && s.y <= p.y && p.x-x >= 0 && p.y-y >= 0 && echiquier[p.x-x][p.y-y].estLibre())
+				pRes = new Point (p.x-x, p.y-y);
+		}
+		return pRes;
+	}
+	
+	public int poidBlanc()
+    {
+        int poidB=0, nbB=0;
+        for (int i=0;i<5;i++) {
+            for (int j=0;j<5;j++) {
+                if(echiquier[i][j].estBlanc())
+                {
+                poidB = poidB + (i+j);
+                nbB++;
+                }
+        }}
+                poidB = poidB + ((5-nbB)*8);
+                return poidB;
+    }
+     
+    public int poidMarron()
+    {
+        int poidM=0, nbM=0;
+        for (int i=0;i<5;i++) {
+            for (int j=0;j<5;j++) {
+                if(echiquier[i][j].estMarron())
+                {
+                poidM = poidM + (8-i-j);
+                nbM++;
+                }
+        }}
+                poidM = poidM + ((5-nbM)*8);
+                return poidM;
+    }
+     
+    public int calculIndicePoid()
+    {
+        if(jBlancjoue())
+        {
+            return poidMarron()-poidBlanc();
+        }
+        else
+        {
+            return poidBlanc()-poidMarron();
+        }         
+    }
 }
 	
 	

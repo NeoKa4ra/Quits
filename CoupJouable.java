@@ -204,4 +204,19 @@ public class CoupJouable {
 		return res;
 	}
 	
+	// 0 = colonne haut, 1 = colonne bas, 2 = rangee droite, 3 = rangee gauche
+	public void coup(int cp, int coordonnee){
+		if(cp == 0)
+			joueCHaut(coordonnee);
+		else if(cp == 1)
+			joueCBas(coordonnee);
+		else if(cp == 2)
+			joueRDroite(coordonnee);
+		else if(cp == 3)
+			joueRGauche(coordonnee);
+		else
+			System.out.println("Mauvais cp lors de l'appel a coup");
+			
+	}
+	
 }
