@@ -14,7 +14,7 @@ public class IA {
 	
 	/************************************* IA 0 *************************************/
 	
-	public CoupJouable niveau0(Plateau pT, CoupJouable coupPrecAdv){
+	public CoupJouable niveau0(Plateau pT){
 		CoupJouable CJ = new CoupJouable();
 		CoupJouable [] coupJouables = new CoupJouable[nbBillesMax*nbCoupsPossibleMax];
 		for (int k = 0; k < (nbBillesMax*nbCoupsPossibleMax);k++)
@@ -37,7 +37,7 @@ public class IA {
 						else			// test des rangees
 							CJ.coup(k-3, j);
 						// Si le coup est valide
-						if(CJ.estValide(pT,coupPrecAdv)){
+						if(CJ.estValide(pT)){
 							if(k<3)
 								coupJouables[cmpt].joueCase(pDep,pArr);
 							else if(k<5)
@@ -62,8 +62,8 @@ public class IA {
 		return CJ;
 	}
 
-	/************************************* IA DE MERDE *************************************/
-	public CoupJouable normal(Plateau pT, CoupJouable coupPrecAdv){
+	/************************************* IA Normal *************************************/
+	public CoupJouable normal(Plateau pT){
 		int indiceInitial = pT.calculIndicePoid();
 		int indiceMax = -100;
 
@@ -86,7 +86,7 @@ public class IA {
 					pDep = new Point(i,j);
 					pArr = pT.pointLibre(pDep,0);
 					CJ.joueCase(pDep,pArr);
-					if(CJ.estValide(pT,coupPrecAdv)){
+					if(CJ.estValide(pT)){
 						pTemp.Joue(CJ,false);
 						if (pTemp.calculIndicePoid()>indiceMax){ 
 							cmpt = 0;
@@ -102,7 +102,7 @@ public class IA {
 					}
 					pArr = pT.pointLibre(pDep,1);
 					CJ.joueCase(pDep,pArr);
-					if(CJ.estValide(pT,coupPrecAdv)){
+					if(CJ.estValide(pT)){
 							pTemp.Joue(CJ,false);
 						if (pTemp.calculIndicePoid()>indiceMax){ 
 							cmpt = 0;
@@ -118,7 +118,7 @@ public class IA {
 					}
 					pArr = pT.pointLibre(pDep,2);
 					CJ.joueCase(pDep,pArr);
-					if(CJ.estValide(pT,coupPrecAdv)){
+					if(CJ.estValide(pT)){
 						pTemp.Joue(CJ,false);
 						if (pTemp.calculIndicePoid()>indiceMax){ 
 							cmpt = 0;
@@ -133,7 +133,7 @@ public class IA {
 						pTemp.copie(pT);
 					}
 					CJ.joueCHaut(i);
-					if(CJ.estValide(pT,coupPrecAdv)){
+					if(CJ.estValide(pT)){
 						pTemp.Joue(CJ,false);
 						if (pTemp.calculIndicePoid()>indiceMax){ 
 							cmpt = 0;
@@ -148,7 +148,7 @@ public class IA {
 						pTemp.copie(pT);
 					}
 					CJ.joueCBas(i);
-					if(CJ.estValide(pT,coupPrecAdv)){
+					if(CJ.estValide(pT)){
 						pTemp.Joue(CJ,false);
 						if (pTemp.calculIndicePoid()>indiceMax){ 
 							cmpt = 0;
@@ -163,7 +163,7 @@ public class IA {
 						pTemp.copie(pT);
 					}
 					CJ.joueRDroite(j);
-					if(CJ.estValide(pT,coupPrecAdv)){
+					if(CJ.estValide(pT)){
 						pTemp.Joue(CJ,false);
 						if (pTemp.calculIndicePoid()>indiceMax){ 
 							cmpt = 0;
@@ -178,7 +178,7 @@ public class IA {
 						pTemp.copie(pT);
 					}
 					CJ.joueRGauche(j);
-					if(CJ.estValide(pT,coupPrecAdv)){
+					if(CJ.estValide(pT)){
 						pTemp.Joue(CJ,false);
 						if (pTemp.calculIndicePoid()>indiceMax){ 
 							cmpt = 0;
@@ -204,7 +204,7 @@ public class IA {
 	}
 	/************************************* IA Difficile *************************************/
 	
-	public CoupJouable hard(Plateau pT, int profondeur, CoupJouable coupPrecAdv){
+	public CoupJouable hard(Plateau pT, int profondeur){
 		this.IActuel = true;
 		CoupJouable CJ=new CoupJouable();
 		CoupJouable CJmax=new CoupJouable();
@@ -229,9 +229,9 @@ public class IA {
 						else			// test des rangees
 							CJ.coup(k-3, j);
 						// Si le coup est valide
-						if(CJ.estValide(pT,coupPrecAdv)){
+						if(CJ.estValide(pT)){
 							pTemp.Joue(CJ,false);
-							tmp = Max(pTemp, profondeur-1,coupPrecAdv);
+							tmp = Max(pTemp, profondeur-1);
 							
 							
 							if(k<3){		// test des points
@@ -256,10 +256,10 @@ public class IA {
 		return CJmax;
 	}
 	
-	private int Max(Plateau pT, int profondeur, CoupJouable coupPrecAdv){
+	private int Max(Plateau pT, int profondeur){
 		CoupJouable CJ = new CoupJouable();
 		if(profondeur == 0 || partieFinie(pT))
-			return eval(pT,true);
+			return eval(pT);
 		int max, tmp;
 		max = -100000;
 
@@ -283,9 +283,9 @@ public class IA {
 						else			// test des rangees
 							CJ.coup(k-3, j);
 						// Si le coup est valide
-						if(CJ.estValide(pT,coupPrecAdv)){
+						if(CJ.estValide(pT)){
 							pTemp.Joue(CJ,false);
-							tmp = Min(pTemp, profondeur-1,coupPrecAdv);
+							tmp = Min(pTemp, profondeur-1);
 							if(tmp > max)
 								max = tmp;
 							pTemp.copie(pT);
@@ -297,10 +297,10 @@ public class IA {
 		return max;
 	}
 	
-	private int Min(Plateau pT, int profondeur, CoupJouable coupPrecAdv){
+	private int Min(Plateau pT, int profondeur){
 		CoupJouable CJ = new CoupJouable();
 		if(profondeur == 0 || partieFinie(pT))
-			return eval(pT,false);
+			return eval(pT);
 		int min, tmp;
 		min = 100000;
 
@@ -324,9 +324,9 @@ public class IA {
 						else			// test des rangees
 							CJ.coup(k-3, j);
 						// Si le coup est valide
-						if(CJ.estValide(pT,coupPrecAdv)){
+						if(CJ.estValide(pT)){
 							pTemp.Joue(CJ,false);
-							tmp = Max(pTemp, profondeur-1,coupPrecAdv);
+							tmp = Max(pTemp, profondeur-1);
 							if(tmp < min)
 								min = tmp;
 							pTemp.copie(pT);
@@ -337,7 +337,7 @@ public class IA {
 		}
 		return min;
 	}
-	private int eval(Plateau pT, boolean IActuel){
+	private int eval(Plateau pT){
 		int res = 0;
 		//System.out.println(" Poids blanc : " + poidsB(pT) + " Poids Marron : " + poidsM(pT));
 		if(pT.jBlancjoue())
