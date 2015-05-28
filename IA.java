@@ -12,7 +12,7 @@ public class IA {
 	
 	}
 	
-	/************************************* IA 0 *************************************/
+	/************************************* IA TESTE *************************************/
 	
 	public CoupJouable niveau0(Plateau pT, CoupJouable coupPrecAdv){
 		CoupJouable CJ = new CoupJouable();
