@@ -157,7 +157,34 @@ public class Testcode {
 		plateau.afficher();*/
 		
 
-		
+		int ia1 = 0 , ia2 = 0;
+		IA bot = new IA();
+		CoupJouable CJ=new CoupJouable();
+		while(ia1 != 100 && ia2 != 100){
+			System.out.println("ia2 :");
+			CJ = bot.normal(plateau, coupAdv);
+			plateau.Joue(CJ,false);
+			plateau.afficher();
+			coupAdv.copie(CJ);
+			
+			
+			System.out.println("ia1 :");
+			CJ = bot.hard(plateau,3, coupAdv);
+			plateau.Joue(CJ,false);
+			plateau.afficher();
+			coupAdv.copie(CJ);
+			
+			if (plateau.nbMarronSortis() >= 3){
+				ia2++;
+				plateau.init_2_joueurs();
+			}
+				
+			if (plateau.nbBlancSortis() >= 3){
+				ia1++;
+				plateau.init_2_joueurs();
+			}
+		}
+		System.out.println("score ia1 : " + ia1 + " *** score ia2 : " + ia2);
 
 		
 
