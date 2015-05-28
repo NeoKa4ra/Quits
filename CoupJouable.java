@@ -174,11 +174,11 @@ public class CoupJouable {
 	}
 	
 	//renvoit si le coup jouer est valide
-	public boolean estValide(Plateau plateau,CoupJouable adersaire){
+	public boolean estValide(Plateau plateau){
 		boolean res = false;
 		boolean jBlanc=plateau.jBlancjoue();
 		//on verifie que le coup joue ne correspond pas au coup inverse de l'adersaire
-		if(!estCoupInverse(adersaire)){
+		if(!estCoupInverse(plateau.adv())){
 			// on joue une rengee ou colonne
 			if(estColonne() && ( (sens && plateau.estJouableCHaut(colonne,jBlanc)) || (!sens && plateau.estJouableCBas(colonne,jBlanc))) )
 				res = colonne>= 0 && colonne<5;
@@ -187,11 +187,13 @@ public class CoupJouable {
 			else{
 			// on joue une case
 				//on verifie qu'elle est bien dans l'�chiquier
+				//if(pDep != null && pArr != null){
 				if(pDep.x>= 0 && pDep.y<5 && pArr.x>= 0 && pArr.y<5 && CaseJouableParJ(plateau))
 					// on verifie que la case d'arriv�e est libre et que la case de depart est occupee
 					if(plateau.echiquier[pArr.x][pArr.y].estLibre() && plateau.echiquier[pDep.x][pDep.y].estOcc())
 						res = estDepPossible(plateau);
 			}
+			//}
 		}
 		return res;		 
 	}
@@ -200,21 +202,6 @@ public class CoupJouable {
 		boolean jBlanc=plateau.jBlancjoue();
 		res= (jBlanc && plateau.echiquier[pDep.x][pDep.y].estBlanc()) || (!jBlanc && plateau.echiquier[pDep.x][pDep.y].estMarron());
 		return res;
-	}
-	
-	// 0 = colonne haut, 1 = colonne bas, 2 = rangee droite, 3 = rangee gauche
-	public void coup(int cp, int coordonnee){
-		if(cp == 0)
-			joueCHaut(coordonnee);
-		else if(cp == 1)
-			joueCBas(coordonnee);
-		else if(cp == 2)
-			joueRDroite(coordonnee);
-		else if(cp == 3)
-			joueRGauche(coordonnee);
-		else
-			System.out.println("Mauvais cp lors de l'appel a coup");
-			
 	}
 	
 }

@@ -15,7 +15,7 @@ public class Moteur {
 	
 	}
 	
-	public void sauvegarde(String nom,Plateau plateau,Sauvegarde sauvegarde) throws IOException {
+	public static void sauvegarde(String nom,Plateau plateau,Sauvegarde sauvegarde) throws IOException {
 		sauvegarde.sauv_Fich(nom);
 		File f=new File(nom);
 		int i,j;
@@ -27,7 +27,12 @@ public class Moteur {
 				else if(plateau.echiquier[i][j].estMarron())
 					fichier.write(2);	
 				else
-					fichier.write(1);						
+					fichier.write(1);
+				
+				if(plateau.echiquier[i][j].num_bille!=-1)
+					fichier.write(plateau.echiquier[i][j].num_bille);
+				else
+					fichier.write(5);
 			}
 		}
 		
@@ -44,10 +49,12 @@ public class Moteur {
 		L=plateau.Historique();
 		Lcopie= (LinkedList<CoupJouable>) L.clone();
 		int position=plateau.position();
-		CoupJouable coupjouable;
+		CoupJouable coupjouable=new CoupJouable();
 		
-		for(i=0;i<position;i++){
-			coupjouable=(CoupJouable) L.get(i);
+		coupjouable.copie(plateau.adv());
+		i=-1;
+		while(i<position){
+
 			if(coupjouable.Colonne()==-1)
 				fichier.write(5);	
 			else
@@ -92,6 +99,9 @@ public class Moteur {
 				fichier.write(1);	
 			else
 				fichier.write(0);
+			i++;
+			if(i!=position)
+				coupjouable=(CoupJouable) L.get(i);
 	
 		}
 		
@@ -99,13 +109,13 @@ public class Moteur {
 		fichier.close();
 	}
 	
-	public void charger(String nom,Plateau plateau) throws IOException{
+	public static void charger(String nom,Plateau plateau) throws IOException{
 		File f=new File(nom);
 		plateau.lecture(f);
 		
 	}
 	
-	public void supp_sauv(String nom,Sauvegarde sauvegarde){
+	public static void supp_sauv(String nom,Sauvegarde sauvegarde) throws IOException{
 		File f=new File(nom);
 		sauvegarde.supp_Fiche(nom);
 		f.delete();
@@ -113,12 +123,12 @@ public class Moteur {
 	
 	
 	
-	public boolean pointJouable(Point dep, Point arr, Plateau plateau){
+	public static boolean pointJouable(Point dep, Point arr, Plateau plateau){
 		CoupJouable adv=new CoupJouable();
 		boolean res=false;
 		CoupJouable coupjouable = new CoupJouable();
 		coupjouable.joueCase(dep,arr);
-		if(coupjouable.estValide(plateau, adv)){
+		if(coupjouable.estValide(plateau)){
 			plateau.Joue(coupjouable,false);
 			res = true;
 		}
@@ -126,12 +136,12 @@ public class Moteur {
 		return res;		
 	}
 	
-	public boolean rangeeJouableD(int rangee, Plateau plateau,CoupJouable adv){
+	public static boolean rangeeJouableD(int rangee, Plateau plateau){
 		
 		boolean res = false;
 		CoupJouable coupjouable = new CoupJouable();
 		coupjouable.joueRDroite(rangee);
-		if(coupjouable.estValide(plateau, adv)){
+		if(coupjouable.estValide(plateau)){
 			plateau.Joue(coupjouable,false);
 			res = true;
 		}
@@ -140,12 +150,12 @@ public class Moteur {
 	}
 	
 	
-	public boolean rangeeJouableG(int rangee, Plateau plateau,CoupJouable adv){
+	public static boolean rangeeJouableG(int rangee, Plateau plateau){
 		
 		boolean res = false;
 		CoupJouable coupjouable = new CoupJouable();
 		coupjouable.joueRGauche(rangee);
-		if(coupjouable.estValide(plateau, adv)){
+		if(coupjouable.estValide(plateau)){
 			plateau.Joue(coupjouable,false);
 			res = true;
 		}
@@ -154,12 +164,12 @@ public class Moteur {
 	}
 	
 	
-	public boolean colonneJouableB(int colonne, Plateau plateau,CoupJouable adv){
+	public static boolean colonneJouableB(int colonne, Plateau plateau){
 		
 		boolean res = false;
 		CoupJouable coupjouable= new CoupJouable();
 		coupjouable.joueCBas(colonne);
-		if(coupjouable.estValide(plateau, adv)){
+		if(coupjouable.estValide(plateau)){
 			plateau.Joue(coupjouable,false);
 			res = true;
 		}
@@ -167,12 +177,12 @@ public class Moteur {
 		return res;	
 	}
 	
-	public boolean colonneJouableH(int colonne, Plateau plateau,CoupJouable adv){
+	public static boolean colonneJouableH(int colonne, Plateau plateau){
 		
 		boolean res = false;
 		CoupJouable coupjouable= new CoupJouable();
 		coupjouable.joueCHaut(colonne);
-		if(coupjouable.estValide(plateau, adv)){
+		if(coupjouable.estValide(plateau)){
 			plateau.Joue(coupjouable,false);
 			res = true;
 		}
@@ -180,18 +190,18 @@ public class Moteur {
 		return res;	
 	}
 	
-	public void annuler(Plateau plateau){
+	public static void annuler(Plateau plateau){
 		CoupJouable coupjouable=new CoupJouable();
 		int position=plateau.position();
 		LinkedList<CoupJouable> L=(LinkedList<CoupJouable>) plateau.Historique().clone();
 		if(position!=0){
-			coupjouable=L.get(position-1);
+			coupjouable.copie(L.get(position-1));
 			plateau.Annuler(coupjouable);
 		}	
 		
 	}
 	
-	public void refaire(Plateau plateau){
+	public static void refaire(Plateau plateau){
 		CoupJouable coupjouable=new CoupJouable();
 		int position=plateau.position();
 
@@ -203,7 +213,7 @@ public class Moteur {
 		
 	}
 	
-	public void inverser(Plateau plateau){
+	public static void inverser(Plateau plateau){
 		plateau.inverser();
 		
 	}

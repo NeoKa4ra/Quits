@@ -10,6 +10,9 @@ import java.util.LinkedList;
 public class Plateau {
 	Case [][] echiquier;
 	
+	// le coup qu'a joué l'adversaire
+	CoupJouable adv;
+	
 	int nbBlancSortis,nbMarronSortis;
 	
 	
@@ -19,6 +22,10 @@ public class Plateau {
 	LinkedList<CoupJouable> historique;
 	
 	int position;
+	
+	public CoupJouable adv(){
+		return adv;
+	}
 	
 	public void inc_position(){
 		position++;
@@ -34,9 +41,13 @@ public class Plateau {
 	
 	public void inverser_case(int i1,int j1,int i2,int j2){
 		
-		Case c=new Case(0);
+		Case c=new Case(0,0);
 		
-		if(echiquier[i1][j1].Contenu()==0)
+		c.change(echiquier[i1][j1]);
+		echiquier[i1][j1].change(echiquier[i2][j2]);
+		echiquier[i2][j2].change(echiquier[i1][j1]);
+		
+	/*	if(echiquier[i1][j1].Contenu()==0)
 			c=new Case(0);
 		else if(echiquier[i1][j1].Contenu()==1)
 			c=new Case(1);
@@ -60,7 +71,7 @@ public class Plateau {
 			echiquier[i2][j2]=new Case(1);
 		
 		else
-			echiquier[i2][j2]=new Case(2);
+			echiquier[i2][j2]=new Case(2); */
 		
 		
 	}
@@ -101,11 +112,11 @@ public class Plateau {
 		for(i=0;i<5;i++){
 			for(j=0;j<5;j++){
 				if(plateau.echiquier[i][j].Contenu()==0)
-					echiquier[i][j]=new Case(0);
+					echiquier[i][j]=new Case(0,-1);
 				else if(plateau.echiquier[i][j].Contenu()==1)
-					echiquier[i][j]=new Case(1);
+					echiquier[i][j]=new Case(1,-1);
 				else
-					echiquier[i][j]=new Case(2);
+					echiquier[i][j]=new Case(2,-1);
 			}
 		}
 		
@@ -116,6 +127,7 @@ public class Plateau {
 		// La matrice est 5*5
 		echiquier=new Case[5][5];
 		jBlanc=false;
+		adv=new CoupJouable();
 	}
 	
 	// retour de quel joueur joue
@@ -135,7 +147,7 @@ public class Plateau {
 		// initialisation des cases � libre
 		for(i=0;i<5;i++){
 			for(j=0;j<5;j++){
-					echiquier[i][j]=new Case(0);					
+					echiquier[i][j]=new Case(0,-1);					
 			}
 		
 			
@@ -148,18 +160,19 @@ public class Plateau {
 		nbMarronSortis=0;
 
 		// mise en place des billes blanches
-		echiquier[0][1].blanchit();
-		echiquier[0][2].blanchit();
-		echiquier[1][0].blanchit();
-		echiquier[1][1].blanchit();
-		echiquier[2][0].blanchit();
+		echiquier[0][1]=new Case(1,2);
+		echiquier[0][2]=new Case(1,3);
+		echiquier[1][0]=new Case(1,0);
+		echiquier[1][1]=new Case(1,4);
+		echiquier[2][0]=new Case(1,1);
 		
 		// mise en place des billes marrons
-		echiquier[2][4].noircit();
-		echiquier[3][4].noircit();
-		echiquier[3][3].noircit();
-		echiquier[4][3].noircit();
-		echiquier[4][2].noircit();
+		echiquier[2][4]=new Case(2,6);
+		echiquier[3][4]=new Case(2,9);
+		echiquier[3][3]=new Case(2,7);
+		echiquier[4][3]=new Case(2,8);
+		echiquier[4][2]=new Case(2,5);
+		
 	
 	}
 	// Getters
@@ -176,11 +189,13 @@ public class Plateau {
 		for(j=4;j>=0;j--){
 			for(i=0;i<5;i++){
 				if(echiquier[i][j].estLibre())
-					System.out.printf("0"+" ");
+					System.out.printf("("+ 0+",");
 				else if(echiquier[i][j].estMarron())
-					System.out.printf("2"+" ");	
+					System.out.printf("("+"2"+",");	
 				else
-					System.out.printf("1"+" ");						
+					System.out.printf("("+1+",");
+				
+				System.out.printf(echiquier[i][j].num_bille+ ") ");		
 			}
 			System.out.printf("\n");				
 		}
@@ -198,10 +213,12 @@ public class Plateau {
 		
 		LinkedList<CoupJouable> Lcopie;
 		Lcopie= (LinkedList<CoupJouable>) historique.clone();
-		CoupJouable coupjouable;
-		/*
-		for(i=0;i<position;i++){
-			coupjouable=(CoupJouable) Lcopie.get(i);
+		CoupJouable coupjouable=new CoupJouable();
+		coupjouable.copie(adv);
+		
+		i=-1;
+		while(i<position){
+
 			System.out.print(coupjouable.Colonne()+" ");
 			System.out.print(coupjouable.Rangee()+" ");
 			Point parr=coupjouable.PointArr();
@@ -228,7 +245,10 @@ public class Plateau {
 				System.out.print("0" +" ");	
 			
 			System.out.printf("\n");
-		}*/
+			i++;
+			if(i!=position)
+				coupjouable=(CoupJouable) Lcopie.get(i);
+		}
 		
 	}
 	
@@ -257,8 +277,8 @@ public class Plateau {
 		else if(coupjouable.estColonne()){
 			int c=coupjouable.Colonne();
 			int i;
-			Case anciennecase=new Case(0);
-			Case nouvellecase=new Case(0);
+			Case anciennecase=new Case(0,0);
+			Case nouvellecase=new Case(0,0);
 			// bas haut
 			if(coupjouable.Sens()){
 				nouvellecase.change(echiquier[c][0]);			
@@ -285,8 +305,8 @@ public class Plateau {
 		else{
 				int r=coupjouable.Rangee();
 				int i;
-				Case anciennecase=new Case(0);
-				Case nouvellecase=new Case(0);
+				Case anciennecase=new Case(0,0);
+				Case nouvellecase=new Case(0,0);
 				// gauche droite
 				if(coupjouable.Sens()){
 					nouvellecase.change(echiquier[0][r]);			
@@ -326,7 +346,9 @@ public class Plateau {
 		changeJoueur();
 		if(!refaire)
 			ajoutHistorique(coupjouable);
+		
 		inc_position();
+		adv.copie(coupjouable);
 	}
 	
 	public boolean VerifPionC(int colonne,boolean jblanc){
@@ -395,11 +417,14 @@ public class Plateau {
 	public void lecture(File f) throws IOException{
 		int i,j;
 		FileReader fichier = new FileReader(f);	
-		int contenu;
+		int contenu,num_bille;
 		for(j=4;j>=0;j--){
 			for(i=0;i<5;i++){
 				contenu = (int) fichier.read();
-				Case c=new Case(contenu);
+				num_bille = (int) fichier.read();
+				if(num_bille==5)
+					num_bille=-1;
+				Case c=new Case(contenu,num_bille);
 				echiquier[i][j]=c;
 			}
 		}
@@ -419,6 +444,7 @@ public class Plateau {
 		Point p1,p2;
 		int colonne=(int) fichier.read();
 		position=0;
+		boolean estadv=true;
 
 		while(colonne!=-1){
 			CoupJouable coupjouable=new CoupJouable();
@@ -477,12 +503,16 @@ public class Plateau {
 			
 				
 			
-
-			historique.add(position,coupjouable);
-			inc_position();
+			if(estadv)
+				adv.copie(coupjouable);
+			else{
+				historique.add(position,coupjouable);
+				inc_position();
+			}	
 			
 			
 			colonne=(int) fichier.read();
+			estadv=false;
 				
 		}
 		
@@ -519,8 +549,8 @@ public class Plateau {
 				else if(coupjouable.estColonne()){
 					int c=coupjouable.Colonne();
 					int i;
-					Case anciennecase=new Case(0);
-					Case nouvellecase=new Case(0);
+					Case anciennecase=new Case(0,0);
+					Case nouvellecase=new Case(0,0);
 					// inversement du bas haut
 					if(!coupjouable.Sens()){
 						nouvellecase.change(echiquier[c][0]);			
@@ -547,8 +577,8 @@ public class Plateau {
 				else{
 						int r=coupjouable.Rangee();
 						int i;
-						Case anciennecase=new Case(0);
-						Case nouvellecase=new Case(0);
+						Case anciennecase=new Case(0,0);
+						Case nouvellecase=new Case(0,0);
 						// inversement gauche droite
 						if(!coupjouable.Sens()){
 							nouvellecase.change(echiquier[0][r]);			
@@ -571,12 +601,16 @@ public class Plateau {
 						}
 						
 				}
+				if(position!=0)
+					adv.copie(historique.get(position-1));
+				else
+					adv=new CoupJouable();
 
 			}
 	
-	public boolean estCoupGagnant(CoupJouable coupjouable,CoupJouable anciencoup){
+	public boolean estCoupgagnant(CoupJouable coupjouable,CoupJouable anciencoup){
 		boolean res=false;
-		if(coupjouable.estValide(this,anciencoup)){
+		if(coupjouable.estValide(this)){
 			Plateau plateaucopie=new Plateau();
 			plateaucopie.copie(this);
 			plateaucopie.Joue(coupjouable, false);
@@ -585,84 +619,6 @@ public class Plateau {
 		return res;
 		
 	}
-	// Retourne le point aux coordonnees ciblant la direction dir : 0 = Gauche, 1 = Droite, 2 = Biais(diagonale)
-	// p = position de la bille
-	// Si le point vaut (-1,-1), c'est qu'il est inaccessible ou occupe ou erreur
-	public Point pointLibre(Point p, int dir){
-		Point pRes = new Point(-1,-1);
-		Point s = new Point(-1,-1);
-		// Coordonnees a ajouter
-		int x = 0, y = 0;
-		if(dir == 0)
-			y = 1;
-		else if(dir == 1)
-			x = 1;
-		else if(dir == 2){
-			x = 1;
-			y = 1;
-		}
-		else
-			System.out.println("dir non valide (0 : Gauche, 1 : Droite, 2 : Biais(Diagonale)");
-		
-		// Si la bille donnee est blanche
-		if(echiquier[p.x][p.y].estBlanc()){
-			s = sortieblanche();
-			if(s.x >= p.x && s.y >= p.y && p.x+x <= 4 && p.y+y <= 4 && echiquier[p.x+x][p.y+y].estLibre())
-				pRes = new Point (p.x+x, p.y+y);
-			else if (s.x <= p.x && s.y <= p.y && p.x-x >= 0 && p.y-y >= 0 && echiquier[p.x-x][p.y-y].estLibre())
-				pRes = new Point (p.x-x, p.y-y);
-		}
-		else{
-			s = sortiemarron();
-			if(s.x >= p.x && s.y >= p.y && p.x+x <= 4 && p.y+y <= 4 && echiquier[p.x+x][p.y+y].estLibre())
-				pRes = new Point (p.x+x, p.y+y);
-			else if (s.x <= p.x && s.y <= p.y && p.x-x >= 0 && p.y-y >= 0 && echiquier[p.x-x][p.y-y].estLibre())
-				pRes = new Point (p.x-x, p.y-y);
-		}
-		return pRes;
-	}
-	
-public int poidBlanc()
-    {
-        int poidB=0, nbB=0;
-        for (int i=0;i<5;i++) {
-            for (int j=0;j<5;j++) {
-                if(echiquier[i][j].estBlanc())
-                {
-                poidB = poidB + (i+j);
-                nbB++;
-                }
-        }}
-                poidB = poidB + ((5-nbB)*8);
-                return poidB;
-    }
-     
-    public int poidMarron()
-    {
-        int poidM=0, nbM=0;
-        for (int i=0;i<5;i++) {
-            for (int j=0;j<5;j++) {
-                if(echiquier[i][j].estMarron())
-                {
-                poidM = poidM + (8-i-j);
-                nbM++;
-                }
-        }}
-                poidM = poidM + ((5-nbM)*8);
-                return poidM;
-    }
-     
-    public int calculIndicePoid()
-    {
-        if(jBlancjoue())
-        {
-            return poidMarron()-poidBlanc();
-        }
-        else
-        {
-            return poidBlanc()-poidMarron();
-        }         
-    }
 }
 	
 	
