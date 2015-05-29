@@ -1,20 +1,30 @@
 import javax.swing.*;
 
 import java.awt.event.*;
+import java.io.IOException;
 
 
 public class EcouteurDeBouton2 implements ActionListener{
 	ChargerPartie cp;
+	Sauvegarde sauvegarde;
 	
-	EcouteurDeBouton2(ChargerPartie cp){
+	
+	
+	EcouteurDeBouton2(ChargerPartie cp,Sauvegarde sauvegarde){
 		this.cp=cp;
+		this.sauvegarde=sauvegarde;
 	}
 
 	public void actionPerformed( ActionEvent e){
 		if(e.getActionCommand().equals("Supprimer")){
-			 System.out.println("joris!!");
-			 //enlever de la liste feremer puis reouvrir la fenetre?
-			 //ou si il y a un truc genre rafraischissement de fenetre
+			 try{
+				    Moteur.supp_sauv(cp.fichierSelectionne,sauvegarde);
+					sauvegarde.afficher();
+			 }
+			     catch(IOException ex) {
+					ex.printStackTrace();
+			     }		     
+			 cp.dispose();
 		}
 		
 		if(e.getActionCommand().equals("Renommer")){
@@ -27,7 +37,22 @@ public class EcouteurDeBouton2 implements ActionListener{
 		}
 		
 		if(e.getActionCommand().equals("Charger")){
-			 System.out.println("joris!!"); //appel de sa fonction charger avc cp.fichierAcharge
+			
+			if(cp.listeBouton.getSelection()!=null){
+				 try{
+					    Moteur.charger(cp.fichierSelectionne,cp.p);
+						sauvegarde.afficher();
+						//ici normalement on devrais charger la partie donc modifier le plateau graphique
+						cp.dispose();
+				 }
+				     catch(IOException ex) {
+						ex.printStackTrace();
+				     }		     
+			}
+			else{
+				 JOptionPane jop = new JOptionPane();
+				 jop.showMessageDialog(null, "Veuillez choisir un fichier!", "Erreur Chargement", JOptionPane.ERROR_MESSAGE);
+			}
 		}
 		
 		if(e.getActionCommand().equals("OK")){

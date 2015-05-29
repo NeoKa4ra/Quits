@@ -34,7 +34,7 @@ public class Sauvegarde {
 	}
 	
 	public void sauv_Fich(String nom_fich) throws IOException{
-		if(listFichier.contains(nom_fich)){
+		if(!listFichier.contains(nom_fich)){
 			//File f=new File(nom_fich);
 			listFichier.add(nom_fich);
 			File f1=new File("sauvegarde");

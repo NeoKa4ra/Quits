@@ -4,20 +4,21 @@ import java.awt.event.*;
 import java.io.IOException;
 
 public class EcouteurDeBouton implements ActionListener{ 
-	ChargerPartie cp;
+	Plateau matrice;
 	NouvellePartie np;
 	Sauvegarde sauvegarde;
 	
-	EcouteurDeBouton(Sauvegarde sauvegarde){
+	EcouteurDeBouton(Sauvegarde sauvegarde, Plateau p){
 		this.sauvegarde=sauvegarde;
+		this.matrice=p;
 	}
 
     	public void actionPerformed(ActionEvent e) {
     	
     		if(e.getActionCommand().equals("Nouvelle Partie")){
-    			 System.out.println("new mais pour l'instant tu t'en fous tu feras une fenetre avec des liste apres" );
+    			 System.out.println("coucou new partie" );
     			 NouvellePartie np = new NouvellePartie(null, "Choisir le niveau", true);
-         		this.np=np;
+         		 this.np=np;
     		
     		}
     		
@@ -26,24 +27,32 @@ public class EcouteurDeBouton implements ActionListener{
         		 System.out.println("save");
         		 JOptionPane jop = new JOptionPane();
  			     String nom = jop.showInputDialog(null, "Entrez un nom pour votre partie: ", "Entrez un nom pour votre partie: ", JOptionPane.QUESTION_MESSAGE);
- 			     
+ 			     //mais ici ne sauvegarder que si on a cliqué sur ok faut chercher ca
  			     //appel de la fonction de sauvegarde (classe Sauvegarde)
- 			     try{
-					sauvegarde.sauv_Fich(nom);
-					//System.out.println(nom);
-					sauvegarde.afficher();
- 			     }
-			     catch(IOException ex) {
-					ex.printStackTrace();
-				}
-				
+ 			     if(nom!=null && nom.length()>0) {
+	 			     try{
+						Moteur.sauvegarde(nom,matrice,sauvegarde);
+						sauvegarde.afficher();
+	 			     }
+				     catch(IOException ex) {
+						ex.printStackTrace();
+					}		     
+        		}else{
+        			JOptionPane jop2 = new JOptionPane();
+					jop2.showMessageDialog(null, "veuillez saisir un nom de fichier", "Erreur sauvegarde", JOptionPane.ERROR_MESSAGE);
+        			
+        		}
         	}
         	
         	if(e.getActionCommand().equals("Charger Partie")){
-        		System.out.println("charger");
-        		
-				ChargerPartie cp = new ChargerPartie(null, "Charger une partie", true, this, this.sauvegarde);
-        		this.cp=cp;
+				
+				if(sauvegarde.listFichier.size()!=0){
+					ChargerPartie cp = new ChargerPartie(null, "Charger une partie", true, this, this.sauvegarde, matrice);				}
+				else{
+					 JOptionPane jop = new JOptionPane();
+					 jop.showMessageDialog(null, "Aucune partie sauvegardée", "Erreur Chargement", JOptionPane.ERROR_MESSAGE);
+				}
+					
         	}
         	
         	if(e.getActionCommand().equals("Options")){

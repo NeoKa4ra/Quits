@@ -6,26 +6,29 @@ import java.util.*;
 import javax.swing.*;
 
 public class ChargerPartie extends JDialog{
+	Plateau p;
 	Sauvegarde sauvegarde;
 	JRadioButton [] listeFich;
-	String fichierAcharge;
+	String fichierSelectionne;
 	int taille;
-		
+	ButtonGroup listeBouton;	
 
-	ChargerPartie(JFrame parent, String title, boolean modal, EcouteurDeBouton b, Sauvegarde sauvegarde){
+	ChargerPartie(JFrame parent, String title, boolean modal, EcouteurDeBouton b, Sauvegarde sauvegarde, Plateau p){
 		super(parent, title, modal);
-		
-		fichierAcharge="riendutoutpourlinstant";
+		this.p=p;
+		fichierSelectionne="riendutoutpourlinstant";
 		this.sauvegarde=sauvegarde;
 		taille = sauvegarde.listFichier.size();
 		System.out.println(taille);
 		Iterator i = sauvegarde.listFichier.iterator();
 		
+		
+		listeBouton = new ButtonGroup();
 		listeFich = new JRadioButton[taille];
 		int x=0;
 		while(i.hasNext()){
 			listeFich[x]=new JRadioButton((String) i.next());
-
+			listeBouton.add(listeFich[x]);
 			x++;
 		}
 		
@@ -42,10 +45,10 @@ public class ChargerPartie extends JDialog{
 		JButton annuler = new JButton("Annuler");
 		JButton charger = new JButton("Charger");
 		
-		supp.addActionListener(new EcouteurDeBouton2(this));	
-		renommer.addActionListener(new EcouteurDeBouton2(this));
-		annuler.addActionListener(new EcouteurDeBouton2(this));
-		charger.addActionListener(new EcouteurDeBouton2(this));
+		supp.addActionListener(new EcouteurDeBouton2(this,sauvegarde));	
+		renommer.addActionListener(new EcouteurDeBouton2(this,sauvegarde));
+		annuler.addActionListener(new EcouteurDeBouton2(this,sauvegarde));
+		charger.addActionListener(new EcouteurDeBouton2(this,sauvegarde));
 		
 		panbouton.add(supp);
 		panbouton.add(renommer);

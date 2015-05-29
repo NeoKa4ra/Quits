@@ -1,6 +1,7 @@
 import javax.swing.*;
 
 import java.awt.event.*;
+import java.io.IOException;
 
 
 public class EcouteurDeBouton3 implements ActionListener{
@@ -16,8 +17,14 @@ public class EcouteurDeBouton3 implements ActionListener{
 		}
 		
 		if(e.getActionCommand().equals("OK")){
-			 System.out.println("joris!!");
-			 np.dispose();
+			if(np.listeBouton.getSelection()!=null){
+				np.dispose();  
+			}
+			else{
+				 JOptionPane jop = new JOptionPane();
+				 jop.showMessageDialog(null, "Veuillez choisir un niveau!", "Erreur Nouvelle Partie", JOptionPane.ERROR_MESSAGE);
+			}
+			 
 		}
 		
 	}

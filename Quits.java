@@ -5,26 +5,30 @@ import java.io.*;
 import javax.swing.*;
 
 
-public class Quits extends JFrame {
+public class Quits implements Runnable{
 
-    Sauvegarde sauvegarde;
-	  
-    Quits() {
-	
+   public void run(){
+	   
+	   
+	   final JFrame fenetre = new JFrame();
+	   Sauvegarde sauvegarde = null;
+	   
+	   
         // Creation d'une fenetre
-        setTitle("QUITS");
+        fenetre.setTitle("QUITS");
         try{
-		sauvegarde = new Sauvegarde();
-	}catch(IOException e) {
+        	sauvegarde = new Sauvegarde();
+        }catch(IOException e) {
 		e.printStackTrace();
-	}
-        
-        Donnees donnees = new Donnees();
-        Menu notremenu = new Menu(sauvegarde);
+        }
+        Plateau matrice = new Plateau();
+        matrice.init_2_joueurs();
+        Donnees donnees = new Donnees(matrice);
+        Menu notremenu = new Menu(sauvegarde,matrice);
         PlateauGraphique plateau = new PlateauGraphique(donnees);
         plateau.init();
 		Etats panel1 = new Etats();
-		Outils panel3 = new Outils(sauvegarde);
+		Outils panel3 = new Outils(sauvegarde,matrice);
 	
 
 		
@@ -39,20 +43,20 @@ public class Quits extends JFrame {
 		MyGlassPane glass = new MyGlassPane(donnees);
     	glass.addMouseMotionListener(new EcouteurDeMouvement(glass));
     	glass.addMouseListener(new EcouteurRetransmetteur(glass,
-                                         this.getContentPane(), donnees));
-    	setGlassPane(glass);
+    			fenetre.getContentPane(), donnees));
+    	fenetre.setGlassPane(glass);
     	glass.setVisible(true);
 		
 		
 	   JSplitPane hpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, notremenu, pane);
-	   add(hpane);
+	   fenetre.add(hpane);
 
         // Un clic sur le bouton de fermeture clos l'application
-     setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+	   fenetre.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
        
     
     
-	 addWindowListener(new WindowAdapter(){
+	   fenetre.addWindowListener(new WindowAdapter(){
              public void windowClosing(WindowEvent e){
             	 
                    int reponse = JOptionPane.showConfirmDialog(null,
@@ -62,21 +66,21 @@ public class Quits extends JFrame {
                                         JOptionPane.QUESTION_MESSAGE);
                    
                    if (reponse==JOptionPane.YES_OPTION){
-                            dispose();
+                	   fenetre.dispose();
                    }
              }
    	 });
    	 
 	
         // On fixe la taille et on demarre
-         setResizable(false);
-         setLocation(400,250);
-         setSize(1100, 900);
-         setVisible(true);
+	   fenetre.setResizable(false);
+	   fenetre.setLocation(400,250);
+	   fenetre.setSize(1100, 900);
+	   fenetre.setVisible(true);
     }
 
 public static void main (String [] args){
-	new Quits();
+	 SwingUtilities.invokeLater(new Quits());
 }
 
 
