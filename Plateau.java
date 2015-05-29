@@ -183,6 +183,23 @@ public class Plateau {
 		return nbBlancSortis;
 	}
 	
+	public void afficheMatrice(){
+		int i,j;
+		for(j=4;j>=0;j--){
+			for(i=0;i<5;i++){
+				if(echiquier[i][j].estLibre())
+					System.out.printf("0");
+				else if(echiquier[i][j].estMarron())
+					System.out.printf("2");	
+				else
+					System.out.printf("1");
+				
+				System.out.printf(" ");		
+			}
+			System.out.println();				
+		}
+	}
+	
 	// afficher les cases de l'echiquier
 	public void afficher(){
 		int i,j;

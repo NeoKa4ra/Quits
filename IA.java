@@ -373,13 +373,15 @@ public class IA {
 							
 							
 							if(k<3){		// test des points
-								System.out.println("jouer : " + i + j +" Coup : " + k + " valeur : " + tmp);
+								//System.out.println("jouer : " + i + j +" Coup : " + k + " valeur : " + tmp);
+								pArr = pT.pointLibre(pDep,k);
+								CJ.joueCase(pDep,pArr);
 							}
 							else if(k<5)	// test des colonnes
 								CJ.coup(k-3, i);
 							else			// test des rangees
 								CJ.coup(k-3, j);
-							System.out.println("case : " + i + j +" Coup : " + k + " valeur : " + tmp);
+							//System.out.println("case : " + i + j +" Coup : " + k + " valeur : " + tmp);
 							if(tmp > max){
 								
 								max = tmp;
