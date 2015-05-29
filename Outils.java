@@ -11,17 +11,17 @@ import javax.swing.*;
 public class Outils extends JPanel{
 	
 
-	Outils(Sauvegarde sauvegarde){
+	Outils(Sauvegarde sauvegarde, Plateau p){
 
 		JButton aide=new JButton("aide");
 		JButton coupdepouce=new JButton ("coupdepouce");
 		JButton annuler=new JButton("annuler");
 		JButton refaire=new JButton("refaire");
 		
-		aide.addActionListener(new EcouteurDeBouton(sauvegarde));
-		coupdepouce.addActionListener(new EcouteurDeBouton(sauvegarde));
-		annuler.addActionListener(new EcouteurDeBouton(sauvegarde));
-		refaire.addActionListener(new EcouteurDeBouton(sauvegarde));
+		aide.addActionListener(new EcouteurDeBouton(sauvegarde,p));
+		coupdepouce.addActionListener(new EcouteurDeBouton(sauvegarde,p));
+		annuler.addActionListener(new EcouteurDeBouton(sauvegarde,p));
+		refaire.addActionListener(new EcouteurDeBouton(sauvegarde,p));
 
 		
 		add(aide);
