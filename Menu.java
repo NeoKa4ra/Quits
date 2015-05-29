@@ -2,36 +2,47 @@ import java.awt.*;
 
 import javax.swing.*;
 
-import java.io.File;
-import java.io.IOException;
+import java.awt.event.*;
+import java.util.*;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 
-public class Outils extends JPanel{
+import java.awt.event.*;
+
+public class Menu extends JPanel{
 	
-
-	Outils(Sauvegarde sauvegarde, Plateau p){
-
-		JButton aide=new JButton("aide");
-		JButton coupdepouce=new JButton ("coupdepouce");
-		JButton annuler=new JButton("annuler");
-		JButton refaire=new JButton("refaire");
+	
+	JButton NouvellePartie;
+	JButton SauvegarderPartie;
+	JButton ChargerPartie;
+	JButton Options;
+	
+	
+	Menu (Sauvegarde sauvegarde, Plateau p){
+	
 		
-		aide.addActionListener(new EcouteurDeBouton(sauvegarde,p));
-		coupdepouce.addActionListener(new EcouteurDeBouton(sauvegarde,p));
-		annuler.addActionListener(new EcouteurDeBouton(sauvegarde,p));
-		refaire.addActionListener(new EcouteurDeBouton(sauvegarde,p));
-
+		NouvellePartie = new JButton ("Nouvelle Partie");
+		SauvegarderPartie = new JButton ("Sauvegarder Partie");
+		ChargerPartie = new JButton ("Charger Partie");
+		Options = new JButton ("Options"); 
+	
 		
-		add(aide);
-		add(coupdepouce);
-		add(annuler);
-		add(refaire);
+		NouvellePartie.addActionListener(new EcouteurDeBouton(sauvegarde,p));
+		SauvegarderPartie.addActionListener(new EcouteurDeBouton(sauvegarde,p));
+		ChargerPartie.addActionListener(new EcouteurDeBouton(sauvegarde,p));
+		Options.addActionListener(new EcouteurDeBouton(sauvegarde,p));
+		
+		this.setLayout (new GridLayout (20,1));
+		this.add (NouvellePartie );
+		this.add (SauvegarderPartie);
+		this.add (ChargerPartie);
+		this.add (Options);
 		
 	}
+	
 	
 	public void paintComponent(Graphics g) {
-	}
 	
+	}
 }
+
