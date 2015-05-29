@@ -119,7 +119,7 @@ public class EcouteurFleche implements MouseListener {
 			num_bille=plateaugraphique.matrice.echiquier[i][j].numBille();
 			if(num_bille!=-1)
 				c.add(d.billes[num_bille]);
-		}	
+		}
 	}
 
 }
