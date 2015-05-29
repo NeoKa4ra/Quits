@@ -15,7 +15,7 @@ class Donnees {
     Donnees(Plateau matrice) {
         billes = new Bille[10];
         fleches = new Fleche[20];
-        this.matrice=matrice
+        this.matrice=matrice;
         
         depart=new Point(-1,-1);
         arrivee=new Point(-1,-1);
