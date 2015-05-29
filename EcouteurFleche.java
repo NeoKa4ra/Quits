@@ -5,10 +5,12 @@ import java.awt.event.MouseListener;
 public class EcouteurFleche implements MouseListener {
 	Donnees d;
 	int selectionF;
+	PlateauGraphique plateaugraphique;
 	
-	EcouteurFleche(int i, Donnees donnees){
+	EcouteurFleche(int i, Donnees donnees,PlateauGraphique plateaugraphique){
 		d = donnees;
 		selectionF = i;
+		this.plateaugraphique=plateaugraphique;
 		
 	}
 
@@ -109,7 +111,16 @@ public class EcouteurFleche implements MouseListener {
 		
 		
 		}
-			
+	int i,j;	
+	int num_bille;
+	for(i=0;i<5;i++)
+		for(j=0;j<5;j++){
+			CaseGraphique c=plateaugraphique.plateauGraphique[i][j];
+			num_bille=plateaugraphique.matrice.echiquier[i][j].numBille();
+			if(num_bille!=-1)
+				c.add(d.billes[num_bille]);
+		}	
 	}
 
 }
+

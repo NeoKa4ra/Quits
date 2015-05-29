@@ -2,13 +2,13 @@ import java.awt.*;
 
 import javax.swing.*;
 
-import java.io.File;
-import java.io.IOException;
+//import java.io.File;
+//import java.io.IOException;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
+//import javax.imageio.ImageIO;
+//import javax.swing.*;
 
-public class PlateauGraphique extends JPanel{
+public class PlateauGraphique extends JComponent{
 	
 	Donnees d;
 	Graphics2D drawable;
@@ -128,7 +128,7 @@ public class PlateauGraphique extends JPanel{
 	
 	public void ajouterFleche(int x, int y, int i){
 		d.fleches[i].setBounds(x, y, 110, 110);
-		d.fleches[i].addMouseListener(new EcouteurFleche(i, d));
+		d.fleches[i].addMouseListener(new EcouteurFleche(i,d,this));
 		add(d.fleches[i]);
 	}
 	
@@ -138,3 +138,4 @@ public class PlateauGraphique extends JPanel{
         
         
 }
+

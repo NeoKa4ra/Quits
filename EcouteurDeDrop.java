@@ -43,12 +43,17 @@ class EcouteurDeDrop implements MouseListener {
     }
 
     // Il faut aussi une implementation pour les autres methodes de l'interface
-    public void mouseEntered(MouseEvent e){
+    public void mouseEntered(MouseEvent e) {
+        System.out.println("toto");
     }
-    public void mouseExited(MouseEvent e){
+    public void mouseExited(MouseEvent e) {
+        System.out.println("toto1");
     }
-    public void mouseClicked(MouseEvent e){
+    public void mouseClicked(MouseEvent e) {
+        System.out.println("toto2");
     }
-    public void mousePressed(MouseEvent e){
+    public void mousePressed(MouseEvent e) {
+        System.out.println("toto3");
     }
 }
+
