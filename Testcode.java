@@ -10,26 +10,41 @@ public class Testcode {
 		// affiche l'initialisation du tableau
 		Plateau plateau=new Plateau();
 		plateau.init_2_joueurs();
-		plateau.afficher();
+		plateau.afficheMatrice();
 
 		int ia1 = 0 , ia2 = 0;
 		IA bot = new IA();
 		CoupJouable CJ=new CoupJouable();
-		int nbParties = 10;
-		while(ia1 != nbParties && ia2 != nbParties && plateau.position<2000){
-			System.out.println("Tour : " + (plateau.position/2));
+		int nbParties = 100;
+		while(ia1 != nbParties && ia2 != nbParties && plateau.position < 300){
+			//*********** VERSION AVEC AFFICHAGE ***********
+			System.out.println();
+			System.out.println("Tour " + (plateau.position/2) + " : ");
+			System.out.println();
+			//*********** JOUEUR 1 ***********
 			System.out.println("Joueur 1 (pions 2) :");
-			CJ = bot.niveau0(plateau);
+			CJ = bot.hard(plateau,1);
 			plateau.Joue(CJ,false);
 			plateau.afficheMatrice();
-			
-			
+
+			System.out.println();
+			//*********** JOUEUR 2 ***********
 			System.out.println("Joueur 2 (pions 1) :");
-			CJ = bot.hard(plateau, 3);
+			CJ = bot.normal(plateau);
 			plateau.Joue(CJ,false);
 			plateau.afficheMatrice();
 			
 			System.out.println();
+			/*
+			//*********** VERSION SANS AFFICHAGE ***********
+			//*********** JOUEUR 1 ***********
+			CJ = bot.normal(plateau);
+			plateau.Joue(CJ,false);
+			//*********** JOUEUR 2 ***********
+			CJ = bot.hard(plateau,3);
+			plateau.Joue(CJ,false);
+			*/
+			//*********** Test Fin Partie ***********
 			if (plateau.nbMarronSortis() >= 3){
 				ia2++;
 				plateau.init_2_joueurs();

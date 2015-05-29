@@ -183,6 +183,7 @@ public class Plateau {
 		return nbBlancSortis;
 	}
 	
+	// afficher les valeurs de la matrice
 	public void afficheMatrice(){
 		int i,j;
 		for(j=4;j>=0;j--){

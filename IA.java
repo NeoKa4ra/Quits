@@ -369,7 +369,7 @@ public class IA {
 						// Si le coup est valide
 						if(CJ.estValide(pT)){
 							pTemp.Joue(CJ,false);
-							tmp = Max(pTemp, profondeur-1);
+							tmp = Min(pTemp, profondeur-1);
 							
 							
 							if(k<3){		// test des points
@@ -381,9 +381,10 @@ public class IA {
 								CJ.coup(k-3, i);
 							else			// test des rangees
 								CJ.coup(k-3, j);
+							//LA
 							//System.out.println("case : " + i + j +" Coup : " + k + " valeur : " + tmp);
 							if(tmp > max){
-								
+								//System.out.println("case : " + i + j +" Coup : " + k + " valeur : " + tmp);
 								max = tmp;
 								CJmax.copie(CJ);
 							}
@@ -399,7 +400,7 @@ public class IA {
 	private int Max(Plateau pT, int profondeur){
 		CoupJouable CJ = new CoupJouable();
 		if(profondeur == 0 || partieFinie(pT))
-			return eval(pT);
+			return eval(pT, true);
 		int max, tmp;
 		max = -100000;
 
@@ -440,7 +441,7 @@ public class IA {
 	private int Min(Plateau pT, int profondeur){
 		CoupJouable CJ = new CoupJouable();
 		if(profondeur == 0 || partieFinie(pT))
-			return eval(pT);
+			return eval(pT, false);
 		int min, tmp;
 		min = 100000;
 
@@ -477,13 +478,13 @@ public class IA {
 		}
 		return min;
 	}
-	private int eval(Plateau pT){
+	private int eval(Plateau pT, boolean max){
 		int res = 0;
 		//System.out.println(" Poids blanc : " + poidsB(pT) + " Poids Marron : " + poidsM(pT));
-		if(pT.jBlancjoue())
-			res = poidsB(pT) - poidsM(pT);
+		if((!pT.jBlancjoue() && max) || (pT.jBlancjoue() && !max))
+			res = poidsM(pT) - poidsB(pT); 
 		else
-			res = poidsM(pT) - poidsB(pT);
+			res = poidsB(pT) - poidsM(pT);
 		return res;
 		
 	}
@@ -500,7 +501,7 @@ public class IA {
 					res += coutB()[i][j];
 			}
 		}
-		res += pT.nbBlancSortis()*150;
+		res += pT.nbBlancSortis()*1000;
 		return res;
 	}
 	
@@ -512,7 +513,7 @@ public class IA {
 					res += coutM()[i][j];
 			}
 		}
-		res += pT.nbMarronSortis()*150;
+		res += pT.nbMarronSortis()*1000;
 		return res;
 	}
 
@@ -528,44 +529,44 @@ public class IA {
 		mat[1][1] = 10;
 		mat[1][2] = 20;
 		mat[1][3] = 35;
-		mat[1][4] = 50;
+		mat[1][4] = 100;
 		mat[2][0] = 0;
 		mat[2][1] = 0;
 		mat[2][2] = 35;
 		mat[2][3] = 40;
-		mat[2][4] = 90;
+		mat[2][4] = 130;
 		mat[3][0] = 0;
 		mat[3][1] = 0;
 		mat[3][2] = 0;
 		mat[3][3] = 100;
-		mat[3][4] = 110;
+		mat[3][4] = 150;
 		mat[4][0] = 0;
 		mat[4][1] = 0;
 		mat[4][2] = 0;
 		mat[4][3] = 0;
-		mat[4][4] = 1000; 
+		mat[4][4] = 5000; 
+		
 		return mat;
 	}
 
 	private int[][] coutM(){
 		int [][] mat = new int[5][5];
 		int [][] temp = new int[5][5];
-		int [] tab = new int[25];
+
 		temp = coutB();
-		int cpt = 0;
+
 		for (int i=0;i<5;i++){
 			for (int j=0;j<5;j++){
-				tab[cpt] = temp[i][j];
-				cpt++;
+				mat[i][j]=temp[4-i][4-j];
 			}
 		}
-		cpt = 0;
-		for (int i=4;i>=0;i--){
-			for (int j=4;j>=0;j--){
-				mat[i][j] = tab[cpt];
-				cpt++;
+		/*for (int i=4;i>=0;i--){
+			for (int j=0;j<5;j++){
+				System.out.printf(mat[j][i] + " ");
 			}
-		}
+			System.out.println();
+		}*/
+
 		
 		return mat;
 	}
