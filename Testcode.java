@@ -1,6 +1,8 @@
 import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 
 public class Testcode {
@@ -11,19 +13,23 @@ public class Testcode {
 		Plateau plateau=new Plateau();
 		plateau.init_2_joueurs();
 		plateau.afficheMatrice();
-
+		LinkedList<CoupJouable> L = new LinkedList<CoupJouable>();
+		L = plateau.ListeCoujouable();
+		plateau.Joue(L.get(7),false);
+		System.out.println();
+		plateau.afficheMatrice();
 		int ia1 = 0 , ia2 = 0;
 		IA bot = new IA();
 		CoupJouable CJ=new CoupJouable();
-		int nbParties = 100;
-		while(ia1 != nbParties && ia2 != nbParties && plateau.position < 300){
-			//*********** VERSION AVEC AFFICHAGE ***********
+		int nbParties = 1;
+		while(ia1 != nbParties && ia2 != nbParties && plateau.position < 400){
+			/*//*********** VERSION AVEC AFFICHAGE ***********
 			System.out.println();
 			System.out.println("Tour " + (plateau.position/2) + " : ");
 			System.out.println();
 			//*********** JOUEUR 1 ***********
 			System.out.println("Joueur 1 (pions 2) :");
-			CJ = bot.normal(plateau);
+			CJ = bot.hard(plateau,1);
 			plateau.Joue(CJ,false);
 			plateau.afficheMatrice();
 
@@ -35,15 +41,15 @@ public class Testcode {
 			plateau.afficheMatrice();
 			
 			System.out.println();
-			/*
+			*/
 			//*********** VERSION SANS AFFICHAGE ***********
 			//*********** JOUEUR 1 ***********
-			CJ = bot.normal(plateau);
+			CJ = bot.niveau0(plateau);
 			plateau.Joue(CJ,false);
 			//*********** JOUEUR 2 ***********
-			CJ = bot.hard(plateau,3);
+			CJ = bot.hard(plateau,1);
 			plateau.Joue(CJ,false);
-			*/
+			
 			//*********** Test Fin Partie ***********
 			if (plateau.nbMarronSortis() >= 3){
 				ia2++;
