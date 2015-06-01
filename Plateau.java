@@ -715,6 +715,50 @@ public class Plateau {
             return poidBlanc()-poidMarron();
         }         
     }
+    
+    public LinkedList<CoupJouable> ListeCoujouable(Plateau plateau, CoupJouable coupPrecAdv){
+		int i,j;
+		
+		LinkedList<CoupJouable> L = new LinkedList<CoupJouable>();
+		//Iterator<CoupJouable> it= L.iterator();
+		CoupJouable CJ = new CoupJouable();
+	
+		int largeurPt = 5;
+		int longueurPt = 5;
+		
+			
+			Point pDep = new Point(-1,-1);
+			Point pArr = new Point(-1,-1);
+			
+			for (i=0;i<largeurPt;i++) {
+				for (j=0;j<longueurPt;j++) {
+					if((plateau.jBlancjoue() && plateau.echiquier[i][j].estBlanc()) || (!plateau.jBlancjoue() && plateau.echiquier[i][j].estMarron())){
+						pDep = new Point(i,j);
+						for(int k=0; k<7; k++){
+							// Choisit un coup
+							if(k<3){		// test des points
+								pArr = plateau.pointLibre(pDep,k);
+								CJ.joueCase(pDep,pArr);
+							}
+							else if(k<5)	// test des colonnes
+								CJ.coup(k-3, i);
+							else			// test des rangees
+								CJ.coup(k-3, j);
+							// Si le coup est valide
+							if(CJ.estValide(plateau)){
+								if(k<3)
+									L.add(CJ);
+								else if(k<5)
+									L.add(CJ);
+								else
+									L.add(CJ);
+							}
+						}
+					}
+				}
+			}
+			return L;
+	}
 }
 	
 	
