@@ -716,7 +716,7 @@ public class Plateau {
         }         
     }
     
-    public LinkedList<CoupJouable> ListeCoujouable(Plateau plateau, CoupJouable coupPrecAdv){
+    public LinkedList<CoupJouable> ListeCoujouable(){
 		int i,j;
 		
 		LinkedList<CoupJouable> L = new LinkedList<CoupJouable>();
@@ -732,12 +732,12 @@ public class Plateau {
 			
 			for (i=0;i<largeurPt;i++) {
 				for (j=0;j<longueurPt;j++) {
-					if((plateau.jBlancjoue() && plateau.echiquier[i][j].estBlanc()) || (!plateau.jBlancjoue() && plateau.echiquier[i][j].estMarron())){
+					if((jBlancjoue() && echiquier[i][j].estBlanc()) || (!jBlancjoue() && echiquier[i][j].estMarron())){
 						pDep = new Point(i,j);
 						for(int k=0; k<7; k++){
 							// Choisit un coup
 							if(k<3){		// test des points
-								pArr = plateau.pointLibre(pDep,k);
+								pArr = pointLibre(pDep,k);
 								CJ.joueCase(pDep,pArr);
 							}
 							else if(k<5)	// test des colonnes
@@ -745,7 +745,7 @@ public class Plateau {
 							else			// test des rangees
 								CJ.coup(k-3, j);
 							// Si le coup est valide
-							if(CJ.estValide(plateau)){
+							if(CJ.estValide(this)){
 								if(k<3)
 									L.add(CJ);
 								else if(k<5)
