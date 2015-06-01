@@ -70,7 +70,9 @@ public class IA {
 		Point as = new Point(-1,-1);
 			
 		Point s = new Point(-1,-1);
-		CoupJouable[] coupJouables = new CoupJouable[3];
+		CoupJouable[] coupJouables = new CoupJouable[1000];
+		for (int k = 0; k < (1000);k++)
+			coupJouables[k] = new CoupJouable();
 		int cmpt=0;	
 		
 		
@@ -103,7 +105,7 @@ public class IA {
 				if(!plateau.echiquier[s.x][s.y].estLibre()){
 					for (int i=0;i<largeurPt;i++) {
 						for (int j=0;j<longueurPt;j++) {
-					
+							pDep = new Point(i,j);
 							for(int k=0; k<7; k++){
 								// Choisit un coup
 								
@@ -111,27 +113,34 @@ public class IA {
 									pArr = plateau.pointLibre(pDep,k);
 									coupJouable.joueCase(pDep,pArr);
 								}
-								else if(k<5)	// test des colonnes
-									coupJouable.joueCBas(i);
-								else			// test des rangees
-									coupJouable.joueRGauche(j);;
+								else if(k==4)	// test des colonnes
+									coupJouable.coup(k-3, i);
+								else if(k==6)			// test des rangees
+									coupJouable.coup(k-3, j);
 								// Si le coup est valide
-								if(coupJouable.estValide(plateau)){
+								if(coupJouable.estValide(plateau) && k!= 3 && k!=5){
+									System.out.println("nan");
 									if(k<3)
 										coupJouables[cmpt].joueCase(pDep,pArr);
-									else if(k<5)
-										coupJouables[cmpt].joueCBas(i);
-									else
-										coupJouables[cmpt].joueRGauche(j);
+									else if(k==4)
+										coupJouables[cmpt].coup(k-3, i);
+									else if(k==6)
+										coupJouables[cmpt].coup(k-3, j);
 									cmpt++;
+									res = true;
 								}
-								Random r = new Random();
 								
-								coupJouable= coupJouables[r.nextInt(cmpt-1)];
 							}
 						}
 					}
 				}
+				Random r = new Random();
+				if (cmpt == 1)
+					coupJouable = coupJouables[0];
+				else if (cmpt >= 1)
+					coupJouable = coupJouables[r.nextInt(cmpt-1)];
+				else
+					System.out.println("Pas de coups possible, voir programmeur." + cmpt);
 			}	
 		}
 		else if (!plateau.jBlanc){
@@ -162,7 +171,7 @@ public class IA {
 				if(!plateau.echiquier[s.x][s.y].estLibre()){
 					for (int i=0;i<largeurPt;i++) {
 						for (int j=0;j<longueurPt;j++) {
-					
+							pDep = new Point(i,j);
 							for(int k=0; k<7; k++){
 								// Choisit un coup
 								
@@ -170,36 +179,51 @@ public class IA {
 									pArr = plateau.pointLibre(pDep,k);
 									coupJouable.joueCase(pDep,pArr);
 								}
-								else if(k<5)	// test des colonnes
-									coupJouable.joueCHaut(i);
-								else			// test des rangees
-									coupJouable.joueRDroite(j);;
+								else if(k==3)	// test des colonnes
+									coupJouable.coup(k-3, i);
+								else if(k==5)			// test des rangees
+									coupJouable.coup(k-3, j);
 								// Si le coup est valide
-								if(coupJouable.estValide(plateau)){
+								if(coupJouable.estValide(plateau) && k!=4 && k!=6){
 									if(k<3)
 										coupJouables[cmpt].joueCase(pDep,pArr);
-									else if(k<5)
-										coupJouables[cmpt].joueCHaut(i);
-									else
-										coupJouables[cmpt].joueRDroite(j);
+									else if(k==3)
+										coupJouables[cmpt].coup(k-3, i);
+									else if(k==5)
+										coupJouables[cmpt].coup(k-3, j);
 									cmpt++;
+									res = true;
 								}
-								Random r = new Random();
-								
-								coupJouable= coupJouables[r.nextInt(cmpt-1)];
 							}
 						}
 					}
 				}
+				Random r = new Random();
+				if (cmpt == 1)
+					coupJouable = coupJouables[0];
+				else if (cmpt >= 1)
+					coupJouable = coupJouables[r.nextInt(cmpt-1)];
+				else
+					System.out.println("Pas de coups possible, voir programmeur." + cmpt);
 			}	
 		}
 		if(res == false){
+			 System.out.println("TAMERE");
+			 coupJouable = niveau0(plateau);
 			 
-			 temp = niveau0(plateau);
-			 
+		}
+		else{
+			Random r = new Random();
+			if (cmpt == 1)
+				coupJouable = coupJouables[0];
+			else if (cmpt >= 1)
+				coupJouable = coupJouables[r.nextInt(cmpt-1)];
+			else
+				System.out.println("Pas de coups possible, voir programmeur." + cmpt);
 		}
 		return coupJouable;
 }
+
 	/************************************* IA Normal *************************************/
 	public CoupJouable normal(Plateau pT){
 		int indiceInitial = pT.calculIndicePoid();

@@ -23,14 +23,14 @@ public class Testcode {
 			System.out.println();
 			//*********** JOUEUR 1 ***********
 			System.out.println("Joueur 1 (pions 2) :");
-			CJ = bot.hard(plateau,1);
+			CJ = bot.normal(plateau);
 			plateau.Joue(CJ,false);
 			plateau.afficheMatrice();
 
 			System.out.println();
 			//*********** JOUEUR 2 ***********
 			System.out.println("Joueur 2 (pions 1) :");
-			CJ = bot.normal(plateau);
+			CJ = bot.niveau1(plateau);
 			plateau.Joue(CJ,false);
 			plateau.afficheMatrice();
 			
