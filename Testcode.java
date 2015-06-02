@@ -22,7 +22,7 @@ public class Testcode {
 		IA bot = new IA();
 		CoupJouable CJ=new CoupJouable();
 		int nbParties = 1;
-		while(ia1 != nbParties && ia2 != nbParties && plateau.position < 400){
+		while(ia1 != nbParties && ia2 != nbParties && plateau.position < 18){
 			//*********** VERSION AVEC AFFICHAGE ***********
 			System.out.println();
 			System.out.println("Tour " + (plateau.position/2) + " : ");
@@ -36,7 +36,7 @@ public class Testcode {
 			System.out.println();
 			//*********** JOUEUR 2 ***********
 			System.out.println("Joueur 2 (pions 1) :");
-			CJ = bot.niveau1(plateau);
+			CJ = bot.hard(plateau,3);
 			plateau.Joue(CJ,false);
 			plateau.afficheMatrice();
 			
