@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.*;
+
 import javax.swing.*;
 
 
@@ -21,29 +22,44 @@ public class Quits implements Runnable{
         }catch(IOException e) {
 		e.printStackTrace();
         }
+        
+        
+        Etats etat1= new Etats(1);
+		Etats etat2= new Etats(2);	
+        Moteur m = new Moteur();
         Plateau matrice = new Plateau();
         matrice.init_2_joueurs();
-        Donnees donnees = new Donnees(matrice);
-        Menu notremenu = new Menu(sauvegarde,matrice);
-        PlateauGraphique plateau = new PlateauGraphique(donnees);
+      
+        PlateauGraphique plateau = new PlateauGraphique(matrice,m,etat1,etat2);
         plateau.init();
-		Etats panel1 = new Etats();
-		Outils panel3 = new Outils(sauvegarde,matrice);
+        
+        JPanel panel1 = new JPanel();
+		panel1.setLayout(new BorderLayout());
+		etat1.setPreferredSize(new Dimension(20,20));
+		panel1.add(etat1,BorderLayout.NORTH);
+		etat2.setPreferredSize(new Dimension(20,20));
+		panel1.add(etat2,BorderLayout.SOUTH);
+		panel1.add(plateau,BorderLayout.CENTER);
+	
+		
+		
+		Menu notremenu = new Menu(sauvegarde,plateau,m,etat1, etat2);
+		Outils panel2 = new Outils(sauvegarde,plateau,etat1, etat2,m);
 	
 
 		
 		JPanel pane = new JPanel();
 		pane.setLayout(new BorderLayout());
-		pane.add(panel1,BorderLayout.NORTH);
-		pane.add(plateau,BorderLayout.CENTER);
-		pane.add(panel3,BorderLayout.SOUTH);
+	
+		pane.add(panel1,BorderLayout.CENTER);
+		pane.add(panel2,BorderLayout.SOUTH);
 
 
 		
-		MyGlassPane glass = new MyGlassPane(donnees);
+		MyGlassPane glass = new MyGlassPane(plateau);
     	glass.addMouseMotionListener(new EcouteurDeMouvement(glass));
     	glass.addMouseListener(new EcouteurRetransmetteur(glass,
-    			fenetre.getContentPane(), donnees));
+    			fenetre.getContentPane(),plateau));
     	fenetre.setGlassPane(glass);
     	glass.setVisible(true);
 		
@@ -73,9 +89,9 @@ public class Quits implements Runnable{
    	 
 	
         // On fixe la taille et on demarre
-	   fenetre.setResizable(false);
-	   fenetre.setLocation(400,250);
-	   fenetre.setSize(1100, 900);
+	   fenetre.setResizable(true);
+	   fenetre.setLocation(0,0);
+	   fenetre.setSize(900, 700);
 	   fenetre.setVisible(true);
     }
 

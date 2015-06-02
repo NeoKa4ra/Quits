@@ -1,24 +1,118 @@
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.Timer;
 
-public class EcouteurFleche implements MouseListener {
-	Donnees d;
-	int selectionF;
-	PlateauGraphique plateaugraphique;
-	
-	EcouteurFleche(int i, Donnees donnees,PlateauGraphique plateaugraphique){
-		d = donnees;
-		selectionF = i;
-		this.plateaugraphique=plateaugraphique;
-		
+
+public class EcouteurFleche implements MouseListener,ActionListener {
+	PlateauGraphique plateau;
+	Timer timer;
+	int current;
+    final int slowness = 100;
+    Moteur m;
+    Etats j1;
+    Etats j2;
+    
+	EcouteurFleche(PlateauGraphique plateau,Moteur m,Etats j1, Etats j2){
+		this.plateau=plateau;
+        current=0;
+        timer=new Timer(10,this);
+        this.m=m;
+        this.j1=j1;
+        this.j2=j2;
 	}
 
+	
 	@Override
-	public void mouseClicked(MouseEvent arg0) {
+	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
-		
+		if(plateau.joueur_joue){
+			int x=e.getX();
+		    int y1=e.getY();
+		    int i=plateau.clicFleche((double)x,(double)y1);
+			int d =plateau.direction(i);
+			int c=-1;
+			if(i==4 || i==0 || i==5 || i==13)
+				c=0;
+			if(i==7 || i==8 || i==1 || i==15)
+				c=1;
+			if(i==10 || i==9 || i==2 || i==16)
+				c=2;	
+			if(i==12 || i==11 || i==3 || i==17)
+				c=3;
+			if(i==6 || i==19 || i==18 || i==14)
+				c=4;
+			
+			switch(d){
+				case 1:
+					System.out.println("nord" + c +" fleche" + i);
+					if(m.colonneJouableH(c,plateau.matrice) && m.niveau!=0){
+		    			plateau.joueur_joue=false;
+		    	        timer.start();
+		    	        current = 1;
+		    	        plateau.fleche=2;
+					}
+
+		    		break;
+		    	case 2:
+					System.out.println("sud" + c +" fleche" + i);
+	
+		    		if(m.colonneJouableB(c,plateau.matrice) && m.niveau!=0){
+		    			plateau.joueur_joue=false;
+		    	        timer.start();
+		    	        current = 1;
+		    	        plateau.fleche=2;
+		    		}
+
+		    		break;
+		    	case 3:
+					System.out.println("est" + c +" fleche" + i);
+		    		if(m.rangeeJouableD(c,plateau.matrice) && m.niveau!=0){
+		    			plateau.joueur_joue=false;
+		    	        timer.start();
+		    	        current = 1;
+		    	        plateau.fleche=2;
+		    		}
+
+		    		break;	
+		    	case 4:
+					System.out.println("ouest" + c +" fleche" + i);
+		    		if(m.rangeeJouableG(c,plateau.matrice) && m.niveau!=0){
+		    			plateau.joueur_joue=false;
+		    	        timer.start();
+		    	        current = 1;
+		    	        plateau.fleche=2;
+		    		}
+
+		    		break;
+				default:;
+				
+			}
+			
+			j1.score= plateau.matrice.nbMarronSortis;
+			j2.score=plateau.matrice.nbBlancSortis;
+			if(plateau.matrice.jBlanc){
+				j2.tour=1;
+				j1.tour=0;
+				
+			}else{
+				j2.tour=0;
+				j1.tour=1;
+			}		
+	        j1.repaint();
+	        j2.repaint();
+			plateau.repaint();
+
+		}	
+	}
+	
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+	
 	}
 
 	@Override
@@ -33,92 +127,79 @@ public class EcouteurFleche implements MouseListener {
 		
 	}
 
-	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
+	/*	// TODO Auto-generated method stub
+		
+	plateaugraphique.matrice.afficher();*/
+	}
+
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		System.out.println("Clic sur la fleche" + selectionF);
-		d.selectionF = selectionF;
-		
-		
-		switch(selectionF){
-		case 19:
-			Moteur.rangeeJouableG(0, d.matrice);
-			break;
-		case 18:
-			Moteur.rangeeJouableG(1, d.matrice);
-			break;
-		case 17:
-			Moteur.rangeeJouableG(2, d.matrice);
-			break;
-		case 16:
-			Moteur.rangeeJouableG(3, d.matrice);
-			break;
-		case 15:
-			Moteur.rangeeJouableG(4, d.matrice);
-			break;
-		case 14:
-			Moteur.colonneJouableB(4, d.matrice);
-			break;
-		case 13:
-			Moteur.colonneJouableB(3, d.matrice);
-			break;
-		case 12:
-			Moteur.colonneJouableB(2, d.matrice);
-			break;
-		case 11:
-			Moteur.colonneJouableB(1, d.matrice);
-			break;
-		case 10:
-			Moteur.colonneJouableB(0, d.matrice);
-			break;
-		case 9:
-			Moteur.colonneJouableH(0, d.matrice);
-			break;
-		case 8:
-			Moteur.colonneJouableH(1, d.matrice);
-			break;
-		case 7:
-			Moteur.colonneJouableH(2, d.matrice);
-			break;
-		case 6:
-			Moteur.colonneJouableH(3, d.matrice);
-			break;
-		case 5:
-			Moteur.colonneJouableH(4, d.matrice);
-			break;
-		case 4:
-			Moteur.rangeeJouableD(0, d.matrice);
-			break;
-		case 3:
-			Moteur.rangeeJouableD(1, d.matrice);
-			break;
-		case 2:
-			Moteur.rangeeJouableD(2, d.matrice);
-			break;
-		case 1:
-			Moteur.rangeeJouableD(3, d.matrice);
-			break;
-		case 0:
-			Moteur.rangeeJouableD(4, d.matrice);
-			break;
-			
-		
-		
-		}
-	int i,j;	
-	int num_bille;
-	for(i=0;i<5;i++)
-		for(j=0;j<5;j++){
-			CaseGraphique c=plateaugraphique.plateauGraphique[i][j];
-			num_bille=plateaugraphique.matrice.echiquier[i][j].numBille();
-			if(num_bille!=-1)
-				c.add(d.billes[num_bille]);
+		if(!plateau.joueur_joue && plateau.fleche==2){
+	        if (current <= slowness) {
+	        	current++;
+	        }
+	        else{
+	        	IA IA=new IA();
+	        	CoupJouable coupjouable;
+	        	if(m.niveau==1)
+	        		coupjouable=IA.niveau1(plateau.matrice);
+	        	else if(m.niveau==2)
+	        		coupjouable=IA.normal(plateau.matrice);	        		
+	        	else //if(ia==3)
+	        		coupjouable=IA.hard(plateau.matrice,1);   
+	        	
+	        	if(coupjouable.estCase()){
+	        		Point dep=coupjouable.PointDep();
+	           		Point arr=coupjouable.PointArr();
+		            if(m.pointJouable(dep,arr,plateau.matrice) ){
+	            		plateau.repaint();
+		            } 
+	        	}
+	        	else if(coupjouable.estColonne()){
+	    			int colonne=coupjouable.Colonne();
+	        		if(coupjouable.Sens())
+	        			m.colonneJouableH(colonne, plateau.matrice);
+	        		else
+	        			m.colonneJouableB(colonne, plateau.matrice);           					
+	        	}
+	        	else{
+	    			int rangee=coupjouable.Rangee();
+	        		if(coupjouable.Sens())
+	        			m.rangeeJouableD(rangee, plateau.matrice);
+	        		else
+	        			m.rangeeJouableG(rangee, plateau.matrice); 
+	        	}
+	        	
+
+	 
+	
+	        	plateau.joueur_joue=true;
+	        	plateau.fleche=0;
+	
+	    		timer.stop();
+	    		
+				j1.score= plateau.matrice.nbMarronSortis;
+				j2.score=plateau.matrice.nbBlancSortis;
+				if(plateau.matrice.jBlanc){
+					j2.tour=1;
+					j1.tour=0;
+					
+				}else{
+					j2.tour=0;
+					j1.tour=1;
+				}		
+		        j1.repaint();
+		        j2.repaint();
+				plateau.repaint();
+	    	
+	        }
+	
 		}
 	}
 

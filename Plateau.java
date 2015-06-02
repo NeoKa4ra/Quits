@@ -41,7 +41,7 @@ public class Plateau {
 	
 	public void inverser_case(int i1,int j1,int i2,int j2){
 		
-		Case c=new Case(0,0);
+		Case c=new Case(0);
 		
 		c.change(echiquier[i1][j1]);
 		echiquier[i1][j1].change(echiquier[i2][j2]);
@@ -112,11 +112,11 @@ public class Plateau {
 		for(i=0;i<5;i++){
 			for(j=0;j<5;j++){
 				if(plateau.echiquier[i][j].Contenu()==0)
-					echiquier[i][j]=new Case(0,-1);
+					echiquier[i][j]=new Case(0);
 				else if(plateau.echiquier[i][j].Contenu()==1)
-					echiquier[i][j]=new Case(1,-1);
+					echiquier[i][j]=new Case(1);
 				else
-					echiquier[i][j]=new Case(2,-1);
+					echiquier[i][j]=new Case(2);
 			}
 		}
 		
@@ -147,7 +147,7 @@ public class Plateau {
 		// initialisation des cases � libre
 		for(i=0;i<5;i++){
 			for(j=0;j<5;j++){
-					echiquier[i][j]=new Case(0,-1);					
+					echiquier[i][j]=new Case(0);					
 			}
 		
 			
@@ -160,18 +160,18 @@ public class Plateau {
 		nbMarronSortis=0;
 
 		// mise en place des billes blanches
-		echiquier[0][1]=new Case(1,2);
-		echiquier[0][2]=new Case(1,3);
-		echiquier[1][0]=new Case(1,0);
-		echiquier[1][1]=new Case(1,4);
-		echiquier[2][0]=new Case(1,1);
+		echiquier[0][1]=new Case(1);
+		echiquier[0][2]=new Case(1);
+		echiquier[1][0]=new Case(1);
+		echiquier[1][1]=new Case(1);
+		echiquier[2][0]=new Case(1);
 		
 		// mise en place des billes marrons
-		echiquier[2][4]=new Case(2,6);
-		echiquier[3][4]=new Case(2,9);
-		echiquier[3][3]=new Case(2,7);
-		echiquier[4][3]=new Case(2,8);
-		echiquier[4][2]=new Case(2,5);
+		echiquier[2][4]=new Case(2);
+		echiquier[3][4]=new Case(2);
+		echiquier[3][3]=new Case(2);
+		echiquier[4][3]=new Case(2);
+		echiquier[4][2]=new Case(2);
 		
 	
 	}
@@ -183,37 +183,18 @@ public class Plateau {
 		return nbBlancSortis;
 	}
 	
-	// afficher les valeurs de la matrice
-	public void afficheMatrice(){
-		int i,j;
-		for(j=4;j>=0;j--){
-			for(i=0;i<5;i++){
-				if(echiquier[i][j].estLibre())
-					System.out.printf("0");
-				else if(echiquier[i][j].estMarron())
-					System.out.printf("2");	
-				else
-					System.out.printf("1");
-				
-				System.out.printf(" ");		
-			}
-			System.out.println();				
-		}
-	}
-	
 	// afficher les cases de l'echiquier
 	public void afficher(){
 		int i,j;
 		for(j=4;j>=0;j--){
 			for(i=0;i<5;i++){
 				if(echiquier[i][j].estLibre())
-					System.out.printf("("+ 0+",");
+					System.out.printf("0"+" ");
 				else if(echiquier[i][j].estMarron())
-					System.out.printf("("+"2"+",");	
+					System.out.printf("2"+" ");	
 				else
-					System.out.printf("("+1+",");
-				
-				System.out.printf(echiquier[i][j].num_bille+ ") ");		
+					System.out.printf("1"+" ");
+					
 			}
 			System.out.printf("\n");				
 		}
@@ -295,8 +276,8 @@ public class Plateau {
 		else if(coupjouable.estColonne()){
 			int c=coupjouable.Colonne();
 			int i;
-			Case anciennecase=new Case(0,0);
-			Case nouvellecase=new Case(0,0);
+			Case anciennecase=new Case(0);
+			Case nouvellecase=new Case(0);
 			// bas haut
 			if(coupjouable.Sens()){
 				nouvellecase.change(echiquier[c][0]);			
@@ -323,8 +304,8 @@ public class Plateau {
 		else{
 				int r=coupjouable.Rangee();
 				int i;
-				Case anciennecase=new Case(0,0);
-				Case nouvellecase=new Case(0,0);
+				Case anciennecase=new Case(0);
+				Case nouvellecase=new Case(0);
 				// gauche droite
 				if(coupjouable.Sens()){
 					nouvellecase.change(echiquier[0][r]);			
@@ -435,14 +416,11 @@ public class Plateau {
 	public void lecture(File f) throws IOException{
 		int i,j;
 		FileReader fichier = new FileReader(f);	
-		int contenu,num_bille;
+		int contenu;
 		for(j=4;j>=0;j--){
 			for(i=0;i<5;i++){
 				contenu = (int) fichier.read();
-				num_bille = (int) fichier.read();
-				if(num_bille==5)
-					num_bille=-1;
-				Case c=new Case(contenu,num_bille);
+				Case c=new Case(contenu);
 				echiquier[i][j]=c;
 			}
 		}
@@ -567,8 +545,8 @@ public class Plateau {
 				else if(coupjouable.estColonne()){
 					int c=coupjouable.Colonne();
 					int i;
-					Case anciennecase=new Case(0,0);
-					Case nouvellecase=new Case(0,0);
+					Case anciennecase=new Case(0);
+					Case nouvellecase=new Case(0);
 					// inversement du bas haut
 					if(!coupjouable.Sens()){
 						nouvellecase.change(echiquier[c][0]);			
@@ -595,8 +573,8 @@ public class Plateau {
 				else{
 						int r=coupjouable.Rangee();
 						int i;
-						Case anciennecase=new Case(0,0);
-						Case nouvellecase=new Case(0,0);
+						Case anciennecase=new Case(0);
+						Case nouvellecase=new Case(0);
 						// inversement gauche droite
 						if(!coupjouable.Sens()){
 							nouvellecase.change(echiquier[0][r]);			
@@ -716,48 +694,22 @@ public class Plateau {
         }         
     }
     
-    public LinkedList<CoupJouable> ListeCoujouable(){
+    // afficher les valeurs de la matrice
+	public void afficheMatrice(){
 		int i,j;
-		
-		LinkedList<CoupJouable> L = new LinkedList<CoupJouable>();
-		//Iterator<CoupJouable> it= L.iterator();
-		CoupJouable CJ = new CoupJouable();
-	
-		int largeurPt = 5;
-		int longueurPt = 5;
-		
-			
-			Point pDep = new Point(-1,-1);
-			Point pArr = new Point(-1,-1);
-			
-			for (i=0;i<largeurPt;i++) {
-				for (j=0;j<longueurPt;j++) {
-					if((jBlancjoue() && echiquier[i][j].estBlanc()) || (!jBlancjoue() && echiquier[i][j].estMarron())){
-						pDep = new Point(i,j);
-						for(int k=0; k<7; k++){
-							// Choisit un coup
-							if(k<3){		// test des points
-								pArr = pointLibre(pDep,k);
-								CJ.joueCase(pDep,pArr);
-							}
-							else if(k<5)	// test des colonnes
-								CJ.coup(k-3, i);
-							else			// test des rangees
-								CJ.coup(k-3, j);
-							// Si le coup est valide
-							if(CJ.estValide(this)){
-								if(k<3)
-									L.add(CJ);
-								else if(k<5)
-									L.add(CJ);
-								else
-									L.add(CJ);
-							}
-						}
-					}
-				}
+		for(j=4;j>=0;j--){
+			for(i=0;i<5;i++){
+				if(echiquier[i][j].estLibre())
+					System.out.printf("0");
+				else if(echiquier[i][j].estMarron())
+					System.out.printf("2");	
+				else
+					System.out.printf("1");
+				
+				System.out.printf(" ");		
 			}
-			return L;
+			System.out.println();				
+		}
 	}
 }
 	

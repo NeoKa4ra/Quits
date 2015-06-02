@@ -1,5 +1,8 @@
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 //import java.io.File;
@@ -10,106 +13,58 @@ import javax.swing.*;
 
 public class PlateauGraphique extends JComponent{
 	
-	Donnees d;
+	
 	Graphics2D drawable;
 	Plateau matrice;
-	CaseGraphique [][] plateauGraphique;
-
-	PlateauGraphique(Donnees donnees){
-		d = donnees;
-		this.matrice = d.matrice;
-		setLayout(null);
-		
-		plateauGraphique=new CaseGraphique[5][5];
+	Shape [] listeCase;
+	Shape [] listeFleche;
+	Point [] listeCentre;
+	Point depart;
+	Image bb,bn,fg,fh,fd,fb;
+	int tailleCase;
+	boolean selectionBille;
+	public boolean joueur_joue;
+	public int fleche;
+	Moteur m;
 	
+	PlateauGraphique(Plateau matrice,Moteur m,Etats j1, Etats j2){
+		
+		this.matrice = matrice;
+		setLayout(null);
+		listeCase = new Shape[25];
+		listeCentre = new Point[25];
+		listeFleche = new Shape[20];
+		tailleCase=0;
+		depart= new Point();
+		addMouseListener(new EcouteurBille(this));
+		addMouseListener(new EcouteurDeDrop(this,m,j1,j2));
+		addMouseListener(new EcouteurFleche(this,m,j1,j2));
+		selectionBille=false;
+		joueur_joue=true;
+		fleche=0;
 	}
 
 	public void init () {
 
-				plateauGraphique[0][0]=ajouterCase(380, 650, matrice.echiquier[0][0].numBille(),0,0);
-				plateauGraphique[1][0]=ajouterCase(460, 570, matrice.echiquier[1][0].numBille(),1,0);
-				plateauGraphique[2][0]=ajouterCase(540, 490, matrice.echiquier[2][0].numBille(),2,0);
-				plateauGraphique[3][0]=ajouterCase(620, 410, matrice.echiquier[3][0].numBille(),3,0);
-				plateauGraphique[4][0]=ajouterCase(700, 330, matrice.echiquier[4][0].numBille(),4,0); //droite
-				
-				plateauGraphique[0][1]=ajouterCase(300, 570, matrice.echiquier[0][1].numBille(),0,1);
-				plateauGraphique[0][2]=ajouterCase(220, 490, matrice.echiquier[0][2].numBille(),0,2);
-				plateauGraphique[0][3]=ajouterCase(140, 410, matrice.echiquier[0][3].numBille(),0,3);
-				plateauGraphique[0][4]=ajouterCase(60, 330, matrice.echiquier[0][4].numBille(),0,4); // gauche
-				
-				plateauGraphique[1][1]=ajouterCase(380, 490, matrice.echiquier[1][1].numBille(),1,1);
-				
-				plateauGraphique[2][1]=ajouterCase(460, 410, matrice.echiquier[2][1].numBille(),2,1);
-				plateauGraphique[3][1]=ajouterCase(540, 330, matrice.echiquier[3][1].numBille(),3,1);
-				plateauGraphique[4][1]=ajouterCase(620, 250, matrice.echiquier[4][1].numBille(),4,1); //d
-				
-				plateauGraphique[1][2]=ajouterCase(300, 410, matrice.echiquier[1][2].numBille(),1,2);
-				plateauGraphique[1][3]=ajouterCase(220, 330, matrice.echiquier[1][3].numBille(),1,3);
-				plateauGraphique[1][4]=ajouterCase(140, 250, matrice.echiquier[1][4].numBille(),1,4); //g
-				
-				
-				plateauGraphique[2][2]=ajouterCase(380, 330, matrice.echiquier[2][2].numBille(),2,2);
-				
-				plateauGraphique[3][2]=ajouterCase(460, 250, matrice.echiquier[3][2].numBille(),3,2);
-				plateauGraphique[4][2]=ajouterCase(540, 170, matrice.echiquier[4][2].numBille(),4,2); // d
-				
-				plateauGraphique[2][3]=ajouterCase(300, 250, matrice.echiquier[2][3].numBille(),2,3);
-				plateauGraphique[2][4]=ajouterCase(220, 170, matrice.echiquier[2][4].numBille(),2,4); //g
-				
-				plateauGraphique[3][3]=ajouterCase(380, 170,matrice.echiquier[3][3].numBille(),3,3); //m
-				
-				plateauGraphique[4][3]=ajouterCase(460, 90,matrice.echiquier[4][3].numBille(),4,3); //d
-				
-				plateauGraphique[3][4]=ajouterCase(300, 90, matrice.echiquier[3][4].numBille(),3,4); //g
-				
-				plateauGraphique[4][4]=ajouterCase(380, 10,matrice.echiquier[4][4].numBille(),4,4); // s
-
-				ajouterFleche(455, 0, 0);
-				ajouterFleche(530, 70, 1);
-				ajouterFleche(605, 140, 2);
-				ajouterFleche(690, 220, 3);
-				ajouterFleche(760, 290, 4);
-				
-				ajouterFleche(290, 0, 5);
-				ajouterFleche(210, 70, 6);
-				ajouterFleche(135, 145, 7);
-				ajouterFleche(65, 220, 8);
-				ajouterFleche(-20, 300, 9);
-				
-				ajouterFleche(450, 750, 10);
-				ajouterFleche(530, 680, 11);
-				ajouterFleche(600, 610, 12);
-				ajouterFleche(680, 530, 13);
-				ajouterFleche(760, 450, 14);
-				
-				ajouterFleche(-20, 460, 15);
-				ajouterFleche(50, 530, 16);
-				ajouterFleche(120, 600, 17);
-				ajouterFleche(210, 690, 18);
-				ajouterFleche(290, 760, 19);
-				
-	}
-	
-
-	public CaseGraphique ajouterCase(int x, int y, int num_bille, int l, int h){
-		CaseGraphique c = new CaseGraphique(l,h);
+		try { 
+			bb=ImageIO.read(new File("blanche.png")); 
+			bn=ImageIO.read(new File("u.png")); 
+			fd=ImageIO.read(new File("t.png"));
+			fh=ImageIO.read(new File("g.png"));
+		    fb=ImageIO.read(new File("bd.png"));
+		    fg=ImageIO.read(new File("bg.png"));
+		} 
+		catch (IOException e) {
+			// TODO Auto-generated catch block 
+			e.printStackTrace(); 
+		}	
 		
-		c.addMouseListener(new EcouteurDeDrop(d, this));
-		if(num_bille!=-1){
-			
-			d.billes[num_bille].addMouseListener(new EcouteurBille(num_bille, d));
-			c.add(d.billes[num_bille]);
-			
-		}
-	    c.setBounds(x, y, 150, 150);
-	    add(c);
-		return c;
+				
 	}
 	
 	
 
 
-	
 	public void paintComponent(Graphics g) {
 	       
 
@@ -120,22 +75,272 @@ public class PlateauGraphique extends JComponent{
 		
 		drawable.setPaint(Color.white);
 		drawable.fillRect(0, 0, getSize().width, getSize().height);
-        	
+		drawable.setStroke(new BasicStroke( 2.0f ));
 		
+		// CALCULE DE LA TAILLE D'UNE CASE 
+		int width = getSize().width; 
+		int height = getSize().height; 
+		
+		int margeX=0,margeY=0,w,h; 
+		int largeurCase = (width)/5; 
+		int hauteurCase = (height)/5; 
+		int demiD; 
+		double diagonale; 
+		
+		
+		if(largeurCase > hauteurCase){ 
+			tailleCase=hauteurCase; 
+			diagonale = Math.sqrt(Math.pow(tailleCase,2)+Math.pow(tailleCase,2)); 
+		
+			if((int) (diagonale*5) > height){
+				//diagonale²=2taillecase² donc on obtient tailleCase 
+				tailleCase= (int) Math.sqrt(Math.pow(height,2)/2)/5;
+				diagonale=(int) height/5;
+			} 
+		} 
+		else{ 
+			tailleCase=largeurCase; 
+			diagonale = Math.sqrt(Math.pow(tailleCase,2)+Math.pow(tailleCase,2)); 
+			if((int) (diagonale*5) > width){
+				//diagonale²=2taillecase² donc on obtient tailleCase 
+				tailleCase = (int) Math.sqrt(Math.pow(width,2)/2)/5;
+			}
+		}
+		int d= (int) Math.sqrt(Math.pow(tailleCase,2)+Math.pow(tailleCase,2)); 
+		
+		w=(int) d*5;
+		h=(int) d*5;	
+		demiD=(int) d/2;
+		margeX = width-(d*5);
+		margeY = height -(d*5);
+	
+		int [] init_polX= {w/2+margeX/2,w/2+demiD+margeX/2,w/2+margeX/2,w/2-demiD+margeX/2};
+		int [] init_polY= {h+margeY/2,h-demiD+margeY/2,h-d+margeY/2,h-demiD+margeY/2};
+		
+		
+		listeCentre[0]=new Point((int) init_polX[0], (int) init_polY[2]+demiD ); 
+		listeCase[0] = new Polygon(init_polX,init_polY,4);
+		
+		drawable.setPaint(Color.orange);
+        drawable.fill(listeCase[0]);
+        drawable.setPaint(Color.black);
+        drawable.draw(listeCase[0]);
+        if(matrice.echiquier[0][0].contenu==1){
+			drawable.drawImage(bb,init_polX[3]+demiD/2,init_polY[3]-demiD/2,tailleCase/2,tailleCase/2,null);
+		}
+		if(matrice.echiquier[0][0].contenu==2){
+			drawable.drawImage(bn,init_polX[3]+demiD/2,init_polY[3]-demiD/2,tailleCase/2,tailleCase/2,null);
+		}
+    	drawable.drawImage(fb,listeCentre[0].x+(3*demiD)/4,listeCentre[0].y+(demiD)/2,tailleCase/3,tailleCase/3,null);
+    	drawable.drawImage(fg,listeCentre[0].x-demiD,listeCentre[0].y+demiD-(demiD/3),tailleCase/3,tailleCase/3,null);
+    	
+	    	listeFleche[0]=new Rectangle(listeCentre[0].x+(3*demiD)/4,listeCentre[0].y+demiD/2,tailleCase/3,tailleCase/3);
+	    	listeFleche[5]=new Rectangle(listeCentre[0].x-demiD,listeCentre[0].y+demiD-(demiD/3),tailleCase/3,tailleCase/3);
+
+    	int [] polX= {w/2+margeX/2,w/2+demiD+margeX/2,w/2+margeX/2,w/2-demiD+margeX/2};
+		int [] polY= {h+margeY/2,h-demiD+margeY/2,h-d+margeY/2,h-demiD+margeY/2};
+	   
+		
+        
+        // dessiner la grille 
+        int c=1, f=1;	int l=1;
+        int i,j;
+        
+        for(i=0;i<5;i++){
+        	for(j=0;j<5;j++){
+        	
+        		
+        	if(!(i==0 && j==0)){
+        		polX[0]= polX[0]-demiD;
+    			polX[1]= polX[1]-demiD;
+    			polX[2]= polX[2]-demiD;
+    			polX[3]= polX[3]-demiD;
+    					
+    			polY[0]= polY[0]-demiD;
+    			polY[1]= polY[1]-demiD;
+    			polY[2]= polY[2]-demiD;
+    			polY[3]= polY[3]-demiD;
+            
+    			if(c%5==0){
+    				
+    				 	polX[0]= init_polX[0]+(demiD)*l;
+    					polX[1]= init_polX[1]+(demiD)*l;
+    					polX[2]= init_polX[2]+(demiD)*l;
+    					polX[3]= init_polX[3]+(demiD)*l;
+    							
+    					polY[0]= init_polY[0]-(demiD)*l;
+    					polY[1]= init_polY[1]-(demiD)*l;
+    					polY[2]= init_polY[2]-(demiD)*l;
+    					polY[3]= init_polY[3]-(demiD)*l;	
+    					l++;
+    			}
+    			
+    			listeCentre[c]=new Point((int) polX[0], (int) polY[2]+demiD );
+	            listeCase[c] = new Polygon(polX,polY,4);
+	        	drawable.setPaint(Color.orange);
+	            drawable.fill(listeCase[c]);
+	            drawable.setPaint(Color.black);
+	            drawable.draw(listeCase[c]);
+	            
+	            //dessiner les billes
+        		if(matrice.echiquier[i][j].contenu==1){
+        			drawable.drawImage(bb,listeCentre[c].x-demiD/3,listeCentre[c].y-demiD/3,tailleCase/2,tailleCase/2,null);
+        		}
+        		if(matrice.echiquier[i][j].contenu==2){
+        			drawable.drawImage(bn,listeCentre[c].x-demiD/3,listeCentre[c].y-demiD/3,tailleCase/2,tailleCase/2,null);
+        		}
+        		
+        		//dessiner les fleches
+
+	            if(j==4){ // vers le haut
+	            	drawable.drawImage(fh,listeCentre[c].x-demiD,listeCentre[c].y-demiD,tailleCase/3,tailleCase/3,null);
+	            	if(f==5)
+	            		f++;	
+	            	listeFleche[f]=new Rectangle(listeCentre[c].x-demiD,listeCentre[c].y-demiD,tailleCase/3,tailleCase/3);
+	            	f++;	
+	            }
+	            if(i==4){ // vers la droite
+	            	drawable.drawImage(fd,listeCentre[c].x+demiD/2,listeCentre[c].y-demiD,tailleCase/3,tailleCase/3,null);
+	            	if(f==5)
+	            		f++;
+	            	listeFleche[f]=new Rectangle(listeCentre[c].x+demiD/2,listeCentre[c].y-demiD,tailleCase/3,tailleCase/3);
+	            	f++;
+
+	            }
+	            if(j==0 ){ // vers le bas
+	            	drawable.drawImage(fb,listeCentre[c].x+(3*demiD)/4,listeCentre[c].y+demiD/2,tailleCase/3,tailleCase/3,null);
+	            	if(f==5)
+	            		f++;
+	            	listeFleche[f]=new Rectangle(listeCentre[c].x+(3*demiD)/4,listeCentre[c].y+demiD/2,tailleCase/3,tailleCase/3);
+	            	f++;
+
+	            }
+	            if(i==0){ // vers la gauche
+	            	drawable.drawImage(fg,listeCentre[c].x-demiD,listeCentre[c].y+demiD-(demiD/3),tailleCase/3,tailleCase/3,null);
+	            	if(f==5)
+	            		f++;
+	            	listeFleche[f]=new Rectangle(listeCentre[c].x-demiD,listeCentre[c].y+demiD-(demiD/3),tailleCase/3,tailleCase/3);
+	            	f++;
+	            }
+        		c++;
+        		
+        		
+        		}
+        	}
+        }
+    
+                
+        
+	}
+	
+	
+	public int calculNUmeroCase(int x, int y){
+		int i=0;
+		Point p=null;
+		while(i<25 && !listeCase[i].contains(x,y)){
+			i++;
+		}
+		if(i!=25)
+			return i;
+		else return -1;
+	}
+        
+    public Point  calculIndice (int i){
+    	
+    	  Point p=new Point();
+    	  
+    	  if(i!=-1){
+    		 p.x=i/5;
+    		 p.y=i%5;
+    	  }
+    	  
+    	  return p;
+      }
+      
+      
+	public boolean clicBille (Point p, int i, int x, int y){
+		boolean b=false;
+		int rayon = tailleCase/4;
+		int d;
+		if(p!=null && matrice.echiquier[p.x][p.y].contenu!=0 && i!=-1){
+			 d= (int) Math.sqrt(Math.pow(listeCentre[i].x-x,2)+Math.pow(listeCentre[i].y-y,2));
+			if (rayon > (Math.sqrt(Math.pow(listeCentre[i].x-x,2)+Math.pow(listeCentre[i].y-y,2)))) 
+				b=true;
+		}
+		return b;
+	}
+	
+    public int clicFleche(double x, double y){
+    	int i=0;
+    	while(i<20 && !(listeFleche[i].contains(x,y))){
+    		i++;	
+    	}
    
-        
-	}
-	
-	public void ajouterFleche(int x, int y, int i){
-		d.fleches[i].setBounds(x, y, 110, 110);
-		d.fleches[i].addMouseListener(new EcouteurFleche(i,d,this));
-		add(d.fleches[i]);
-	}
-	
-        
-        
-	
-        
+    	if(i!=25){
+    		return i;
+    	}
+    	else	
+    		return -1;
+    	
+    }
+    
+    public int direction (int i){ // nord sud est ouest respectivement 1 2 3 4
+    	Point p;
+    	switch(i){
+    	case 0:
+    		return 2;
+    	case 1:
+    		return 4;
+    	case 2:
+    		return 4;
+    	case 3:
+    		return 4;	
+    	case 4:
+    		return 1;
+    	case 5:
+    		return 4;	
+    	case 6:
+    		return 4;
+    	case 7:
+    		return 2;	
+    	case 8:
+    		return 1;
+    	case 9:
+    		return 2;	
+    	case 10:
+    		return 1;
+    	case 11:
+    		return 2;	
+    	case 12:
+    		return 1;
+    	case 13:
+    		return 3;	
+    	case 14:
+    		return 2;
+    	case 15:
+    		return 3;	
+    	case 16:
+    		return 3;
+    	case 17:
+    		return 3;	
+    	case 18:
+    		return 1;
+    	case 19:
+    		return 3;
+    	default:;
+    	}
+    	return -1;
+    	
+    }
+    
+  
+    
+    public void afficherFleche(){
+    	for(int i=0;i<20;i++)
+    		System.out.println(i+" "+ listeFleche[i]);
+    	
+    }
+    
         
 }
 

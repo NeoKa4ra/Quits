@@ -4,20 +4,28 @@ import java.awt.event.*;
 import java.io.IOException;
 
 public class EcouteurDeBouton implements ActionListener{ 
-	Plateau matrice;
+	PlateauGraphique plateau;
 	NouvellePartie np;
 	Sauvegarde sauvegarde;
+	Moteur m;
+	int bouton;
+	Etats j1,j2;
 	
-	EcouteurDeBouton(Sauvegarde sauvegarde, Plateau p){
+	EcouteurDeBouton(int b, Sauvegarde sauvegarde,PlateauGraphique plateau,Moteur m, Etats j1, Etats j2){
 		this.sauvegarde=sauvegarde;
-		this.matrice=p;
+		this.plateau=plateau;
+		bouton=b;
+		this.j1=j1;
+		this.j2=j2;
+		this.m=m;
+
 	}
 
     	public void actionPerformed(ActionEvent e) {
-    	
     		if(e.getActionCommand().equals("Nouvelle Partie")){
     			 System.out.println("coucou new partie" );
-    			 NouvellePartie np = new NouvellePartie(null, "Choisir le niveau", true);
+
+    			 NouvellePartie np = new NouvellePartie(null, "Choisir le niveau", true, m);
          		 this.np=np;
     		
     		}
@@ -31,7 +39,7 @@ public class EcouteurDeBouton implements ActionListener{
  			     //appel de la fonction de sauvegarde (classe Sauvegarde)
  			     if(nom!=null && nom.length()>0) {
 	 			     try{
-						Moteur.sauvegarde(nom,matrice,sauvegarde);
+						Moteur.sauvegarde(nom,plateau.matrice,sauvegarde);
 						sauvegarde.afficher();
 	 			     }
 				     catch(IOException ex) {
@@ -47,7 +55,7 @@ public class EcouteurDeBouton implements ActionListener{
         	if(e.getActionCommand().equals("Charger Partie")){
 				
 				if(sauvegarde.listFichier.size()!=0){
-					ChargerPartie cp = new ChargerPartie(null, "Charger une partie", true, this, this.sauvegarde, matrice);				}
+					ChargerPartie cp = new ChargerPartie(null, "Charger une partie", true, this, this.sauvegarde, plateau.matrice);				}
 				else{
 					 JOptionPane jop = new JOptionPane();
 					 jop.showMessageDialog(null, "Aucune partie sauvegardée", "Erreur Chargement", JOptionPane.ERROR_MESSAGE);
@@ -55,24 +63,36 @@ public class EcouteurDeBouton implements ActionListener{
 					
         	}
         	
-        	if(e.getActionCommand().equals("Options")){
+         	if(e.getActionCommand().equals("Options")){
         		System.out.println("options");
         	}
         	
-        	if(e.getActionCommand().equals("aide")){
-        		System.out.println("aide");
+        	if(bouton==0){
+        		System.out.println("Je dois afficher les regles");
         	}
         	
-        	if(e.getActionCommand().equals("coupdepouce")){
+        	if(bouton==1){
         		System.out.println("coupdepouce");
         	}
         	
-        	if(e.getActionCommand().equals("annuler")){
-        		System.out.println("annuler");
-        	}
+        	if(bouton==2){
+        		Moteur.annuler(plateau.matrice);
+	        		j1.score= plateau.matrice.nbMarronSortis;
+	        		j2.score=plateau.matrice.nbBlancSortis;
+	        		j1.repaint();
+	        		j2.repaint();
+	        		plateau.repaint();
+        		}
         	
-        	if(e.getActionCommand().equals("refaire")){
-        		System.out.println("refaire");
+        	
+        	if(bouton==3){
+        		Moteur.refaire(plateau.matrice);
+	        		j1.score= plateau.matrice.nbMarronSortis;
+	        		j2.score=plateau.matrice.nbBlancSortis;
+	        		j1.repaint();
+	        		j2.repaint();
+	        		plateau.repaint();
+        		
         	}
    	 }
  }

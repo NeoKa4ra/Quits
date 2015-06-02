@@ -2,34 +2,34 @@ import java.awt.*;
 import javax.swing.*;
 
 class MyGlassPane extends JComponent {
-    Donnees d;
+	
+PlateauGraphique plateau;
     int selection, x, y;
     Graphics2D drawable;
+    
 
-    MyGlassPane(Donnees donnees) {
-       d = donnees;
+    MyGlassPane(PlateauGraphique plateau) {
+    	this.plateau = plateau;
     }
 
     public void paintComponent(Graphics g) {
         drawable = (Graphics2D) g;
 
-        if (d.selected) {
-            //drawable.drawImage(d.billes[d.selection], x, y, null);
-        	if(d.selection >= 0 && d.selection <=4)
-        		drawable.setPaint(Color.black);
-        	else
-        		drawable.setPaint(Color.gray);
-        	
-            drawable.fillOval(x, y, d.billes[d.selection].getWidth()-90, d.billes[d.selection].getHeight()-90);
+        if (plateau.selectionBille) {
+        	if(plateau.matrice.echiquier[plateau.depart.x][plateau.depart.y].contenu==1){
+    			drawable.drawImage(plateau.bb,x,y,plateau.tailleCase/2,plateau.tailleCase/2,null);
+    		}
+    		if(plateau.matrice.echiquier[plateau.depart.x][plateau.depart.y].contenu==2){
+    			drawable.drawImage(plateau.bn,x,y,plateau.tailleCase/2,plateau.tailleCase/2,null);
+    		}
         }
        
     }
 
     public void dessiner(int x, int y) {
-        if (d.selected) {
-    		
-            this.x = x;
-            this.y = y;
+        if (plateau.selectionBille) {
+        	this.x=x-plateau.tailleCase/4;
+        	this.y=y-plateau.tailleCase/4;
             repaint();
         }
     }

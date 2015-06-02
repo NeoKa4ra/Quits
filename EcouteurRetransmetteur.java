@@ -3,14 +3,14 @@ import javax.swing.*;
 import java.awt.event.*;
 
 class EcouteurRetransmetteur implements MouseListener {
+	PlateauGraphique plateau;
     MyGlassPane glass;
     Container content;
-    Donnees d;
 
-    public EcouteurRetransmetteur(MyGlassPane g, Container c, Donnees donnees) {
+    public EcouteurRetransmetteur(MyGlassPane g, Container c, PlateauGraphique plateau) {
         glass = g;
         content = c;
-        d = donnees;
+        this.plateau=plateau;
     }
 
     // Le GlassPane interceptant tous les evenements, il nous faut une methode pour
@@ -34,14 +34,14 @@ class EcouteurRetransmetteur implements MouseListener {
 	// Dans les deux methodes ci-dessous, le d.selected = false sert a gerer le cas
 	// ou le clic est en dehors des composants de l'application
     public void mousePressed(MouseEvent e) {
-        d.selected = false;
+        plateau.selectionBille = false;
         forwardEvent(e);
         glass.dessiner(e.getX(), e.getY());
     }
 
     public void mouseReleased(MouseEvent e) {
         forwardEvent(e);
-        d.selected = false;
+        plateau.selectionBille = false;
         glass.repaint();
     }
 

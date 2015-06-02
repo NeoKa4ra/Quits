@@ -10,10 +10,13 @@ import java.util.LinkedList;
 
 public class Moteur {
 
+	public int niveau;
 	
 	Moteur(){
-	
+		niveau=0;
 	}
+	
+	
 	
 	public static void sauvegarde(String nom,Plateau plateau,Sauvegarde sauvegarde) throws IOException {
 		sauvegarde.sauv_Fich(nom);
@@ -29,10 +32,7 @@ public class Moteur {
 				else
 					fichier.write(1);
 				
-				if(plateau.echiquier[i][j].num_bille!=-1)
-					fichier.write(plateau.echiquier[i][j].num_bille);
-				else
-					fichier.write(5);
+
 			}
 		}
 		
@@ -132,6 +132,8 @@ public class Moteur {
 			plateau.Joue(coupjouable,false);
 			res = true;
 		}
+		else
+			System.out.println("injouable"+dep.x + dep.y+ arr.x+arr.y);
 		
 		return res;		
 	}

@@ -4,11 +4,9 @@ public class Case {
 	// 1 pour case occupee par blanc
 	// 2 pour case occupee par marron
 	public int contenu;
-	public int num_bille;
 	
 	// constructeur
-	public Case(int contenu,int num_bille){
-		this.num_bille=num_bille;
+	public Case(int contenu){
 		this.contenu=contenu;
 	}
 	
@@ -50,7 +48,6 @@ public class Case {
 	// change le contenu de la case en fonctin du contenu d'une case
 	public void change(Case c){
 		contenu=c.contenu;
-		num_bille=c.num_bille;
 	}
 	
 	public void afficher(){
@@ -67,9 +64,7 @@ public class Case {
 		return contenu;
 	}
 	
-	public int numBille(){
-		return num_bille;
-	}
+
 	
 	
 	
