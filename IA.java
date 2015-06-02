@@ -384,7 +384,7 @@ public class IA {
 						if(CJ.estValide(pT)){
 							pTemp.Joue(CJ,false);
 							tmp = Min(pTemp, profondeur-1);
-							/*
+							
 							if(k == 0){
 								System.out.println("Bille Gauche x : " + i + " y : " + j + " valeur =" + tmp);
 							}
@@ -407,7 +407,7 @@ public class IA {
 								System.out.println("Ligne Gauche y : " + j + " valeur =" + tmp);
 							}
 
-*/
+
 							if(k<3){		// test des points
 								//System.out.println("jouer : " + i + j +" Coup : " + k + " valeur : " + tmp);
 								pArr = pT.pointLibre(pDep,k);

@@ -13,17 +13,17 @@ public class Testcode {
 		Plateau plateau=new Plateau();
 		plateau.init_2_joueurs();
 		plateau.afficheMatrice();
-		LinkedList<CoupJouable> L = new LinkedList<CoupJouable>();
+		/*LinkedList<CoupJouable> L = new LinkedList<CoupJouable>();
 		L = plateau.ListeCoujouable();
 		plateau.Joue(L.get(7),false);
 		System.out.println();
-		plateau.afficheMatrice();
+		plateau.afficheMatrice();*/
 		int ia1 = 0 , ia2 = 0;
 		IA bot = new IA();
 		CoupJouable CJ=new CoupJouable();
 		int nbParties = 1;
 		while(ia1 != nbParties && ia2 != nbParties && plateau.position < 400){
-			/*//*********** VERSION AVEC AFFICHAGE ***********
+			//*********** VERSION AVEC AFFICHAGE ***********
 			System.out.println();
 			System.out.println("Tour " + (plateau.position/2) + " : ");
 			System.out.println();
@@ -41,7 +41,7 @@ public class Testcode {
 			plateau.afficheMatrice();
 			
 			System.out.println();
-			*/
+			/*
 			//*********** VERSION SANS AFFICHAGE ***********
 			//*********** JOUEUR 1 ***********
 			CJ = bot.niveau0(plateau);
@@ -49,7 +49,7 @@ public class Testcode {
 			//*********** JOUEUR 2 ***********
 			CJ = bot.hard(plateau,1);
 			plateau.Joue(CJ,false);
-			
+			*/
 			//*********** Test Fin Partie ***********
 			if (plateau.nbMarronSortis() >= 3){
 				ia2++;
