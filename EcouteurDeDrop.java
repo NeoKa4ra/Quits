@@ -111,7 +111,7 @@ class EcouteurDeDrop implements MouseListener,ActionListener {
 	        		coupjouable=IA.normal(plateau.matrice);
 	        	}	
 	        	else //if(m.niveau==3)
-	        		coupjouable=IA.hard(plateau.matrice,1);       		
+	        		coupjouable=IA.hard(plateau.matrice,3);       		
 
 	        	
 	        	if(coupjouable.estCase()){

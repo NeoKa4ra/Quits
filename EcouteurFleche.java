@@ -152,7 +152,7 @@ public class EcouteurFleche implements MouseListener,ActionListener {
 	        	else if(m.niveau==2)
 	        		coupjouable=IA.normal(plateau.matrice);	        		
 	        	else //if(ia==3)
-	        		coupjouable=IA.hard(plateau.matrice,1);   
+	        		coupjouable=IA.hard(plateau.matrice,3);   
 	        	
 	        	if(coupjouable.estCase()){
 	        		Point dep=coupjouable.PointDep();

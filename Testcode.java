@@ -22,35 +22,35 @@ public class Testcode {
 		IA bot = new IA();
 		CoupJouable CJ=new CoupJouable();
 		int nbPartie = 100;
-		int nbTour = 200;
+		int nbTour = 210;
 		while(ia1 != nbPartie && ia2 != nbPartie && plateau.position < nbTour*2){
-			/*//*********** VERSION AVEC AFFICHAGE ***********
+			//*********** VERSION AVEC AFFICHAGE ***********
 			System.out.println();
 			System.out.println("Tour " + (plateau.position/2) + " : ");
 			System.out.println();
 			//*********** JOUEUR 1 ***********
 			System.out.println("Joueur 1 (pions 2) :");
-			CJ = bot.hard(plateau,1);
+			CJ = bot.hard(plateau,2 , true);
 			plateau.Joue(CJ,false);
 			plateau.afficheMatrice();
 
 			System.out.println();
 			//*********** JOUEUR 2 ***********
 			System.out.println("Joueur 2 (pions 1) :");
-			CJ = bot.hard(plateau,3);
+			CJ = bot.hard(plateau,2 , false);
 			plateau.Joue(CJ,false);
 			plateau.afficheMatrice();
 			
-			System.out.println();*/
-			
+			System.out.println();
+			/*
 			//*********** VERSION SANS AFFICHAGE ***********
 			//*********** JOUEUR 1 ***********
 			CJ = bot.normal(plateau);
 			plateau.Joue(CJ,false);
 			//*********** JOUEUR 2 ***********
-			CJ = bot.hard(plateau,4);
+			CJ = bot.hard(plateau,2);
 			plateau.Joue(CJ,false);
-			
+			*/
 			//*********** Test Fin Partie ***********
 			if (plateau.nbMarronSortis() >= 3){
 				ia2++;
