@@ -384,28 +384,28 @@ public class IA {
 						if(CJ.estValide(pT)){
 							pTemp.Joue(CJ,false);
 							tmp = Min(pTemp, profondeur-1);
-							
+							/*
 							if(k == 0){
-								System.out.println("Bille Gauche x : " + i + " y : " + j + " valeur =" + tmp);
+								System.out.println("Bille Gauche 		x : " + i + "	y : " + j + "	valeur = " + tmp);
 							}
 							else if(k == 1){
-								System.out.println("Bille Droite x : " + i + " y : " + j + " valeur =" + tmp);
+								System.out.println("Bille Droite 		x : " + i + "	y : " + j + "	valeur = " + tmp);
 							}
 							else if(k == 2){
-								System.out.println("Bille Diagonal x : " + i + " y : " + j + " valeur =" + tmp);
+								System.out.println("Bille Diagonal 		x : " + i + "	y : " + j + "	valeur = " + tmp);
 							}
 							else if(k == 3){
-								System.out.println("Colonne Haut x : " + i + " valeur =" + tmp);
+								System.out.println("Colonne Haut		x : " + i + "		valeur = " + tmp);
 							}
 							else if(k == 4){
-								System.out.println("Colonne Bas x : " + i + " valeur =" + tmp);
+								System.out.println("Colonne Bas		x : " + i + "		valeur = " + tmp);
 							}
 							else if(k == 5){
-								System.out.println("Ligne Droite y : " + j + " valeur =" + tmp);
+								System.out.println("Ligne Droite		y : " + j + "		valeur = " + tmp);
 							}
 							else if(k == 6){
-								System.out.println("Ligne Gauche y : " + j + " valeur =" + tmp);
-							}
+								System.out.println("Ligne Gauche		y : " + j + "		valeur = " + tmp);
+							}*/
 
 
 							if(k<3){		// test des points
@@ -538,7 +538,9 @@ public class IA {
 					res += coutB()[i][j];
 			}
 		}
-		res += pT.nbBlancSortis()*1000;
+		res += pT.nbBlancSortis()*100;
+		if (pT.nbBlancSortis() >= 3)
+			res += 10000;
 		return res;
 	}
 	
@@ -550,39 +552,20 @@ public class IA {
 					res += coutM()[i][j];
 			}
 		}
-		res += pT.nbMarronSortis()*1000;
+		res += pT.nbMarronSortis()*100;
+		if (pT.nbMarronSortis() >= 3)
+			res += 10000;
 		return res;
 	}
 
 
 	private int[][] coutB(){
 		int [][] mat = new int[5][5];
-		mat[0][0] = 1000;
-		mat[0][1] = 10;
-		mat[0][2] = 20;
-		mat[0][3] = 30;
-		mat[0][4] = 40;
-		mat[1][0] = 0;
-		mat[1][1] = 10;
-		mat[1][2] = 20;
-		mat[1][3] = 35;
-		mat[1][4] = 100;
-		mat[2][0] = 0;
-		mat[2][1] = 0;
-		mat[2][2] = 35;
-		mat[2][3] = 40;
-		mat[2][4] = 130;
-		mat[3][0] = 0;
-		mat[3][1] = 0;
-		mat[3][2] = 0;
-		mat[3][3] = 100;
-		mat[3][4] = 150;
-		mat[4][0] = 0;
-		mat[4][1] = 0;
-		mat[4][2] = 0;
-		mat[4][3] = 0;
-		mat[4][4] = 5000; 
-		
+	mat[0][4] = 4;		mat[1][4] = 5;		mat[2][4] = 6;		mat[3][4] = 7;		mat[4][4] = 0; 
+	mat[0][3] = 3;		mat[1][3] = 4;		mat[2][3] = 5;		mat[3][3] = 6;		mat[4][3] = 7;
+	mat[0][2] = 2;		mat[1][2] = 3;		mat[2][2] = 4;		mat[3][2] = 5;		mat[4][2] = 6;
+	mat[0][1] = 1;		mat[1][1] = 2;		mat[2][1] = 3;		mat[3][1] = 4;		mat[4][1] = 5;
+	mat[0][0] = 10;		mat[1][0] = 1;		mat[2][0] = 2;		mat[3][0] = 3;		mat[4][0] = 4;
 		return mat;
 	}
 
