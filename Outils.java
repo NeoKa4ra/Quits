@@ -49,6 +49,7 @@ public class Outils extends JPanel{
 		refaire.setEnabled(false);
 		
 		plateau.annuler=annuler;
+		plateau.refaire=refaire;
 	
 		
 	}

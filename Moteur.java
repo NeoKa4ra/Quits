@@ -25,6 +25,14 @@ public class Moteur {
 		File f=new File(nom);
 		int i,j;
 		FileWriter fichier = new FileWriter(f);
+		plateau.difficulte=niveau;
+		
+		if(plateau.estinverse)
+			fichier.write(1);
+		else
+			fichier.write(0);		
+		
+		fichier.write(plateau.difficulte);
 		for(j=4;j>=0;j--){
 			for(i=0;i<5;i++){
 				if(plateau.echiquier[i][j].estLibre())
@@ -114,6 +122,7 @@ public class Moteur {
 	public static void charger(String nom,Plateau plateau) throws IOException{
 		File f=new File(nom);
 		plateau.lecture(f);
+		niveau=plateau.difficulte;
 		
 	}
 	
@@ -194,7 +203,7 @@ public class Moteur {
 		return res;	
 	}
 	
-	public static void annuler(Plateau plateau,JButton annuler,JButton refaire){
+	public static void annuler(Plateau plateau,JButton annuler,JButton refaire,boolean couleurInverse){
 		CoupJouable coupjouable=new CoupJouable();
 		int position=plateau.position();
 		LinkedList<CoupJouable> L=(LinkedList<CoupJouable>) plateau.Historique().clone();
@@ -203,16 +212,18 @@ public class Moteur {
 		plateau.Annuler(coupjouable);
 
 			
-		if(position!=1 && niveau!=0){
+		if( (position!=1 || !(couleurInverse && position==2)) && niveau!=0){
 			coupjouable.copie(L.get(position-2));
 			plateau.Annuler(coupjouable);
-			if(position==2)
+			if(position==2 || (couleurInverse && position==3))
 				annuler.setEnabled(false);
 		}
 		refaire.setEnabled(true);
 		if(position==1)
 			annuler.setEnabled(false);
 		
+		if(position==2 && niveau!=0 && couleurInverse)
+			annuler.setEnabled(false);
 	}
 	
 	public static void refaire(Plateau plateau,JButton refaire,JButton annuler){
@@ -224,10 +235,10 @@ public class Moteur {
 		coupjouable=L.get(position);
 		plateau.Joue(coupjouable,true);
 				
-		if(position!=L.size() && niveau!=0){
+		if(position!=L.size()-1 && niveau!=0){
 			coupjouable=L.get(position+1);
 			plateau.Joue(coupjouable,true);
-			if(position+1==L.size()-1)
+			if(position==L.size()-2)
 				refaire.setEnabled(false);
 		}
 		

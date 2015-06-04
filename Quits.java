@@ -15,8 +15,7 @@ public class Quits implements Runnable{
 	   Sauvegarde sauvegarde = null;
 	   
 	   
-	   
-        // Creation d'une fenetre 12
+        // Creation d'une fenetre
         fenetre.setTitle("QUITS");
         try{
         	sauvegarde = new Sauvegarde();

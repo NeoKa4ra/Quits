@@ -42,6 +42,15 @@ public class EcouteurDeBouton2 implements ActionListener{
 			if(cp.listeBouton.getSelection()!=null){
 				 try{
 					    Moteur.charger(cp.fichierSelectionne,cp.p.matrice);
+					    cp.p.couleurInverse=cp.p.matrice.estinverse;
+					    if(cp.p.couleurInverse){
+					    	plateau.j2.tour=1;
+			    			plateau.j1.tour=0;
+			    			plateau.j2.joueur=1;
+			    			plateau.j1.joueur=2;
+			    			plateau.j1.repaint();
+			    			plateau.j2.repaint();
+					    }
 						sauvegarde.afficher();
 						//ici normalement on devrais charger la partie donc modifier le plateau graphique
 						cp.dispose();

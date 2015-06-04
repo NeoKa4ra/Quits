@@ -51,11 +51,6 @@ public class EcouteurFleche implements MouseListener,ActionListener {
 				case 1:
 					System.out.println("nord" + c +" fleche" + i);
 					if(m.colonneJouableH(c,plateau.matrice)){
-	            		plateau.clicfleche=i;
-	            		plateau.depart.x=-1;
-		    			plateau.depart.y=-1;
-		    			plateau.arrivee.x=-1;
-		    			plateau.arrivee.y=-1;
 	            		
 						int position=plateau.matrice.position;
 			    		int L=plateau.matrice.historique.size();
@@ -64,7 +59,7 @@ public class EcouteurFleche implements MouseListener,ActionListener {
 		
 		
 			    		if(position!=L){
-
+			    			plateau.refaire.setEnabled(false);
 					    	//System.out.println(L+"="+position);
 				    		int j;
 
@@ -82,33 +77,22 @@ public class EcouteurFleche implements MouseListener,ActionListener {
 			    	        current = 1;
 			    	        plateau.fleche=2;
 			    	        plateau.annuler.setVisible(true);
-						}else{
-			    			plateau.clicfleche=-1;
-			    			System.out.println("est" + c +" fleche" + i);
-
-
-			    		}
+						}
 
 		    		break;
 		    	case 2:
-					
 				
-					System.out.println("sud" + c +" fleche" + i);
+		    		System.out.println("ici");
 		    		if(m.colonneJouableB(c,plateau.matrice)){
-		    			plateau.clicfleche=i;
-		    			plateau.depart.x=-1;
-		    			plateau.depart.y=-1;
-		    			plateau.arrivee.x=-1;
-		    			plateau.arrivee.y=-1;
-		    			
 	            		int position=plateau.matrice.position;
 			    		int L=plateau.matrice.historique.size();
 			    		//System.out.println(L);
 			    		//System.out.println(position);
-		
+			    		
+			    		System.out.println("sud" + c +" fleche" + i);
 		
 			    		if(position!=L){
-
+			    			plateau.refaire.setEnabled(false);
 					    	//System.out.println(L+"="+position);
 				    		int j;
 
@@ -126,24 +110,13 @@ public class EcouteurFleche implements MouseListener,ActionListener {
 			    	        current = 1;
 			    	        plateau.fleche=2;
 			    	        plateau.annuler.setVisible(true);
-					}else{
-		    			plateau.clicfleche=-1;
-		    			System.out.println("est" + c +" fleche" + i);
-
-		    		}
-	
+						}
 
 		    		break;
 		    	case 3:
 					System.out.println("est" + c +" fleche" + i);
 		    		if(m.rangeeJouableD(c,plateau.matrice)){
-		    			System.out.println("est" + c +" fleche" + i);
-		    			plateau.clicfleche=i;
-		    			plateau.depart.x=-1;
-		    			plateau.depart.y=-1;
-		    			plateau.arrivee.x=-1;
-		    			plateau.arrivee.y=-1;
-		    			
+
 		    			int position=plateau.matrice.position;
 			    		int L=plateau.matrice.historique.size();
 			    		//System.out.println(L);
@@ -151,7 +124,7 @@ public class EcouteurFleche implements MouseListener,ActionListener {
 		
 		
 			    		if(position!=L){
-
+			    			plateau.refaire.setEnabled(false);
 					    	//System.out.println(L+"="+position);
 				    		int j;
 
@@ -160,8 +133,8 @@ public class EcouteurFleche implements MouseListener,ActionListener {
 				    	    	//System.out.println("j"+j);
 				    	    	plateau.matrice.historique.removeLast();
 				    	    }
+
 			    		}
-			    	
 		    			
 		    			if( m.niveau!=0 && !(plateau.matrice.nbBlancSortis()==3 || plateau.matrice.nbMarronSortis()==3))
 							plateau.joueur_joue=false;
@@ -169,21 +142,12 @@ public class EcouteurFleche implements MouseListener,ActionListener {
 			    	        current = 1;
 			    	        plateau.fleche=2;
 			    	        plateau.annuler.setVisible(true);
-						
-		    		}else{
-		    			System.out.println("est" + c +" fleche" + i);
-		    			plateau.clicfleche=-1;
+						}
 
-		    		}
 		    		break;	
 		    	case 4:
 					System.out.println("ouest" + c +" fleche" + i);
 		    		if(m.rangeeJouableG(c,plateau.matrice)){
-		    			plateau.clicfleche=i;
-		    			plateau.depart.x=-1;
-		    			plateau.depart.y=-1;
-		    			plateau.arrivee.x=-1;
-		    			plateau.arrivee.y=-1;
 		    			
 		    			int position=plateau.matrice.position;
 			    		int L=plateau.matrice.historique.size();
@@ -192,7 +156,7 @@ public class EcouteurFleche implements MouseListener,ActionListener {
 		
 		
 			    		if(position!=L){
-
+			    			plateau.refaire.setEnabled(false);
 					    	//System.out.println(L+"="+position);
 				    		int j;
 
@@ -211,13 +175,8 @@ public class EcouteurFleche implements MouseListener,ActionListener {
 			    	        current = 1;
 			    	        plateau.fleche=2;
 			    	        plateau.annuler.setVisible(true);
-					}else{
-		    			System.out.println("est" + c +" fleche" + i);
+						}
 
-		    			plateau.clicfleche=-1;
-
-		    		}
-		    		
 		    		break;
 				default:;
 				
@@ -288,6 +247,7 @@ public class EcouteurFleche implements MouseListener,ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
+		
 		if(!plateau.joueur_joue && plateau.fleche==2){
 	        if (current <= slowness) {
 	        	current++;
