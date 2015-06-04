@@ -30,6 +30,11 @@ public class EcouteurDeBouton implements ActionListener{
     		if(bouton==-1){
     			plateau.debut=false;
     			plateau.couleurInverse=false;
+    			plateau.depart.x=-1;
+        		plateau.depart.y=-1;
+        		plateau.arrivee.x=-1;
+        		plateau.arrivee.y=-1;
+        		
     			j1.debut=false;
     			j2.debut=false;
     			j1.repaint();
