@@ -30,7 +30,7 @@ public class IA {
 		}
 		return CJ;
 	}
-	/************************************* IA 1 *************************************/
+	/************************************* IA 12 *************************************/
 	public CoupJouable niveau1(Plateau plateau){
 		CoupJouable coupJouable = new CoupJouable();
 		boolean res = false; 
