@@ -21,10 +21,10 @@ public class Testcode {
 		int ia1 = 0 , ia2 = 0;
 		IA bot = new IA();
 		CoupJouable CJ=new CoupJouable();
-		int nbPartie = 100;
+		int nbPartie = 10000;
 		int nbTour = 300;
 		while(ia1 != nbPartie && ia2 != nbPartie && plateau.position < nbTour*2){
-			//*********** VERSION AVEC AFFICHAGE ***********
+			/*//*********** VERSION AVEC AFFICHAGE ***********
 			System.out.println();
 			System.out.println("Tour " + (plateau.position/2) + " : ");
 			System.out.println();
@@ -42,15 +42,15 @@ public class Testcode {
 			plateau.afficheMatrice();
 			
 			System.out.println();
-			/*
+			*/
 			//*********** VERSION SANS AFFICHAGE ***********
 			//*********** JOUEUR 1 ***********
-			CJ = bot.normal(plateau);
+			CJ = bot.niveau0(plateau);
 			plateau.Joue(CJ,false);
 			//*********** JOUEUR 2 ***********
-			CJ = bot.hard(plateau,2);
+			CJ = bot.niveau0(plateau);
 			plateau.Joue(CJ,false);
-			*/
+			
 			//*********** Test Fin Partie ***********
 			if (plateau.nbMarronSortis() >= 3){
 				ia2++;
@@ -67,6 +67,6 @@ public class Testcode {
 			}
 			
 		}
+		System.out.println(" Joueur 1 gagne a " + (float) ia2/(ia2+ia1) + " % du temps");
 	}
 }
-
