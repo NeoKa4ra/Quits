@@ -24,13 +24,16 @@ public class IA {
 		
 		Random r = new Random();
 		try{
-			CJ = list.get(r.nextInt(list.size()-1));
+			if (list.size() == 1)
+				CJ = list.getFirst();
+			else
+				CJ = list.get(r.nextInt(list.size()-1));
 		} catch(NoSuchElementException e) {
 			System.out.println("Probleme : Coup IA Interdit");
 		}
 		return CJ;
 	}
-	/************************************* IA 12 *************************************/
+	/************************************* IA 1 *************************************/
 	public CoupJouable niveau1(Plateau plateau){
 		CoupJouable coupJouable = new CoupJouable();
 		boolean res = false; 
@@ -532,4 +535,3 @@ public class IA {
 		return B;
 	}
 }
-
