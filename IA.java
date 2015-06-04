@@ -13,55 +13,14 @@ public class IA {
 	IA(){
 	
 	}
-	// Liste des coups jouables
-	public LinkedList<CoupJouable> listeCoupsPossibles(Plateau pT){
-		LinkedList<CoupJouable> list = new<CoupJouable> LinkedList();
-		CoupJouable CJ = new CoupJouable();
-		CoupJouable CJtemp = new CoupJouable();
-		CoupJouable [] coupJouables = new CoupJouable[nbBillesMax*nbCoupsPossibleMax];
-		for (int k = 0; k < (nbBillesMax*nbCoupsPossibleMax);k++)
-			coupJouables[k] = new CoupJouable();
-		int cmpt = 0;
-		Point pDep = new Point(-1,-1);
-		Point pArr = new Point(-1,-1);
-		for (int i=0;i<largeurPt;i++) {
-			for (int j=0;j<longueurPt;j++) {
-				if((pT.jBlancjoue() && pT.echiquier[i][j].estBlanc()) || (!pT.jBlancjoue() && pT.echiquier[i][j].estMarron())){
-					pDep = new Point(i,j);
-					for(int k=0; k<7; k++){
-						// Choisit un coup
-						if(k<3){		// test des points
-							pArr = pT.pointLibre(pDep,k);
-							CJ.joueCase(pDep,pArr);
-						} else if(k<5)	// test des colonnes
-							CJ.coup(k-3, i);
-						else			// test des rangees
-							CJ.coup(k-3, j);
-						// Si le coup est valide
-						if(CJ.estValide(pT)){
-							CJ = new CoupJouable();
-							if(k<3)
-								CJ.joueCase(pDep,pArr);
-							else if(k<5)
-								CJ.coup(k-3, i);
-							else
-								CJ.coup(k-3, j);
-							list.add(CJ);
-							cmpt++;
-						}
-					}
-				}
-			}
-		}
-		return list;
-	}
+	
 	
 	/************************************* IA 0 *************************************/
 	
 	public CoupJouable niveau0(Plateau pT){
 		CoupJouable CJ = new CoupJouable();
 		LinkedList<CoupJouable> list = new<CoupJouable> LinkedList();
-		list = listeCoupsPossibles(pT);
+		list = pT.listeCoupsPossibles();
 		
 		Random r = new Random();
 		try{
@@ -389,7 +348,7 @@ public class IA {
 	*/
 	/************************************* IA Difficile *************************************/
 	
-	public CoupJouable hard(Plateau pT, int profondeur, boolean faireAlpha){
+	public CoupJouable hard(Plateau pT, int profondeur){
 		this.isMax = true;
 		int alpha = -10000;
 		int beta = 10000;
@@ -399,12 +358,12 @@ public class IA {
 		pTemp.copie(pT);
 		
 		LinkedList<CoupJouable> list = new<CoupJouable> LinkedList();
-		list = listeCoupsPossibles(pT);
+		list = pT.listeCoupsPossibles();
 		for(CoupJouable CJ : list){
 			pTemp.Joue(CJ,false);
-			if(faireAlpha)
+			/*if(faireAlpha)
 				tmp = alphaBeta(pTemp, alpha, beta, profondeur-1);
-			else
+			else*/
 				tmp = Min(pTemp, profondeur-1);
 			if(tmp > max){
 				max = tmp;
@@ -425,7 +384,7 @@ public class IA {
 		pTemp.copie(pT);
 		
 		LinkedList<CoupJouable> list = new<CoupJouable> LinkedList();
-		list = listeCoupsPossibles(pT);
+		list = pT.listeCoupsPossibles();
 		for(CoupJouable CJ : list){
 			pTemp.Joue(CJ,false);
 			tmp = Min(pTemp, profondeur-1);
@@ -447,7 +406,7 @@ public class IA {
 		pTemp.copie(pT);
 		
 		LinkedList<CoupJouable> list = new<CoupJouable> LinkedList();
-		list = listeCoupsPossibles(pT);
+		list = pT.listeCoupsPossibles();
 		for(CoupJouable CJ : list){
 			pTemp.Joue(CJ,false);
 			tmp = Max(pTemp, profondeur-1);
@@ -535,7 +494,7 @@ public class IA {
 			return eval(pT, isMax);
 		else{
 			LinkedList<CoupJouable> list = new<CoupJouable> LinkedList();
-			list = listeCoupsPossibles(pT);
+			list = pT.listeCoupsPossibles();
 			if(!isMax){
 				val = 100000;
 				for(CoupJouable CJ : list){
