@@ -33,49 +33,94 @@ class EcouteurDeDrop implements MouseListener,ActionListener {
     // en a une
     public void mouseReleased(MouseEvent e) {
     	
-    	if(plateau.joueur_joue){
+    	if(plateau.joueur_joue && !(plateau.matrice.nbBlancSortis()==3 || plateau.matrice.nbMarronSortis()==3)){
 	        if (plateau.selectionBille) {
-	        	 
+	        	
+
+		        	 
 	        	 int x=e.getX();
 	             int y=e.getY();
 	              
 	             int i= plateau.calculNUmeroCase(x, y);
-	             Point arrivee = plateau.calculIndice(i);
-	             
-	        	 plateau.selectionBille = false;
-	            
+	             if(i!=-1){
+		             Point arrivee = plateau.calculIndice(i);
+		             
+		        	 plateau.selectionBille = false;
+		            
+	
+		            
+		         //   System.out.println(arrivee.x +" "+arrivee.y);
+		            if(m.pointJouable(plateau.depart,arrivee,plateau.matrice)){
+		            		//plateau.repaint();
+		            		int position=plateau.matrice.position;
+				    		int L=plateau.matrice.historique.size();
+				    		//System.out.println(L);
+				    		//System.out.println(position);
+			
+			
+				    		if(position!=L){
 
-	            
-	         //   System.out.println(arrivee.x +" "+arrivee.y);
-	            if(m.pointJouable(plateau.depart,arrivee,plateau.matrice)  && m.niveau!=0 ){
-	            		plateau.repaint();
-		     	        plateau.joueur_joue=false;
-		    	        timer.start();
-		    	        current = 1;
-		    	        plateau.fleche=1;
+						    	//System.out.println(L+"="+position);
+					    		int j;
+	
+					    		
+					    	  	for(j=position;j<L;j++){
+					    	    	//System.out.println("j"+j);
+					    	    	plateau.matrice.historique.removeLast();
+					    	    }
 
-	            } 
-	    		if(plateau.matrice.jBlanc){
-	    			j2.tour=1;
-	    			j1.tour=0;
-	    			
-	    		}else{
-	    			j2.tour=0;
-	    			j1.tour=1;
-	    			
-	    		}
-	    		j1.score= plateau.matrice.nbMarronSortis;
-	    		j2.score=plateau.matrice.nbBlancSortis;
-	    		j1.repaint();
-	    		j2.repaint();
-	    		plateau.repaint();     
-	       }  
+				    		}
+		            	
+		            		if(m.niveau!=0 && !(plateau.matrice.nbBlancSortis()==3 || plateau.matrice.nbMarronSortis()==3)){
+				     	        plateau.joueur_joue=false;
+				    	        timer.start();
+				    	        current = 1;
+				    	        plateau.fleche=1;
+				    	        plateau.annuler.setEnabled(true);
+		            		}
+		            		else
+				    	        plateau.annuler.setEnabled(true);
+	
+		            } 
+		    		if(plateau.matrice.jBlanc){
+		    			j2.tour=1;
+		    			j1.tour=0;
+		    			
+		    		}else{
+		    			j2.tour=0;
+		    			j1.tour=1;
+		    			
+		    		}
+		    		j1.score= plateau.matrice.nbMarronSortis;
+		    		j2.score=plateau.matrice.nbBlancSortis;
+		    		j1.repaint();
+		    		j2.repaint();
+		    		plateau.repaint();  
+		    		
+					if(plateau.matrice.nbBlancSortis()==3 || plateau.matrice.nbMarronSortis()==3){
+						JOptionPane jop2 = new JOptionPane();
+						if(m.niveau!=0)
+							jop2.showMessageDialog(null, "VOUS AVEZ GAGNE", "Fin De Partie", JOptionPane.INFORMATION_MESSAGE);
+							
+						if(plateau.matrice.jBlanc && m.niveau==0)
+							jop2.showMessageDialog(null, "JOUEUR NOIR A GAGNE", "Fin De Partie", JOptionPane.INFORMATION_MESSAGE);
+						else if(m.niveau==0)
+							jop2.showMessageDialog(null, "JOUEUR BLANC A GAGNE", "Fin De Partie", JOptionPane.INFORMATION_MESSAGE);
+				/*		plateau.matrice.init_2_joueurs();
+						j1.init();
+						j2.init();
+						j1.repaint();
+						j2.repaint();
+						plateau.repaint();*/
+					}
+	            }  
+	        }
 	            
 	            
-	            
-	           // matrice.afficher();
+	    // matrice.afficher();
 
-	  
+	    
+	        
 
     	}
 
@@ -111,7 +156,7 @@ class EcouteurDeDrop implements MouseListener,ActionListener {
 	        		coupjouable=IA.normal(plateau.matrice);
 	        	}	
 	        	else //if(m.niveau==3)
-	        		coupjouable=IA.hard(plateau.matrice,3);       		
+	        		coupjouable=IA.hard(plateau.matrice,4);       		
 
 	        	
 	        	if(coupjouable.estCase()){
@@ -149,11 +194,23 @@ class EcouteurDeDrop implements MouseListener,ActionListener {
 	    			j1.tour=1;
 	    			
 	    		}
+    	        plateau.annuler.setEnabled(true);
 	    		j1.score= plateau.matrice.nbMarronSortis;
 	    		j2.score=plateau.matrice.nbBlancSortis;
 	    		j1.repaint();
 	    		j2.repaint();
-	    		plateau.repaint();   
+	    		plateau.repaint(); 
+	    		
+				if(plateau.matrice.nbBlancSortis()==3 || plateau.matrice.nbMarronSortis()==3){
+					JOptionPane jop2 = new JOptionPane();
+					jop2.showMessageDialog(null, "VOUS AVEZ PERDU", "Fin De Partie", JOptionPane.INFORMATION_MESSAGE);							
+				/*	plateau.matrice.init_2_joueurs();
+					j1.init();
+					j2.init();
+					j1.repaint();
+					j2.repaint();		
+					plateau.repaint();*/
+				}
 
 	    	
 	        }

@@ -11,7 +11,7 @@ import java.awt.event.*;
 
 public class Menu extends JPanel{
 	
-	
+	//MonBouton b;
 	JButton NouvellePartie;
 	JButton SauvegarderPartie;
 	JButton ChargerPartie;
@@ -22,22 +22,24 @@ public class Menu extends JPanel{
 	
 		this.m=m;
 		
+		//b=new MonBouton("Sauvegarder Partie2");
 		NouvellePartie = new JButton ("Nouvelle Partie");
 		SauvegarderPartie = new JButton ("Sauvegarder Partie");
 		ChargerPartie = new JButton ("Charger Partie");
 		Options = new JButton ("Options"); 
 	
 		
-		NouvellePartie.addActionListener(new EcouteurDeBouton(-1,sauvegarde,p,m,j1,j2));
-		SauvegarderPartie.addActionListener(new EcouteurDeBouton(-1,sauvegarde,p,m,j1,j2));
-		ChargerPartie.addActionListener(new EcouteurDeBouton(-1,sauvegarde,p,m,j1,j2));
-		Options.addActionListener(new EcouteurDeBouton(-1,sauvegarde,p,m,j1,j2));
+		NouvellePartie.addActionListener(new EcouteurDeBouton(-1,sauvegarde,p,m,j1,j2,SauvegarderPartie,ChargerPartie));
+		SauvegarderPartie.addActionListener(new EcouteurDeBouton(-2,sauvegarde,p,m,j1,j2,SauvegarderPartie,ChargerPartie));
+		ChargerPartie.addActionListener(new EcouteurDeBouton(-3,sauvegarde,p,m,j1,j2,SauvegarderPartie,ChargerPartie));
+		Options.addActionListener(new EcouteurDeBouton(-4,sauvegarde,p,m,j1,j2,SauvegarderPartie,ChargerPartie));
 		
 		this.setLayout (new GridLayout (20,1));
 		this.add (NouvellePartie );
 		this.add (SauvegarderPartie);
 		this.add (ChargerPartie);
 		this.add (Options);
+		//this.add (b);
 		
 	}
 	
@@ -46,4 +48,3 @@ public class Menu extends JPanel{
 	
 	}
 }
-

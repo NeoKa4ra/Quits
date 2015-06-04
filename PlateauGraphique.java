@@ -5,11 +5,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-//import java.io.File;
-//import java.io.IOException;
-
-//import javax.imageio.ImageIO;
-//import javax.swing.*;
 
 public class PlateauGraphique extends JComponent{
 	
@@ -20,15 +15,23 @@ public class PlateauGraphique extends JComponent{
 	Shape [] listeFleche;
 	Point [] listeCentre;
 	Point depart;
-	Image bb,bn,fg,fh,fd,fb;
+	Image bb,bn,fg,fh,fd,fb,img,caseG;
 	int tailleCase;
 	boolean selectionBille;
 	public boolean joueur_joue;
+	public JButton annuler;
 	public int fleche;
 	Moteur m;
+	boolean debut;
+	boolean couleurInverse;
+	Etats j1;
+	Etats j2;
 	
 	PlateauGraphique(Plateau matrice,Moteur m,Etats j1, Etats j2){
-		
+		this.j1=j1;
+		this.j2=j2;
+		couleurInverse=false;
+		debut=true;
 		this.matrice = matrice;
 		setLayout(null);
 		listeCase = new Shape[25];
@@ -47,12 +50,14 @@ public class PlateauGraphique extends JComponent{
 	public void init () {
 
 		try { 
-			bb=ImageIO.read(new File("blanche.png")); 
-			bn=ImageIO.read(new File("u.png")); 
-			fd=ImageIO.read(new File("t.png"));
-			fh=ImageIO.read(new File("g.png"));
-		    fb=ImageIO.read(new File("bd.png"));
-		    fg=ImageIO.read(new File("bg.png"));
+			caseG=ImageIO.read(new File("case.png")); 
+			img=ImageIO.read(new File("quits-image.jpg")); 
+			bb=ImageIO.read(new File("Boule-Blanche.png")); 
+			bn=ImageIO.read(new File("Boule-Noire.png")); 
+			fd=ImageIO.read(new File("haut.png"));
+			fh=ImageIO.read(new File("droite.png"));
+		    fb=ImageIO.read(new File("bas.png"));
+		    fg=ImageIO.read(new File("gauche.png"));
 		} 
 		catch (IOException e) {
 			// TODO Auto-generated catch block 
@@ -62,8 +67,33 @@ public class PlateauGraphique extends JComponent{
 				
 	}
 	
-	
+	public void inverserCouleurJoueur(){
+		try { 
+			 
+			bb=ImageIO.read(new File("Boule-Noire.png")); 
+			bn=ImageIO.read(new File("Boule-Blanche.png")); 
+			
+		} 
+		catch (IOException e) {
+			// TODO Auto-generated catch block 
+			e.printStackTrace(); 
+		}	
+		
+	}
 
+	public void reinit_couleur_joueurs(){
+		try { 
+			 
+			bn=ImageIO.read(new File("Boule-Noire.png")); 
+			bb=ImageIO.read(new File("Boule-Blanche.png")); 
+			
+		} 
+		catch (IOException e) {
+			// TODO Auto-generated catch block 
+			e.printStackTrace(); 
+		}	
+		
+	}
 
 	public void paintComponent(Graphics g) {
 	       
@@ -72,14 +102,31 @@ public class PlateauGraphique extends JComponent{
 		// Le cast permet d'avoir acces a un peu plus de primitives de dessin
 		drawable = (Graphics2D) g;
 		//drawable.rotate(Math.toRadians(45));
-		
 		drawable.setPaint(Color.white);
 		drawable.fillRect(0, 0, getSize().width, getSize().height);
-		drawable.setStroke(new BasicStroke( 2.0f ));
+		
+		if(couleurInverse){
+			inverserCouleurJoueur();
+		}
+
+		int width = getSize().width; 
+		int height = getSize().height;
+		
+		int a=width/2;
+		int b=height-100;
+		int a1=width/2-50;
+		int b1=height-100-50;
+		if(debut){
+			drawable.drawImage(img,0,0, width, height,null);
+
+		}
+		else {
+		drawable.setPaint(Color.white);
+		drawable.fillRect(0, 0, getSize().width, getSize().height);
+		//drawable.setStroke(new BasicStroke( 2.0f ));
 		
 		// CALCULE DE LA TAILLE D'UNE CASE 
-		int width = getSize().width; 
-		int height = getSize().height; 
+		 
 		
 		int margeX=0,margeY=0,w,h; 
 		int largeurCase = (width)/5; 
@@ -120,18 +167,15 @@ public class PlateauGraphique extends JComponent{
 		
 		listeCentre[0]=new Point((int) init_polX[0], (int) init_polY[2]+demiD ); 
 		listeCase[0] = new Polygon(init_polX,init_polY,4);
+	
+		drawable.drawImage(caseG,(int) (init_polX[0]-demiD),(int) (init_polY[0]-diagonale),d,d,null);
 		
-		drawable.setPaint(Color.orange);
-        drawable.fill(listeCase[0]);
-        drawable.setPaint(Color.black);
-        drawable.draw(listeCase[0]);
-        if(matrice.echiquier[0][0].contenu==1){
-			drawable.drawImage(bb,init_polX[3]+demiD/2,init_polY[3]-demiD/2,tailleCase/2,tailleCase/2,null);
-		}
+		if(matrice.echiquier[0][0].contenu==1){
+			drawable.drawImage(bb,listeCentre[0].x-demiD/3,listeCentre[0].y-demiD/3,tailleCase/2,tailleCase/2,null);		}
 		if(matrice.echiquier[0][0].contenu==2){
-			drawable.drawImage(bn,init_polX[3]+demiD/2,init_polY[3]-demiD/2,tailleCase/2,tailleCase/2,null);
-		}
-    	drawable.drawImage(fb,listeCentre[0].x+(3*demiD)/4,listeCentre[0].y+(demiD)/2,tailleCase/3,tailleCase/3,null);
+			drawable.drawImage(bn,listeCentre[0].x-demiD/3,listeCentre[0].y-demiD/3,tailleCase/2,tailleCase/2,null);		}
+    	
+		drawable.drawImage(fb,listeCentre[0].x+(3*demiD)/4,listeCentre[0].y+(demiD)/2,tailleCase/3,tailleCase/3,null);
     	drawable.drawImage(fg,listeCentre[0].x-demiD,listeCentre[0].y+demiD-(demiD/3),tailleCase/3,tailleCase/3,null);
     	
 	    	listeFleche[0]=new Rectangle(listeCentre[0].x+(3*demiD)/4,listeCentre[0].y+demiD/2,tailleCase/3,tailleCase/3);
@@ -177,10 +221,9 @@ public class PlateauGraphique extends JComponent{
     			
     			listeCentre[c]=new Point((int) polX[0], (int) polY[2]+demiD );
 	            listeCase[c] = new Polygon(polX,polY,4);
-	        	drawable.setPaint(Color.orange);
-	            drawable.fill(listeCase[c]);
-	            drawable.setPaint(Color.black);
-	            drawable.draw(listeCase[c]);
+	        	
+	        	drawable.drawImage(caseG ,(int) (polX[0]-demiD),(int) (polY[0]-diagonale),d,d,null);
+	        	
 	            
 	            //dessiner les billes
         		if(matrice.echiquier[i][j].contenu==1){
@@ -229,7 +272,7 @@ public class PlateauGraphique extends JComponent{
         	}
         }
     
-                
+         }       
         
 	}
 	
@@ -343,4 +386,3 @@ public class PlateauGraphique extends JComponent{
     
         
 }
-

@@ -33,16 +33,23 @@ public class Outils extends JPanel{
 		annuler.setPreferredSize(new Dimension(30, 30));
 		
 		
-		aide.addActionListener(new EcouteurDeBouton(0,sauvegarde,plateau,m,j1,j2));
-		coupdepouce.addActionListener(new EcouteurDeBouton(1,sauvegarde,plateau,m,j1,j2));
-		annuler.addActionListener(new EcouteurDeBouton(2,sauvegarde,plateau,m,j1,j2));
-		refaire.addActionListener(new EcouteurDeBouton(3,sauvegarde,plateau,m,j1,j2));
+		aide.addActionListener(new EcouteurDeBouton(0,sauvegarde,plateau,m,j1,j2,aide,annuler));
+		coupdepouce.addActionListener(new EcouteurDeBouton(1,sauvegarde,plateau,m,j1,j2,coupdepouce,annuler));
+		annuler.addActionListener(new EcouteurDeBouton(2,sauvegarde,plateau,m,j1,j2,annuler,refaire));
+		refaire.addActionListener(new EcouteurDeBouton(3,sauvegarde,plateau,m,j1,j2,annuler,refaire));
+		
 
 		
 		add(aide);
 		add(coupdepouce);
 		add(annuler);
 		add(refaire);
+		
+		annuler.setEnabled(false);
+		refaire.setEnabled(false);
+		
+		plateau.annuler=annuler;
+	
 		
 	}
 	

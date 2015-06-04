@@ -6,14 +6,14 @@ import java.util.*;
 import javax.swing.*;
 
 public class ChargerPartie extends JDialog{
-	Plateau p;
+	PlateauGraphique p;
 	Sauvegarde sauvegarde;
 	JRadioButton [] listeFich;
 	String fichierSelectionne;
 	int taille;
 	ButtonGroup listeBouton;	
 
-	ChargerPartie(JFrame parent, String title, boolean modal, EcouteurDeBouton b, Sauvegarde sauvegarde, Plateau p){
+	ChargerPartie(JFrame parent, String title, boolean modal, EcouteurDeBouton b, Sauvegarde sauvegarde, PlateauGraphique p){
 		super(parent, title, modal);
 		this.p=p;
 		fichierSelectionne="riendutoutpourlinstant";
@@ -45,10 +45,10 @@ public class ChargerPartie extends JDialog{
 		JButton annuler = new JButton("Annuler");
 		JButton charger = new JButton("Charger");
 		
-		supp.addActionListener(new EcouteurDeBouton2(this,sauvegarde));	
-		renommer.addActionListener(new EcouteurDeBouton2(this,sauvegarde));
-		annuler.addActionListener(new EcouteurDeBouton2(this,sauvegarde));
-		charger.addActionListener(new EcouteurDeBouton2(this,sauvegarde));
+		supp.addActionListener(new EcouteurDeBouton2(this,sauvegarde,p));	
+		renommer.addActionListener(new EcouteurDeBouton2(this,sauvegarde,p));
+		annuler.addActionListener(new EcouteurDeBouton2(this,sauvegarde,p));
+		charger.addActionListener(new EcouteurDeBouton2(this,sauvegarde,p));
 		
 		panbouton.add(supp);
 		panbouton.add(renommer);

@@ -7,10 +7,11 @@ import java.io.IOException;
 public class EcouteurDeBouton2 implements ActionListener{
 	ChargerPartie cp;
 	Sauvegarde sauvegarde;
+	PlateauGraphique plateau;
 	
 	
-	
-	EcouteurDeBouton2(ChargerPartie cp,Sauvegarde sauvegarde){
+	EcouteurDeBouton2(ChargerPartie cp,Sauvegarde sauvegarde,PlateauGraphique plateau){
+		this.plateau=plateau;
 		this.cp=cp;
 		this.sauvegarde=sauvegarde;
 	}
@@ -37,10 +38,10 @@ public class EcouteurDeBouton2 implements ActionListener{
 		}
 		
 		if(e.getActionCommand().equals("Charger")){
-			
+
 			if(cp.listeBouton.getSelection()!=null){
 				 try{
-					    Moteur.charger(cp.fichierSelectionne,cp.p);
+					    Moteur.charger(cp.fichierSelectionne,cp.p.matrice);
 						sauvegarde.afficher();
 						//ici normalement on devrais charger la partie donc modifier le plateau graphique
 						cp.dispose();
@@ -53,11 +54,10 @@ public class EcouteurDeBouton2 implements ActionListener{
 				 JOptionPane jop = new JOptionPane();
 				 jop.showMessageDialog(null, "Veuillez choisir un fichier!", "Erreur Chargement", JOptionPane.ERROR_MESSAGE);
 			}
+			cp.p.repaint();
 		}
 		
-		if(e.getActionCommand().equals("OK")){
-			 System.out.println("joris!!"); //appel de sa fonction charger avc cp.fichierAcharge
-		}
+		
 	}
 
 }

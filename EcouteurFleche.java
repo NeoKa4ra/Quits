@@ -4,6 +4,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 
@@ -29,7 +30,7 @@ public class EcouteurFleche implements MouseListener,ActionListener {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		if(plateau.joueur_joue){
+		if(plateau.joueur_joue && !(plateau.matrice.nbBlancSortis()==3 || plateau.matrice.nbMarronSortis()==3)){
 			int x=e.getX();
 		    int y1=e.getY();
 		    int i=plateau.clicFleche((double)x,(double)y1);
@@ -49,43 +50,131 @@ public class EcouteurFleche implements MouseListener,ActionListener {
 			switch(d){
 				case 1:
 					System.out.println("nord" + c +" fleche" + i);
-					if(m.colonneJouableH(c,plateau.matrice) && m.niveau!=0){
-		    			plateau.joueur_joue=false;
-		    	        timer.start();
-		    	        current = 1;
-		    	        plateau.fleche=2;
-					}
+					if(m.colonneJouableH(c,plateau.matrice)){
+	            		
+						int position=plateau.matrice.position;
+			    		int L=plateau.matrice.historique.size();
+			    		//System.out.println(L);
+			    		//System.out.println(position);
+		
+		
+			    		if(position!=L){
+
+					    	//System.out.println(L+"="+position);
+				    		int j;
+
+				    		
+				    	  	for(j=position;j<L;j++){
+				    	    	//System.out.println("j"+j);
+				    	    	plateau.matrice.historique.removeLast();
+				    	    }
+
+			    		}
+						
+						if( m.niveau!=0 && !(plateau.matrice.nbBlancSortis()==3 || plateau.matrice.nbMarronSortis()==3))
+							plateau.joueur_joue=false;
+			    	        timer.start();
+			    	        current = 1;
+			    	        plateau.fleche=2;
+			    	        plateau.annuler.setVisible(true);
+						}
 
 		    		break;
 		    	case 2:
 					System.out.println("sud" + c +" fleche" + i);
 	
 		    		if(m.colonneJouableB(c,plateau.matrice) && m.niveau!=0){
-		    			plateau.joueur_joue=false;
-		    	        timer.start();
-		    	        current = 1;
-		    	        plateau.fleche=2;
-		    		}
+	            		int position=plateau.matrice.position;
+			    		int L=plateau.matrice.historique.size();
+			    		//System.out.println(L);
+			    		//System.out.println(position);
+		
+		
+			    		if(position!=L){
+
+					    	//System.out.println(L+"="+position);
+				    		int j;
+
+				    		
+				    	  	for(j=position;j<L;j++){
+				    	    	//System.out.println("j"+j);
+				    	    	plateau.matrice.historique.removeLast();
+				    	    }
+
+			    		}
+		    			
+		    			if( m.niveau!=0 && !(plateau.matrice.nbBlancSortis()==3 || plateau.matrice.nbMarronSortis()==3))
+							plateau.joueur_joue=false;
+			    	        timer.start();
+			    	        current = 1;
+			    	        plateau.fleche=2;
+			    	        plateau.annuler.setVisible(true);
+						}
 
 		    		break;
 		    	case 3:
 					System.out.println("est" + c +" fleche" + i);
-		    		if(m.rangeeJouableD(c,plateau.matrice) && m.niveau!=0){
-		    			plateau.joueur_joue=false;
-		    	        timer.start();
-		    	        current = 1;
-		    	        plateau.fleche=2;
-		    		}
+		    		if(m.rangeeJouableD(c,plateau.matrice)){
+	            		
+		    			int position=plateau.matrice.position;
+			    		int L=plateau.matrice.historique.size();
+			    		//System.out.println(L);
+			    		//System.out.println(position);
+		
+		
+			    		if(position!=L){
+
+					    	//System.out.println(L+"="+position);
+				    		int j;
+
+				    		
+				    	  	for(j=position;j<L;j++){
+				    	    	//System.out.println("j"+j);
+				    	    	plateau.matrice.historique.removeLast();
+				    	    }
+
+			    		}
+		    			
+		    			if( m.niveau!=0 && !(plateau.matrice.nbBlancSortis()==3 || plateau.matrice.nbMarronSortis()==3))
+							plateau.joueur_joue=false;
+			    	        timer.start();
+			    	        current = 1;
+			    	        plateau.fleche=2;
+			    	        plateau.annuler.setVisible(true);
+						}
 
 		    		break;	
 		    	case 4:
 					System.out.println("ouest" + c +" fleche" + i);
-		    		if(m.rangeeJouableG(c,plateau.matrice) && m.niveau!=0){
-		    			plateau.joueur_joue=false;
-		    	        timer.start();
-		    	        current = 1;
-		    	        plateau.fleche=2;
-		    		}
+		    		if(m.rangeeJouableG(c,plateau.matrice)){
+	            		
+		    			int position=plateau.matrice.position;
+			    		int L=plateau.matrice.historique.size();
+			    		//System.out.println(L);
+			    		//System.out.println(position);
+		
+		
+			    		if(position!=L){
+
+					    	//System.out.println(L+"="+position);
+				    		int j;
+
+				    		
+				    	  	for(j=position;j<L;j++){
+				    	    	//System.out.println("j"+j);
+				    	    	plateau.matrice.historique.removeLast();
+				    	    }
+
+			    		}
+		    			
+		    			
+		    			if( m.niveau!=0 && !(plateau.matrice.nbBlancSortis()==3 || plateau.matrice.nbMarronSortis()==3))
+							plateau.joueur_joue=false;
+			    	        timer.start();
+			    	        current = 1;
+			    	        plateau.fleche=2;
+			    	        plateau.annuler.setVisible(true);
+						}
 
 		    		break;
 				default:;
@@ -105,6 +194,23 @@ public class EcouteurFleche implements MouseListener,ActionListener {
 	        j1.repaint();
 	        j2.repaint();
 			plateau.repaint();
+			
+			if(plateau.matrice.nbBlancSortis()==3 || plateau.matrice.nbMarronSortis()==3){
+				JOptionPane jop2 = new JOptionPane();
+				if(m.niveau!=0)
+					jop2.showMessageDialog(null, "VOUS AVEZ GAGNE", "Fin De Partie", JOptionPane.INFORMATION_MESSAGE);
+					
+				if(plateau.matrice.jBlanc && m.niveau==0)
+					jop2.showMessageDialog(null, "JOUEUR NOIR A GAGNE", "Fin De Partie", JOptionPane.INFORMATION_MESSAGE);
+				else if(m.niveau==0)
+					jop2.showMessageDialog(null, "JOUEUR BLANC A GAGNE", "Fin De Partie", JOptionPane.INFORMATION_MESSAGE);
+			/*	plateau.matrice.init_2_joueurs();
+				j1.init();
+				j2.init();
+				j1.repaint();
+				j2.repaint();	
+				plateau.repaint(); */
+			}
 
 		}	
 	}
@@ -152,7 +258,7 @@ public class EcouteurFleche implements MouseListener,ActionListener {
 	        	else if(m.niveau==2)
 	        		coupjouable=IA.normal(plateau.matrice);	        		
 	        	else //if(ia==3)
-	        		coupjouable=IA.hard(plateau.matrice,3);   
+	        		coupjouable=IA.hard(plateau.matrice,4);   
 	        	
 	        	if(coupjouable.estCase()){
 	        		Point dep=coupjouable.PointDep();
@@ -196,7 +302,18 @@ public class EcouteurFleche implements MouseListener,ActionListener {
 				}		
 		        j1.repaint();
 		        j2.repaint();
+    	        plateau.annuler.setEnabled(true);
 				plateau.repaint();
+				if(plateau.matrice.nbBlancSortis()==3 || plateau.matrice.nbMarronSortis()==3){
+					JOptionPane jop2 = new JOptionPane();
+					jop2.showMessageDialog(null, "VOUS AVEZ PERDU", "Fin De Partie", JOptionPane.INFORMATION_MESSAGE);
+				/*	plateau.matrice.init_2_joueurs();
+					j1.init();
+					j2.init();
+					j1.repaint();
+					j2.repaint();
+					plateau.repaint(); */
+				}
 	    	
 	        }
 	

@@ -5,30 +5,58 @@ import java.io.IOException;
 
 public class EcouteurDeBouton implements ActionListener{ 
 	PlateauGraphique plateau;
-	NouvellePartie np;
+	Options opt;
 	Sauvegarde sauvegarde;
 	Moteur m;
 	int bouton;
 	Etats j1,j2;
+	JButton annuler,refaire;
+
+
 	
-	EcouteurDeBouton(int b, Sauvegarde sauvegarde,PlateauGraphique plateau,Moteur m, Etats j1, Etats j2){
+	EcouteurDeBouton(int b, Sauvegarde sauvegarde,PlateauGraphique plateau,Moteur m, Etats j1, Etats j2,JButton annuler,JButton refaire){
 		this.sauvegarde=sauvegarde;
 		this.plateau=plateau;
 		bouton=b;
 		this.j1=j1;
 		this.j2=j2;
 		this.m=m;
+		this.annuler=annuler;
+		this.refaire=refaire;
 
 	}
 
     	public void actionPerformed(ActionEvent e) {
-    		if(e.getActionCommand().equals("Nouvelle Partie")){
-    			 System.out.println("coucou new partie" );
+    		if(bouton==-1){
+    			plateau.debut=false;
+    			plateau.couleurInverse=false;
+    			j1.debut=false;
+    			j2.debut=false;
+    			j1.repaint();
+    	    		j2.repaint();
 
-    			 NouvellePartie np = new NouvellePartie(null, "Choisir le niveau", true, m);
-         		 this.np=np;
-    		
-    		}
+        			m.niveau=0;
+        			plateau.matrice.init_2_joueurs();
+        			plateau.reinit_couleur_joueurs();
+        			j1.joueur=1;
+        			j2.joueur=2;
+    			System.out.println(plateau.debut);
+        			if(plateau.matrice.jBlanc){
+    	    			j2.tour=1;
+    	    			j1.tour=0;
+    	    			
+    	    		}else{
+    	    			j2.tour=0;
+    	    			j1.tour=1;
+    	    			
+    	    		}
+    	    		j1.score= plateau.matrice.nbMarronSortis;
+    	    		j2.score=plateau.matrice.nbBlancSortis;
+    	    		
+    	    		plateau.repaint();
+
+        		}
+        		
     		
     		
         	if(e.getActionCommand().equals("Sauvegarder Partie")){
@@ -52,19 +80,39 @@ public class EcouteurDeBouton implements ActionListener{
         		}
         	}
         	
-        	if(e.getActionCommand().equals("Charger Partie")){
+        	if(bouton==-3){
 				
 				if(sauvegarde.listFichier.size()!=0){
-					ChargerPartie cp = new ChargerPartie(null, "Charger une partie", true, this, this.sauvegarde, plateau.matrice);				}
+					ChargerPartie cp = new ChargerPartie(null, "Charger une partie", true, this, this.sauvegarde, plateau);				}
 				else{
 					 JOptionPane jop = new JOptionPane();
 					 jop.showMessageDialog(null, "Aucune partie sauvegardée", "Erreur Chargement", JOptionPane.ERROR_MESSAGE);
 				}
+				j1.debut=false;
+				j2.debut=false;
+				if(plateau.matrice.jBlanc){
+	    			j2.tour=1;
+	    			j1.tour=0;
+	    			
+	    		}else{
+	    			j2.tour=0;
+	    			j1.tour=1;
+	    			
+	    		}
+	    		j1.score= plateau.matrice.nbMarronSortis;
+	    		j2.score=plateau.matrice.nbBlancSortis;
+				j1.repaint();
+	    		j2.repaint();	
+				plateau.debut=false;
+				plateau.repaint();
 					
         	}
+        	     	 	
+        	
         	
          	if(e.getActionCommand().equals("Options")){
-        		System.out.println("options");
+         		 Options opt= new Options(null, "Options", true, m, plateau);
+        		 this.opt=opt;
         	}
         	
         	if(bouton==0){
@@ -76,24 +124,45 @@ public class EcouteurDeBouton implements ActionListener{
         	}
         	
         	if(bouton==2){
-        		Moteur.annuler(plateau.matrice);
-	        		j1.score= plateau.matrice.nbMarronSortis;
-	        		j2.score=plateau.matrice.nbBlancSortis;
+        		Moteur.annuler(plateau.matrice,annuler,refaire);
+        		if(plateau.matrice.jBlanc){
+	    			j2.tour=1;
+	    			j1.tour=0;
+	    			
+	    		}else{
+	    			j2.tour=0;
+	    			j1.tour=1;
+	    			
+	    		}
+	    		j1.score= plateau.matrice.nbMarronSortis;
+	    		j2.score=plateau.matrice.nbBlancSortis;
+	        		j1.repaint();
+	        		j2.repaint();
+	        		plateau.repaint();
+        	}
+        	
+	        	
+        	
+        	
+        	if(bouton==3){
+        		Moteur.refaire(plateau.matrice,refaire,annuler);
+        		if(plateau.matrice.jBlanc){
+	    			j2.tour=1;
+	    			j1.tour=0;
+	    			
+	    		}else{
+	    			j2.tour=0;
+	    			j1.tour=1;
+	    			
+	    		}
+	    		j1.score= plateau.matrice.nbMarronSortis;
+	    		j2.score=plateau.matrice.nbBlancSortis;
 	        		j1.repaint();
 	        		j2.repaint();
 	        		plateau.repaint();
         		}
         	
-        	
-        	if(bouton==3){
-        		Moteur.refaire(plateau.matrice);
-	        		j1.score= plateau.matrice.nbMarronSortis;
-	        		j2.score=plateau.matrice.nbBlancSortis;
-	        		j1.repaint();
-	        		j2.repaint();
-	        		plateau.repaint();
-        		
-        	}
+	        		
    	 }
  }
         	

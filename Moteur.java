@@ -8,9 +8,11 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import javax.swing.JButton;
+
 public class Moteur {
 
-	public int niveau;
+	public static int niveau;
 	
 	Moteur(){
 		niveau=0;
@@ -192,26 +194,49 @@ public class Moteur {
 		return res;	
 	}
 	
-	public static void annuler(Plateau plateau){
+	public static void annuler(Plateau plateau,JButton annuler,JButton refaire){
 		CoupJouable coupjouable=new CoupJouable();
 		int position=plateau.position();
 		LinkedList<CoupJouable> L=(LinkedList<CoupJouable>) plateau.Historique().clone();
-		if(position!=0){
-			coupjouable.copie(L.get(position-1));
+
+		coupjouable.copie(L.get(position-1));
+		plateau.Annuler(coupjouable);
+
+			
+		if(position!=1 && niveau!=0){
+			coupjouable.copie(L.get(position-2));
 			plateau.Annuler(coupjouable);
-		}	
+			if(position==2)
+				annuler.setEnabled(false);
+		}
+		refaire.setEnabled(true);
+		if(position==1)
+			annuler.setEnabled(false);
 		
 	}
 	
-	public static void refaire(Plateau plateau){
+	public static void refaire(Plateau plateau,JButton refaire,JButton annuler){
 		CoupJouable coupjouable=new CoupJouable();
 		int position=plateau.position();
 
-			LinkedList<CoupJouable> L=(LinkedList<CoupJouable>) plateau.Historique().clone();
-			if(position!=L.size()){
-				coupjouable=L.get(position);
-				plateau.Joue(coupjouable,true);
-			}	
+		LinkedList<CoupJouable> L=(LinkedList<CoupJouable>) plateau.Historique().clone();
+
+		coupjouable=L.get(position);
+		plateau.Joue(coupjouable,true);
+				
+		if(position!=L.size() && niveau!=0){
+			coupjouable=L.get(position+1);
+			plateau.Joue(coupjouable,true);
+			if(position+1==L.size()-1)
+				refaire.setEnabled(false);
+		}
+		
+				
+		if(position==L.size()-1)
+			refaire.setEnabled(false);
+		
+		if(position!=1)
+			annuler.setEnabled(true);
 		
 	}
 	
