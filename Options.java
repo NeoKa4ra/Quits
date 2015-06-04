@@ -20,9 +20,8 @@ public class Options extends JDialog {
 		listeDifficulte [1]=new JRadioButton(" Joueur Vs Ordi (Facile) ");
 		listeDifficulte [2]=new JRadioButton(" Joueur Vs Ordi (Moyen) ");
 		listeDifficulte [3]=new JRadioButton(" Joueur Vs Ordi (Difficile) ");
-	
-		listeDifficulte[0].setSelected(true);
-		//System.out.println(m.niveau);
+		
+		listeDifficulte[0].setSelected(true);		//System.out.println(m.niveau);
 		
 		listeBouton = new ButtonGroup();
 		JPanel panDifficulte = new JPanel();

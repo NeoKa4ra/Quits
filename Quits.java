@@ -15,7 +15,8 @@ public class Quits implements Runnable{
 	   Sauvegarde sauvegarde = null;
 	   
 	   
-        // Creation d'une fenetre
+	   
+        // Creation d'une fenetre 12
         fenetre.setTitle("QUITS");
         try{
         	sauvegarde = new Sauvegarde();
@@ -35,9 +36,9 @@ public class Quits implements Runnable{
         
         JPanel panel1 = new JPanel();
 		panel1.setLayout(new BorderLayout());
-		etat1.setPreferredSize(new Dimension(20,20));
+		etat1.setPreferredSize(new Dimension(40,35));
 		panel1.add(etat1,BorderLayout.NORTH);
-		etat2.setPreferredSize(new Dimension(20,20));
+		etat2.setPreferredSize(new Dimension(40,35));
 		panel1.add(etat2,BorderLayout.SOUTH);
 		panel1.add(plateau,BorderLayout.CENTER);
 	

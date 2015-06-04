@@ -27,6 +27,9 @@ public class Plateau {
 	
 	int position;
 	
+	int difficulte;
+	boolean estinverse;
+	
 	public CoupJouable adv(){
 		return adv;
 	}
@@ -421,6 +424,17 @@ public class Plateau {
 		int i,j;
 		FileReader fichier = new FileReader(f);	
 		int contenu;
+		int inv;
+		inv=(int) fichier.read();
+		
+		if(inv==1)
+			estinverse=true;
+		else
+			estinverse=false;
+		
+		difficulte=(int) fichier.read();
+		
+		
 		for(j=4;j>=0;j--){
 			for(i=0;i<5;i++){
 				contenu = (int) fichier.read();
@@ -698,68 +712,69 @@ public class Plateau {
         }         
     }
     
-     // afficher les valeurs de la matrice
-	public void afficheMatrice(){
-		int i,j;
-		for(j=4;j>=0;j--){
-			for(i=0;i<5;i++){
-				if(echiquier[i][j].estLibre())
-					System.out.printf("0");
-				else if(echiquier[i][j].estMarron())
-					System.out.printf("2");	
-				else
-					System.out.printf("1");
-				
-				System.out.printf(" ");		
-			}
-			System.out.println();				
-		}
-	}
-	
-	// Liste des coups jouables
-	public LinkedList<CoupJouable> listeCoupsPossibles(){
-		LinkedList<CoupJouable> list = new<CoupJouable> LinkedList();
-		CoupJouable CJ = new CoupJouable();
-		CoupJouable CJtemp = new CoupJouable();
-		CoupJouable [] coupJouables = new CoupJouable[nbBillesMax*nbCoupsPossibleMax];
-		for (int k = 0; k < (nbBillesMax*nbCoupsPossibleMax);k++)
-			coupJouables[k] = new CoupJouable();
-		int cmpt = 0;
-		Point pDep = new Point(-1,-1);
-		Point pArr = new Point(-1,-1);
-		for (int i=0;i<largeurPt;i++) {
-			for (int j=0;j<longueurPt;j++) {
-				if((jBlancjoue() && echiquier[i][j].estBlanc()) || (!jBlancjoue() && echiquier[i][j].estMarron())){
-					pDep = new Point(i,j);
-					for(int k=0; k<7; k++){
-						// Choisit un coup
-						if(k<3){		// test des points
-							pArr = pointLibre(pDep,k);
-							CJ.joueCase(pDep,pArr);
-						} else if(k<5)	// test des colonnes
-							CJ.coup(k-3, i);
-						else			// test des rangees
-							CJ.coup(k-3, j);
-						// Si le coup est valide
-						if(CJ.estValide(this)){
-							CJ = new CoupJouable();
-							if(k<3)
-								CJ.joueCase(pDep,pArr);
-							else if(k<5)
-								CJ.coup(k-3, i);
-							else
-								CJ.coup(k-3, j);
-							list.add(CJ);
-							cmpt++;
-						}
-					}
-				}
-			}
-		}
-		return list;
-	}
+    
+    
+    // afficher les valeurs de la matrice
+   	public void afficheMatrice(){
+   		int i,j;
+   		for(j=4;j>=0;j--){
+   			for(i=0;i<5;i++){
+   				if(echiquier[i][j].estLibre())
+   					System.out.printf("0");
+   				else if(echiquier[i][j].estMarron())
+   					System.out.printf("2");	
+   				else
+   					System.out.printf("1");
+   				
+   				System.out.printf(" ");		
+   			}
+   			System.out.println();				
+   		}
+   	}
+   	
+   	// Liste des coups jouables
+   	public LinkedList<CoupJouable> listeCoupsPossibles(){
+   		LinkedList<CoupJouable> list = new<CoupJouable> LinkedList();
+   		CoupJouable CJ = new CoupJouable();
+   		CoupJouable CJtemp = new CoupJouable();
+   		CoupJouable [] coupJouables = new CoupJouable[nbBillesMax*nbCoupsPossibleMax];
+   		for (int k = 0; k < (nbBillesMax*nbCoupsPossibleMax);k++)
+   			coupJouables[k] = new CoupJouable();
+   		int cmpt = 0;
+   		Point pDep = new Point(-1,-1);
+   		Point pArr = new Point(-1,-1);
+   		for (int i=0;i<largeurPt;i++) {
+   			for (int j=0;j<longueurPt;j++) {
+   				if((jBlancjoue() && echiquier[i][j].estBlanc()) || (!jBlancjoue() && echiquier[i][j].estMarron())){
+   					pDep = new Point(i,j);
+   					for(int k=0; k<7; k++){
+   						// Choisit un coup
+   						if(k<3){		// test des points
+   							pArr = pointLibre(pDep,k);
+   							CJ.joueCase(pDep,pArr);
+   						} else if(k<5)	// test des colonnes
+   							CJ.coup(k-3, i);
+   						else			// test des rangees
+   							CJ.coup(k-3, j);
+   						// Si le coup est valide
+   						if(CJ.estValide(this)){
+   							CJ = new CoupJouable();
+   							if(k<3)
+   								CJ.joueCase(pDep,pArr);
+   							else if(k<5)
+   								CJ.coup(k-3, i);
+   							else
+   								CJ.coup(k-3, j);
+   							list.add(CJ);
+   							cmpt++;
+   						}
+   					}
+   				}
+   			}
+   		}
+   		return list;
+   	}
 }
 	
 	
 	
-

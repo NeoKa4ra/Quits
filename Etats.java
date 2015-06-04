@@ -52,7 +52,7 @@ public class Etats extends JComponent{
 		
 		int w=getSize().width;
 		int h=getSize().height;
-		drawable.setPaint(new Color(186,186,186));
+		drawable.setPaint(new Color(187, 174, 152));
 		drawable.fillRect(0, 0, getSize().width, getSize().height);
 		drawable.setPaint(Color.black);
 		drawable.drawString(message,0,0);

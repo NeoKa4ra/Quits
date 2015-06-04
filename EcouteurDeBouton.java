@@ -30,6 +30,11 @@ public class EcouteurDeBouton implements ActionListener{
     		if(bouton==-1){
     			plateau.debut=false;
     			plateau.couleurInverse=false;
+    			plateau.depart.x=-1;
+        		plateau.depart.y=-1;
+        		plateau.arrivee.x=-1;
+        		plateau.arrivee.y=-1;
+        		
     			j1.debut=false;
     			j2.debut=false;
     			j1.repaint();
@@ -60,7 +65,7 @@ public class EcouteurDeBouton implements ActionListener{
     		
     		
         	if(e.getActionCommand().equals("Sauvegarder Partie")){
-        		plateau.matrice.estinverse=plateau.couleurInverse;
+           		plateau.matrice.estinverse=plateau.couleurInverse;
         		 System.out.println("save");
         		 JOptionPane jop = new JOptionPane();
  			     String nom = jop.showInputDialog(null, "Entrez un nom pour votre partie: ", "Entrez un nom pour votre partie: ", JOptionPane.QUESTION_MESSAGE);
@@ -68,6 +73,7 @@ public class EcouteurDeBouton implements ActionListener{
  			     //appel de la fonction de sauvegarde (classe Sauvegarde)
  			     if(nom!=null && nom.length()>0) {
 	 			     try{
+	 			    	
 						Moteur.sauvegarde(nom,plateau.matrice,sauvegarde);
 						sauvegarde.afficher();
 	 			     }

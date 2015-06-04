@@ -9,7 +9,7 @@ class EcouteurBille implements MouseListener {
     PlateauGraphique plateau;
 
     // Ecouteur d'action a besoin de connaitre les donnees pour effectuer la
-    // selection
+    // selection!
     public EcouteurBille(PlateauGraphique plateau) {
     	this.plateau=plateau;
 

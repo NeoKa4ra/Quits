@@ -16,21 +16,21 @@ public class Outils extends JPanel{
 
 	Outils(Sauvegarde sauvegarde,PlateauGraphique plateau, Etats j1,  Etats j2, Moteur m){
 
-		ImageIcon icon = new ImageIcon(new ImageIcon("aide.jpeg").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT));
+		ImageIcon icon = new ImageIcon(new ImageIcon("aide.jpeg").getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
 		aide=new JButton(icon);
-		aide.setPreferredSize(new Dimension(30, 30));
+		aide.setPreferredSize(new Dimension(40, 40));
 		
-		icon = new ImageIcon(new ImageIcon("aide.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT));
+		icon = new ImageIcon(new ImageIcon("aide.png").getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
 		coupdepouce=new JButton(icon);
-		coupdepouce.setPreferredSize(new Dimension(30, 30));
+		coupdepouce.setPreferredSize(new Dimension(40, 40));
 		
-		icon = new ImageIcon(new ImageIcon("refaire.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT));
+		icon = new ImageIcon(new ImageIcon("refaire.png").getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
 		refaire=new JButton(icon);
-		refaire.setPreferredSize(new Dimension(30, 30));
+		refaire.setPreferredSize(new Dimension(40, 40));
 		
-		icon = new ImageIcon(new ImageIcon("annuler.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT));
+		icon = new ImageIcon(new ImageIcon("annuler.png").getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
 		annuler=new JButton(icon);
-		annuler.setPreferredSize(new Dimension(30, 30));
+		annuler.setPreferredSize(new Dimension(40, 40));
 		
 		
 		aide.addActionListener(new EcouteurDeBouton(0,sauvegarde,plateau,m,j1,j2,aide,annuler));
@@ -50,7 +50,7 @@ public class Outils extends JPanel{
 		
 		plateau.annuler=annuler;
 		plateau.refaire=refaire;
-	
+		
 		
 	}
 	

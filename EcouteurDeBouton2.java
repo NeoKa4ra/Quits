@@ -43,6 +43,8 @@ public class EcouteurDeBouton2 implements ActionListener{
 				 try{
 					    Moteur.charger(cp.fichierSelectionne,cp.p.matrice);
 					    cp.p.couleurInverse=cp.p.matrice.estinverse;
+					    plateau.j2.score=plateau.matrice.nbBlancSortis;
+		    			plateau.j1.score=plateau.matrice.nbMarronSortis;
 					    if(cp.p.couleurInverse){
 					    	plateau.j2.tour=1;
 			    			plateau.j1.tour=0;

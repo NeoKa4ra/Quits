@@ -51,7 +51,15 @@ class EcouteurDeDrop implements MouseListener,ActionListener {
 		            
 		         //   System.out.println(arrivee.x +" "+arrivee.y);
 		            if(m.pointJouable(plateau.depart,arrivee,plateau.matrice)){
-		            		//plateau.repaint();
+		            	
+		    				plateau.refaire.setEnabled(false);
+		    				
+		            		plateau.depart1.x=plateau.depart.x;
+		            		plateau.depart1.y=plateau.depart.y;
+		            		plateau.arrivee.x=arrivee.x;
+		            		plateau.arrivee.y=arrivee.y;
+		            		plateau.clicfleche=-1;
+		            		plateau.repaint();
 		            		int position=plateau.matrice.position;
 				    		int L=plateau.matrice.historique.size();
 				    		//System.out.println(L);
@@ -60,7 +68,6 @@ class EcouteurDeDrop implements MouseListener,ActionListener {
 			
 				    		if(position!=L){
 
-				    			plateau.refaire.setEnabled(false);
 						    	//System.out.println(L+"="+position);
 					    		int j;
 	
@@ -78,12 +85,12 @@ class EcouteurDeDrop implements MouseListener,ActionListener {
 				    	        current = 1;
 				    	        plateau.fleche=1;
 				    	        plateau.annuler.setEnabled(true);
-				    	        
 		            		}
 		            		else
 				    	        plateau.annuler.setEnabled(true);
 	
-		            } 
+		            }
+		            
 		    		if(plateau.matrice.jBlanc){
 		    			j2.tour=1;
 		    			j1.tour=0;
@@ -165,11 +172,17 @@ class EcouteurDeDrop implements MouseListener,ActionListener {
 	        		Point dep=coupjouable.PointDep();
 	           		Point arr=coupjouable.PointArr();
 		            if(Moteur.pointJouable(dep,arr,plateau.matrice) ){
+		            	plateau.depart1.x=dep.x;
+		        		plateau.depart1.y=dep.y;
+		        		plateau.arrivee.x=arr.x;
+		        		plateau.arrivee.y=arr.y;
+		        		plateau.clicfleche=-1;
 	            		plateau.repaint();
-		            } 
+		            }
 	        	}
 	        	else if(coupjouable.estColonne()){
 	    			int colonne=coupjouable.Colonne();
+	    			System.out.println("pol" + colonne);
 	        		if(coupjouable.Sens())
 	        			m.colonneJouableH(colonne, plateau.matrice);
 	        		else
