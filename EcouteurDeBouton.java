@@ -41,7 +41,7 @@ public class EcouteurDeBouton implements ActionListener{
     			j1.repaint();
     	    	j2.repaint();
 
-        			m.niveau=0;
+        			System.out.println(m.niveau);
         			plateau.matrice.init_2_joueurs();
         			plateau.reinit_couleur_joueurs();
         			j1.joueur=1;
@@ -111,7 +111,7 @@ public class EcouteurDeBouton implements ActionListener{
         	
         	
          	if(bouton==-4){
-         		 Options opt= new Options(null, "Options", true, m, plateau);
+         		 Options opt= new Options(null, "Options", true, m, plateau, m.niveau);
         		 this.opt=opt;
         	}
         	

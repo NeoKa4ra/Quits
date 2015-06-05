@@ -102,7 +102,7 @@ public class Quits implements Runnable{
 	
         // On fixe la taille et on demarre
 	   fenetre.setResizable(true);
-	   fenetre.setLocation(0,0);
+	   fenetre.setLocation(200,200);
 	   fenetre.setSize(W,H);
 	   fenetre.setVisible(true);
     }
