@@ -367,7 +367,7 @@ public class IA {
 			/*if(faireAlpha)
 				tmp = alphaBeta(pTemp, alpha, beta, profondeur-1);
 			else*/
-				tmp = Min(pTemp, profondeur-1);
+				tmp = Min(pTemp, profondeur);
 			if(tmp > max){
 				max = tmp;
 				CJmax.copie(CJ);

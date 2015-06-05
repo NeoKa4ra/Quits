@@ -678,11 +678,13 @@ public class Plateau {
             for (int j=0;j<5;j++) {
                 if(echiquier[i][j].estBlanc())
                 {
+                if (i == 0 && j == 0)
+                	poidB += 15;
                 poidB = poidB + (i+j);
                 nbB++;
                 }
         }}
-                poidB = poidB + ((5-nbB)*8);
+                poidB = poidB + ((5-nbB)*15);
                 return poidB;
     }
      
@@ -693,11 +695,13 @@ public class Plateau {
             for (int j=0;j<5;j++) {
                 if(echiquier[i][j].estMarron())
                 {
+                if (i == 4 && j == 4)
+                	poidM += 15;
                 poidM = poidM + (8-i-j);
                 nbM++;
                 }
         }}
-                poidM = poidM + ((5-nbM)*8);
+                poidM = poidM + ((5-nbM)*15);
                 return poidM;
     }
      
