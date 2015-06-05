@@ -8,7 +8,7 @@ import java.util.TimerTask;
 class EcouteurDeDrop implements MouseListener,ActionListener {
 
     PlateauGraphique plateau;
-    final int slowness = 1000;
+    final int slowness = 100;
     Timer timer;
     int current;
     Moteur m;
