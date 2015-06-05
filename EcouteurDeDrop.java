@@ -8,7 +8,7 @@ import java.util.TimerTask;
 class EcouteurDeDrop implements MouseListener,ActionListener {
 
     PlateauGraphique plateau;
-    final int slowness = 100;
+    final int slowness = 1000;
     Timer timer;
     int current;
     Moteur m;
@@ -35,8 +35,9 @@ class EcouteurDeDrop implements MouseListener,ActionListener {
     	
     	if(plateau.joueur_joue && !(plateau.matrice.nbBlancSortis()==3 || plateau.matrice.nbMarronSortis()==3)){
 	        if (plateau.selectionBille) {
-	        	
-
+	        	 
+	        	/* if(plateau.couleurInverse)
+	        		 plateau.matrice.inverser();*/
 		        	 
 	        	 int x=e.getX();
 	             int y=e.getY();
@@ -122,7 +123,9 @@ class EcouteurDeDrop implements MouseListener,ActionListener {
 						j2.repaint();
 						plateau.repaint();*/
 					}
-	            }  
+	            }
+	        	/*if(plateau.couleurInverse)
+	        		 plateau.matrice.inverser();*/
 	        }
 	            
 	            
@@ -150,12 +153,18 @@ class EcouteurDeDrop implements MouseListener,ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
+
+		
+		
 		if(!plateau.joueur_joue && plateau.fleche==1){
 	        if (current <= slowness) {
 	        	current++;
 
 	        }
 	        else{
+	       	 	/*if(plateau.couleurInverse)
+	       	 		plateau.matrice.inverser(); */
+	        	
 	        	IA IA=new IA();
 	        	CoupJouable coupjouable;
 	        	if(m.niveau==1)
@@ -227,9 +236,11 @@ class EcouteurDeDrop implements MouseListener,ActionListener {
 					plateau.repaint();*/
 				}
 
-	    	
+	       	 	/*if(plateau.couleurInverse)
+	       	 		plateau.matrice.inverser(); */
+
 	        }
-	
+
 		}
 	}
 }

@@ -31,6 +31,9 @@ public class EcouteurFleche implements MouseListener,ActionListener {
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
 		if(plateau.joueur_joue && !(plateau.matrice.nbBlancSortis()==3 || plateau.matrice.nbMarronSortis()==3)){
+       	/* if(plateau.couleurInverse)
+    		 plateau.matrice.inverser();*/
+			
 			int x=e.getX();
 		    int y1=e.getY();
 		    int i=plateau.clicFleche((double)x,(double)y1);
@@ -240,13 +243,16 @@ public class EcouteurFleche implements MouseListener,ActionListener {
 			
 			if(plateau.matrice.nbBlancSortis()==3 || plateau.matrice.nbMarronSortis()==3){
 				JOptionPane jop2 = new JOptionPane();
-				if(m.niveau!=0)
-					jop2.showMessageDialog(null, "VOUS AVEZ GAGNE", "Fin De Partie", JOptionPane.INFORMATION_MESSAGE);
-					
-				if(plateau.matrice.jBlanc && m.niveau==0)
-					jop2.showMessageDialog(null, "JOUEUR NOIR A GAGNE", "Fin De Partie", JOptionPane.INFORMATION_MESSAGE);
-				else if(m.niveau==0)
+				if(m.niveau!=0){
+					if( (plateau.matrice.nbBlancSortis==3 && plateau.matrice.jBlanc) || (plateau.matrice.nbMarronSortis==3 && !plateau.matrice.jBlanc))
+						jop2.showMessageDialog(null, "VOUS AVEZ GAGNE", "Fin De Partie", JOptionPane.INFORMATION_MESSAGE);
+					else
+						jop2.showMessageDialog(null, "VOUS AVEZ PERDU", "Fin De Partie", JOptionPane.INFORMATION_MESSAGE);
+				}	
+				if(plateau.matrice.nbBlancSortis==3 && plateau.matrice.jBlanc && m.niveau==0)
 					jop2.showMessageDialog(null, "JOUEUR BLANC A GAGNE", "Fin De Partie", JOptionPane.INFORMATION_MESSAGE);
+				else if(m.niveau==0)
+					jop2.showMessageDialog(null, "JOUEUR NOIR A GAGNE", "Fin De Partie", JOptionPane.INFORMATION_MESSAGE);
 			/*	plateau.matrice.init_2_joueurs();
 				j1.init();
 				j2.init();
@@ -254,7 +260,8 @@ public class EcouteurFleche implements MouseListener,ActionListener {
 				j2.repaint();	
 				plateau.repaint(); */
 			}
-
+       	 	/*if(plateau.couleurInverse)
+       	 		plateau.matrice.inverser();*/
 		}	
 	}
 	
@@ -294,6 +301,9 @@ public class EcouteurFleche implements MouseListener,ActionListener {
 	        	current++;
 	        }
 	        else{
+	       	 	/*if(plateau.couleurInverse)
+	       	 		plateau.matrice.inverser();*/
+	       	 	
 	        	IA IA=new IA();
 	        	CoupJouable coupjouable;
 	        	if(m.niveau==1)
@@ -361,7 +371,11 @@ public class EcouteurFleche implements MouseListener,ActionListener {
 				plateau.repaint();
 				if(plateau.matrice.nbBlancSortis()==3 || plateau.matrice.nbMarronSortis()==3){
 					JOptionPane jop2 = new JOptionPane();
-					jop2.showMessageDialog(null, "VOUS AVEZ PERDU", "Fin De Partie", JOptionPane.INFORMATION_MESSAGE);
+					if( (plateau.matrice.nbBlancSortis==3 && plateau.matrice.jBlanc) || (plateau.matrice.nbMarronSortis==3 && !plateau.matrice.jBlanc))
+						jop2.showMessageDialog(null, "VOUS AVEZ PERDU", "Fin De Partie", JOptionPane.INFORMATION_MESSAGE);
+					else
+						jop2.showMessageDialog(null, "VOUS AVEZ GAGNE", "Fin De Partie", JOptionPane.INFORMATION_MESSAGE);
+				}	
 				/*	plateau.matrice.init_2_joueurs();
 					j1.init();
 					j2.init();
@@ -369,11 +383,12 @@ public class EcouteurFleche implements MouseListener,ActionListener {
 					j2.repaint();
 					plateau.repaint(); */
 				}
-	    	
+	       	 	/*if(plateau.couleurInverse)
+	       	 		plateau.matrice.inverser(); */
 	        }
 	
 		}
 	}
 
-}
+
 

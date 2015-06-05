@@ -150,6 +150,7 @@ public class Plateau {
 	// initialisation de toutes les cases � libres
 	public void init_2_joueurs(){
 
+		jBlanc=false;
 		int i,j;
 		// initialisation des cases � libre
 		for(i=0;i<5;i++){
