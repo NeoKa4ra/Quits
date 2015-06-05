@@ -330,21 +330,55 @@ public class EcouteurFleche implements MouseListener,ActionListener {
 	    			int colonne=coupjouable.Colonne();
 	    			System.out.println("pol" + colonne);
 	        		if(coupjouable.Sens()){
-	        			m.colonneJouableH(colonne, plateau.matrice);		   
+	        			if(m.colonneJouableH(colonne, plateau.matrice)){
+	        				plateau.clicfleche=plateau.colFleche(colonne,true);
+	        				System.out.println("essai " + plateau.clicfleche);
+			    			plateau.depart1.x=-1;
+			    			plateau.depart1.y=-1;
+			    			plateau.arrivee.x=-1;
+			    			plateau.arrivee.y=-1;
+	        				
+	        			}   
 	        		}
 	        		else{
-	        			m.colonneJouableB(colonne, plateau.matrice);  
-	        		  
+	        			if(m.colonneJouableB(colonne, plateau.matrice)){
+	        				plateau.clicfleche=plateau.colFleche(colonne,true);
+	        				System.out.println("essai2 " + plateau.clicfleche);
+			    			plateau.depart1.x=-1;
+			    			plateau.depart1.y=-1;
+			    			plateau.arrivee.x=-1;
+			    			plateau.arrivee.y=-1;
+	        				
+	        				
+	        			}
 	        		}
 	        	}
 	        	else{
 	    			int rangee=coupjouable.Rangee();
 	    			System.out.println("rangee" + rangee);
 
-	        		if(coupjouable.Sens())
-	        			m.rangeeJouableD(rangee, plateau.matrice);
-	        		else
-	        			m.rangeeJouableG(rangee, plateau.matrice); 
+	        		if(coupjouable.Sens()){
+	        			if(m.rangeeJouableD(rangee, plateau.matrice)){
+	        				plateau.clicfleche=plateau.rangFleche(rangee,true);
+	        				System.out.println("essai2 " + plateau.clicfleche);
+			    			plateau.depart1.x=-1;
+			    			plateau.depart1.y=-1;
+			    			plateau.arrivee.x=-1;
+			    			plateau.arrivee.y=-1;
+	        				
+	        				
+	        			}
+	        		}
+	        		else{
+	        			if(m.rangeeJouableG(rangee, plateau.matrice)){
+	        				plateau.clicfleche=plateau.rangFleche(rangee,false);
+	        				System.out.println("essai2 " + plateau.clicfleche);
+			    			plateau.depart1.x=-1;
+			    			plateau.depart1.y=-1;
+			    			plateau.arrivee.x=-1;
+			    			plateau.arrivee.y=-1;
+	        			}
+	        		}
 	        	}
 	        	
 
