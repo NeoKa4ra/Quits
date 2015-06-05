@@ -30,41 +30,34 @@ public class EcouteurDeBouton implements ActionListener{
     		if(bouton==-1){
     			plateau.debut=false;
     			plateau.couleurInverse=false;
-    			plateau.depart.x=-1;
-        		plateau.depart.y=-1;
+    			plateau.clicfleche=-1;
+    			plateau.depart1.x=-1;
+        		plateau.depart1.y=-1;
         		plateau.arrivee.x=-1;
         		plateau.arrivee.y=-1;
         		
     			j1.debut=false;
     			j2.debut=false;
     			j1.repaint();
-    	    		j2.repaint();
+    	    	j2.repaint();
 
         			m.niveau=0;
         			plateau.matrice.init_2_joueurs();
         			plateau.reinit_couleur_joueurs();
         			j1.joueur=1;
         			j2.joueur=2;
-    			System.out.println(plateau.debut);
-        			if(plateau.matrice.jBlanc){
-    	    			j2.tour=1;
-    	    			j1.tour=0;
-    	    			
-    	    		}else{
-    	    			j2.tour=0;
-    	    			j1.tour=1;
-    	    			
-    	    		}
-    	    		j1.score= plateau.matrice.nbMarronSortis;
-    	    		j2.score=plateau.matrice.nbBlancSortis;
-    	    		
+        			j1.tour=1;
+        			j2.tour=0;
+        			j1.score=0;
+        			j2.score=0;
+        			plateau.matrice.jBlanc=false;
     	    		plateau.repaint();
 
         		}
         		
     		
     		
-        	if(e.getActionCommand().equals("Sauvegarder Partie")){
+        	if(bouton==-2){
            		plateau.matrice.estinverse=plateau.couleurInverse;
         		 System.out.println("save");
         		 JOptionPane jop = new JOptionPane();
@@ -117,7 +110,7 @@ public class EcouteurDeBouton implements ActionListener{
         	     	 	
         	
         	
-         	if(e.getActionCommand().equals("Options")){
+         	if(bouton==-4){
          		 Options opt= new Options(null, "Options", true, m, plateau);
         		 this.opt=opt;
         	}
@@ -171,6 +164,8 @@ public class EcouteurDeBouton implements ActionListener{
         	
 	        		
    	 }
+    	
+    
  }
         	
         	

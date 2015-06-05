@@ -15,11 +15,16 @@ public class Etats extends JComponent{
 	int tour;
 	Image bb,bn,flecheN, flecheJ;
 	boolean debut;
+	int H,i;
 	
-	Etats(int i){
+	
+	Etats(int i, int h){
+		this.H=h;
+		setPreferredSize(new Dimension(100, H));
 		debut=true;
 		message="oui";
 		score=0;
+		this.i=i;
 		joueur=i;
 		if(joueur==1)
 			tour=1;
@@ -50,22 +55,39 @@ public class Etats extends JComponent{
 		Graphics2D drawable = (Graphics2D) g;
 		//drawable.rotate(Math.toRadians(45));
 		
+		
+		//setPreferredSize(new Dimension(100,100));
 		int w=getSize().width;
 		int h=getSize().height;
-		drawable.setPaint(new Color(187, 174, 152));
+		drawable.setPaint(new Color(132, 46, 27));
 		drawable.fillRect(0, 0, getSize().width, getSize().height);
 		drawable.setPaint(Color.black);
 		drawable.drawString(message,0,0);
 		int x=w-h;
 		int y=0;
 		if(debut==false){
-			if(tour==1 && joueur==1) //c'est mon tour
-				drawable.drawImage(flecheN,w/10,0,w/10,h,null);
+			if(i==1) //c'est mon tour
+				drawable.drawImage(flecheN,w/5,0,w/10,h,null);
 		
-			if(tour==1 && joueur==2) //c'est mon tour
-				drawable.drawImage(flecheJ,w/10,0,w/10,h,null);
-		
-			drawable.drawString(message,w/10+10,0);
+			if(i==2) //c'est mon tour
+				drawable.drawImage(flecheJ,w/5,0,w/10,h,null);
+			
+			for(int i=0;i<3;i++){
+				drawable.setPaint(new Color(136, 66, 29));
+				drawable.fillOval(x,y,h-(h/8),h-(h/8));
+				x=x-h;
+			}
+			
+			if(tour==1) {//c'est mon tour
+				if(joueur==1) //c'est mon tour
+					drawable.drawImage(bn,w/5+w/10+w/50,0,h,h,null);
+			
+				if(joueur==2) //c'est mon tour
+					drawable.drawImage(bb,w/5+w/10+w/50,0,h,h,null);
+			}
+			
+			
+			x=w-h;
 			for(int i=0;i<score;i++){
 				if(joueur==1)
 					drawable.drawImage(bn,x,y,h,h,null);
@@ -73,6 +95,21 @@ public class Etats extends JComponent{
 					drawable.drawImage(bb,x,y,h,h,null);
 				x=x-h;
 			}
+		}else{
+			if(joueur==1) //c'est mon tour
+				drawable.drawImage(flecheN,w/5,0,w/10,h,null);
+		
+			if(joueur==2) //c'est mon tour
+				drawable.drawImage(flecheJ,w/5,0,w/10,h,null);
+			
+			for(int i=0;i<5;i++){
+				if(joueur==1)
+					drawable.drawImage(bn,x,y,h,h,null);
+				if(joueur==2)
+					drawable.drawImage(bb,x,y,h,h,null);
+				x=x-h;
+			}
+			
 		}
 		
 	}

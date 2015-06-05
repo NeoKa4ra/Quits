@@ -38,18 +38,41 @@ public class EcouteurDeBouton3 implements ActionListener{
 				
 				if(couleurj1==1 && couleurj2==0){//j1 devient blanc
 					plateau.couleurInverse=true;
-					//plateau.matrice.jBlanc=true;
-					plateau.j2.tour=1;
-	    			plateau.j1.tour=0;
+					plateau.j1.joueur=2;
 	    			plateau.j2.joueur=1;
-	    			plateau.j1.joueur=2;
+	    			plateau.j1.score = plateau.matrice.nbMarronSortis;
+		    		plateau.j2.score = plateau.matrice.nbBlancSortis;
+		    		if(plateau.matrice.jBlanc){
+		    			plateau.j2.tour=0;
+		    			plateau.j1.tour=1;
+		    			plateau.matrice.jBlanc=false;
+		    			
+		    		}else{
+		    			plateau.j2.tour=1;
+		    			plateau.j1.tour=0;
+		    			plateau.matrice.jBlanc=true;
+		    		}
+		    		
 	    			plateau.j1.repaint();
 	    			plateau.j2.repaint();
-				}else if(couleurj1==0 && couleurj2==1){						
+				}else if(couleurj1==0 && couleurj2==1){	
+					System.out.println("poiu");
 					plateau.couleurInverse=false;
-					//plateau.matrice.jBlanc=true;
-					plateau.j2.tour=0;
-	    			plateau.j1.tour=1;
+
+	    			plateau.j1.joueur=1;
+	    			plateau.j2.joueur=2;
+	    			plateau.j1.score = plateau.matrice.nbBlancSortis;
+		    		plateau.j2.score = plateau.matrice.nbMarronSortis;
+		    		if(plateau.matrice.jBlanc){
+		    			plateau.j2.tour=1;
+		    			plateau.j1.tour=0;
+		    			
+		    		}else{
+		    			plateau.j2.tour=0;
+		    			plateau.j1.tour=1;
+		    			
+		    		}
+		    		
 				}
 				
 				
