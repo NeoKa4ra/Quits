@@ -763,14 +763,8 @@ public class Plateau {
    							CJ.coup(k-3, j);
    						// Si le coup est valide
    						if(CJ.estValide(this)){
-   							CJ = new CoupJouable();
-   							if(k<3)
-   								CJ.joueCase(pDep,pArr);
-   							else if(k<5)
-   								CJ.coup(k-3, i);
-   							else
-   								CJ.coup(k-3, j);
    							list.add(CJ);
+   							CJ = new CoupJouable();
    							cmpt++;
    						}
    					}
