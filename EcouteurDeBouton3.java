@@ -40,38 +40,32 @@ public class EcouteurDeBouton3 implements ActionListener{
 					plateau.couleurInverse=true;
 					plateau.j1.joueur=2;
 	    			plateau.j2.joueur=1;
-	    			plateau.j1.score = plateau.matrice.nbMarronSortis;
-		    		plateau.j2.score = plateau.matrice.nbBlancSortis;
-		    		if(plateau.matrice.jBlanc){
-		    			plateau.j2.tour=0;
-		    			plateau.j1.tour=1;
-		    			plateau.matrice.jBlanc=false;
-		    			
-		    		}else{
-		    			plateau.j2.tour=1;
-		    			plateau.j1.tour=0;
-		    			plateau.matrice.jBlanc=true;
-		    		}
+	    			plateau.j1.score = 0;
+		    		plateau.j2.score = 0;
+		    		plateau.matrice.init_2_joueurs();
+		    		plateau.matrice.jBlanc=true;
+		    		plateau.j2.tour=1;
+		    		plateau.j1.tour=0;
 		    		
-	    			plateau.j1.repaint();
-	    			plateau.j2.repaint();
-				}else if(couleurj1==0 && couleurj2==1){	
-					System.out.println("poiu");
+	    			plateau.clicfleche=-1;
+        			plateau.depart1.x=-1;
+            		plateau.depart1.y=-1;
+            		plateau.arrivee.x=-1;
+            		plateau.arrivee.y=-1;
+				}else if(couleurj1==0 && couleurj2==1){	 // j1 noir
 					plateau.couleurInverse=false;
-
 	    			plateau.j1.joueur=1;
 	    			plateau.j2.joueur=2;
-	    			plateau.j1.score = plateau.matrice.nbBlancSortis;
-		    		plateau.j2.score = plateau.matrice.nbMarronSortis;
-		    		if(plateau.matrice.jBlanc){
-		    			plateau.j2.tour=1;
-		    			plateau.j1.tour=0;
-		    			
-		    		}else{
-		    			plateau.j2.tour=0;
-		    			plateau.j1.tour=1;
-		    			
-		    		}
+	    			plateau.j1.score = 0;
+		    		plateau.j2.score = 0;
+		    		plateau.j2.tour=0;
+		    		plateau.j1.tour=1;
+		    		plateau.matrice.init_2_joueurs();
+		    		plateau.clicfleche=-1;
+        			plateau.depart1.x=-1;
+            		plateau.depart1.y=-1;
+            		plateau.arrivee.x=-1;
+            		plateau.arrivee.y=-1;
 		    		
 				}
 				

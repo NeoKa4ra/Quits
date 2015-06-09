@@ -13,6 +13,7 @@ import javax.swing.JButton;
 public class Moteur {
 
 	public static int niveau;
+	public static int dernier_niveau;
 	
 	Moteur(){
 		niveau=0;

@@ -32,9 +32,12 @@ class EcouteurDeDrop implements MouseListener,ActionListener {
     // Lors d'un relachement de bouton, on trace l'image selectionnee, s'il y
     // en a une
     public void mouseReleased(MouseEvent e) {
+
     	
     	if(plateau.joueur_joue && !(plateau.matrice.nbBlancSortis()==3 || plateau.matrice.nbMarronSortis()==3)){
-	        if (plateau.selectionBille) {
+	        if (plateau.selectionBille){
+	        	System.out.println(plateau.matrice.nbBlancSortis());
+	        	System.out.println(plateau.matrice.nbMarronSortis());
 	        	 
 	        	/* if(plateau.couleurInverse)
 	        		 plateau.matrice.inverser();*/
@@ -108,6 +111,7 @@ class EcouteurDeDrop implements MouseListener,ActionListener {
 		    		plateau.repaint();  
 		    		
 					if(plateau.matrice.nbBlancSortis()==3 || plateau.matrice.nbMarronSortis()==3){
+						plateau.matrice.jBlanc=!plateau.matrice.jBlanc;
 						JOptionPane jop2 = new JOptionPane();
 						if(m.niveau!=0)
 							jop2.showMessageDialog(null, "VOUS AVEZ GAGNE", "Fin De Partie", JOptionPane.INFORMATION_MESSAGE);
@@ -259,7 +263,8 @@ class EcouteurDeDrop implements MouseListener,ActionListener {
 	    		
 				if(plateau.matrice.nbBlancSortis()==3 || plateau.matrice.nbMarronSortis()==3){
 					JOptionPane jop2 = new JOptionPane();
-					jop2.showMessageDialog(null, "VOUS AVEZ PERDU", "Fin De Partie", JOptionPane.INFORMATION_MESSAGE);							
+					jop2.showMessageDialog(null, "VOUS AVEZ PERDU", "Fin De Partie", JOptionPane.INFORMATION_MESSAGE);	
+				//	plateau.matrice.jBlanc=!plateau.matrice.jBlanc;
 				/*	plateau.matrice.init_2_joueurs();
 					j1.init();
 					j2.init();

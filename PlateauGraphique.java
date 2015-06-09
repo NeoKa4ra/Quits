@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -20,6 +22,7 @@ public class PlateauGraphique extends JComponent{
 	boolean coupvalide;
 	Image bb,bn,fg,fh,fd,fb,fg2,fh2,fd2,fb2, img,caseG, caseG1, plateau_ombre;
 	int tailleCase;
+	int niveau;
 	boolean selectionBille;
 	public boolean joueur_joue;
 	public JButton annuler;
@@ -29,10 +32,12 @@ public class PlateauGraphique extends JComponent{
 	Moteur m;
 	boolean debut;
 	boolean couleurInverse;
+	boolean coupdepouce;
 	Etats j1;
 	Etats j2;
 	
 	PlateauGraphique(Plateau matrice,Moteur m,Etats j1, Etats j2){
+
 		this.j1=j1;
 		this.j2=j2;
 		couleurInverse=false;
@@ -51,13 +56,14 @@ public class PlateauGraphique extends JComponent{
 		arrivee= new Point();
 		arrivee.x=-1;
 		arrivee.y=-1;
-		addMouseListener(new EcouteurBille(this));
-		addMouseListener(new EcouteurDeDrop(this,m,j1,j2));
-		addMouseListener(new EcouteurFleche(this,m,j1,j2));
+		if(!debut){
+			
+		}
 		selectionBille=false;
 		joueur_joue=true;
 		fleche=0;
 		coupvalide=false;
+		coupdepouce=false;
 	}
 
 	public void init () {
@@ -86,6 +92,12 @@ public class PlateauGraphique extends JComponent{
 				
 	}
 	
+	public void lancerEcouteur(){
+		addMouseListener(new EcouteurBille(this));
+		addMouseListener(new EcouteurDeDrop(this,m,j1,j2));
+		addMouseListener(new EcouteurFleche(this,m,j1,j2));
+	}
+
 	public void inverserCouleurJoueur(){
 		try { 
 			 
@@ -116,13 +128,15 @@ public class PlateauGraphique extends JComponent{
 
 	public void paintComponent(Graphics g) {
 	       
-
+		
 		// Graphics 2D est le vrai type de l'objet passe en parametre
 		// Le cast permet d'avoir acces a un peu plus de primitives de dessin
 		drawable = (Graphics2D) g;
 		//drawable.rotate(Math.toRadians(45));
 		drawable.setPaint(Color.white);
 		drawable.fillRect(0, 0, getSize().width, getSize().height);
+		if(!debut)
+			lancerEcouteur();
 		
 		if(couleurInverse){
 			inverserCouleurJoueur();
@@ -140,7 +154,9 @@ public class PlateauGraphique extends JComponent{
 	
 		drawable.setPaint(Color.white);
 		drawable.fillRect(0, 0, getSize().width, getSize().height);
-		//drawable.setStroke(new BasicStroke( 2.0f ));
+		
+		
+		
 		
 		// CALCULE DE LA TAILLE D'UNE CASE 
 		 
@@ -170,6 +186,8 @@ public class PlateauGraphique extends JComponent{
 				tailleCase = (int) Math.sqrt(Math.pow(width,2)/2)/5;
 			}
 		}
+		
+		///////////////////////////////////////////////
 		int d= (int) Math.sqrt(Math.pow(tailleCase,2)+Math.pow(tailleCase,2)); 
 		
 		w=(int) d*5;
@@ -180,7 +198,8 @@ public class PlateauGraphique extends JComponent{
 	
 		//drawable.drawImage(plateau_ombre,margeX/2,margeY/2,d*5,d*5,null);
 		
-		
+		///// DESSINER LE PLATEAU ///////
+		/****1ere case****/
 		int [] init_polX= {w/2+margeX/2,w/2+demiD+margeX/2,w/2+margeX/2,w/2-demiD+margeX/2};
 		int [] init_polY= {h+margeY/2,h-demiD+margeY/2,h-d+margeY/2,h-demiD+margeY/2};
 		
@@ -206,8 +225,10 @@ public class PlateauGraphique extends JComponent{
 				}
 		}
 		
-		drawable.drawImage(fb,listeCentre[0].x+(3*demiD)/4,listeCentre[0].y+(demiD)/2,tailleCase/3,tailleCase/3,null);
-    	drawable.drawImage(fg,listeCentre[0].x-demiD,listeCentre[0].y+demiD-(demiD/3),tailleCase/3,tailleCase/3,null);
+		if(matrice.estJouableCBas(0, matrice.jBlanc))
+			drawable.drawImage(fb,listeCentre[0].x+(3*demiD)/4,listeCentre[0].y+(demiD)/2,tailleCase/3,tailleCase/3,null);
+    	if(matrice.estJouableRGauche(0, matrice.jBlanc))
+    		drawable.drawImage(fg,listeCentre[0].x-demiD,listeCentre[0].y+demiD-(demiD/3),tailleCase/3,tailleCase/3,null);
     	
 	    	listeFleche[0]=new Rectangle(listeCentre[0].x+(3*demiD)/4,listeCentre[0].y+demiD/2,tailleCase/3,tailleCase/3);
 	    	listeFleche[5]=new Rectangle(listeCentre[0].x-demiD,listeCentre[0].y+demiD-(demiD/3),tailleCase/3,tailleCase/3);
@@ -220,14 +241,14 @@ public class PlateauGraphique extends JComponent{
             	drawable.drawImage(fg2,listeCentre[0].x-demiD,listeCentre[0].y+demiD-(demiD/3),tailleCase/3,tailleCase/3,null);
         	}
 	    	
-	    	
+	    ///////////////////////////////////////
+        	
     	int [] polX= {w/2+margeX/2,w/2+demiD+margeX/2,w/2+margeX/2,w/2-demiD+margeX/2};
 		int [] polY= {h+margeY/2,h-demiD+margeY/2,h-d+margeY/2,h-demiD+margeY/2};
 	   
 		
-		
-        
-        // dessiner la grille 
+		 /**** boucle pour dessiner toute la grille de jeu ****/
+		//// on remplit les liste de case, centre et fleches au fur et à mesure ////
         int c=1, f=1;	int l=1;
         int i,j;
         
@@ -235,7 +256,7 @@ public class PlateauGraphique extends JComponent{
         	for(j=0;j<5;j++){
         	
         		
-        		
+        	// calcul des coordonnees des 4 points formant le polygone	
         	if(!(i==0 && j==0)){
         		polX[0]= polX[0]-demiD;
     			polX[1]= polX[1]-demiD;
@@ -268,14 +289,15 @@ public class PlateauGraphique extends JComponent{
 	        	
 	        	
 	        	
-	       		//colorier le point de depart
+	       		//colorier le point de depart et arrivéé (dernier coup joue //
         		if(i==depart1.x && j==depart1.y){
         			drawable.drawImage(caseG1 ,(int) (polX[0]-demiD),(int) (polY[0]-diagonale),d,d,null);
         		}
         		if(i==arrivee.x && j==arrivee.y){
         			drawable.drawImage(caseG1 ,(int) (polX[0]-demiD),(int) (polY[0]-diagonale),d,d,null);
         		}
-	            
+        		
+        			
         		
         		if(!debut){
 		            //dessiner les billes
@@ -285,14 +307,15 @@ public class PlateauGraphique extends JComponent{
 	        		if(matrice.echiquier[i][j].contenu==2){
 	        			drawable.drawImage(bn,listeCentre[c].x-demiD/3,listeCentre[c].y-demiD/3,tailleCase/2,tailleCase/2,null);
 	        		}
+        		
         		}
-     
+        		
+        		       		
         		
         		
-        		
-        		//dessiner les fleches
+        		///////////dessiner les fleches/////////////////
 
-	            if(j==4){ // vers le haut
+	            if(j==4  && matrice.estJouableCHaut(i, matrice.jBlanc)){ // vers le haut
 	            	drawable.drawImage(fh,listeCentre[c].x-demiD,listeCentre[c].y-demiD,tailleCase/3,tailleCase/3,null);
 	            	if(f==5)
 	            		f++;	
@@ -304,7 +327,7 @@ public class PlateauGraphique extends JComponent{
 	            	f++;	
 	            	
 	            }
-	            if(i==4){ // vers la droite
+	            if(i==4 && matrice.estJouableRDroite(j, matrice.jBlanc)){ // vers la droite
 	            	drawable.drawImage(fd,listeCentre[c].x+demiD/2,listeCentre[c].y-demiD,tailleCase/3,tailleCase/3,null);
 	            	if(f==5)
 	            		f++;
@@ -317,7 +340,7 @@ public class PlateauGraphique extends JComponent{
 	            	f++;
 
 	            }
-	            if(j==0 ){ // vers le bas
+	            if(j==0 && matrice.estJouableCBas(i, matrice.jBlanc)){ // vers le bas
 	            	drawable.drawImage(fb,listeCentre[c].x+(3*demiD)/4,listeCentre[c].y+demiD/2,tailleCase/3,tailleCase/3,null);
 	            	if(f==5)
 	            		f++;
@@ -329,7 +352,7 @@ public class PlateauGraphique extends JComponent{
 	            	f++;
 
 	            }
-	            if(i==0){ // vers la gauche
+	            if(i==0 && matrice.estJouableRGauche(j, matrice.jBlanc)){ // vers la gauche
 	            	drawable.drawImage(fg,listeCentre[c].x-demiD,listeCentre[c].y+demiD-(demiD/3),tailleCase/3,tailleCase/3,null);
 	            	if(f==5)
 	            		f++;
@@ -339,21 +362,99 @@ public class PlateauGraphique extends JComponent{
 	            		drawable.drawImage(fg2,listeCentre[c].x-demiD,listeCentre[c].y+demiD-(demiD/3),tailleCase/3,tailleCase/3,null);
 	            	}
 	            	f++;
-	            
-	            	
 	            }
+	            /////////////////////////////	          
         		c++;
-        		
+        	}//fin if i!=0 et j!=0
+
+        	}  //fin boucle for
+
+       	}//fin boucle for
+
+        
+        
+        ///////////////////////////////////////////////////////////////////////////////////
+        
+        
+        ///// AFFICHER LES COUPS JOUABLES ////
+        if(coupdepouce && !debut){ // mettre en evidence la liste des coups jouables
+        	Color v= new Color(0,250,0);//new Color(165, 38, 10);
+        	drawable.setStroke(new BasicStroke( 2.0f ));
+			IA IA=new IA();
+        	CoupJouable cj;
+        	cj=IA.normal(matrice);	  
+			
+			Polygon p;
+				if(cj.pDep.x!=-1 && cj.pDep.y!=-1 && cj.pArr.x!=-1 && cj.pArr.x!=-1){
+	        		p = (Polygon) listeCase[5*cj.pDep.x+cj.pDep.y];
+	        		drawable.setPaint(v);
+	        		drawable.fillPolygon(p);
+	        		drawable.setPaint(Color.black);
+		  			drawable.drawPolygon(p);
+
+	       			p = (Polygon) listeCase[5*cj.pArr.x+cj.pArr.y];
+	       			drawable.setPaint(v);
+	        		drawable.fillPolygon(p);
+	        		drawable.setPaint(Color.black);
+		  			drawable.drawPolygon(p);
+		  			v.brighter();
+		  			v.brighter();
+				}else if(cj.colonne!=-1){
+					int t;
+					for(t=0;t<5;t++){
+						p= (Polygon) listeCase[t+5*cj.colonne];
+						drawable.setPaint(v);
+		        		drawable.fillPolygon(p);
+		        		drawable.setPaint(Color.black);
+			  			drawable.drawPolygon(p);
+					}
+					t--;
+					if(cj.sens) //vers le haut
+						drawable.drawImage(fh2,listeCentre[t+5*cj.colonne].x-demiD,listeCentre[t+5*cj.colonne].y-demiD,tailleCase/3,tailleCase/3,null);
+					else		//vers le bas
+						drawable.drawImage(fb2,listeCentre[5*cj.colonne].x+(3*demiD)/4,listeCentre[5*cj.colonne].y+demiD/2,tailleCase/3,tailleCase/3,null);
+					
+				}else if(cj.rangee!=-1){
+					int t;
+					for(t=0;t<5;t++){
+						p= (Polygon) listeCase[t*5+cj.rangee];
+						drawable.setPaint(v);
+		        		drawable.fillPolygon(p);
+		        		drawable.setPaint(Color.black);
+			  			drawable.drawPolygon(p);
+					}
+					t--;
+					if(cj.sens) //vers la droite
+						drawable.drawImage(fd2,listeCentre[t*5+cj.rangee].x+demiD/2,listeCentre[t*5+cj.rangee].y-demiD,tailleCase/3,tailleCase/3,null);
+					else		//vers la gauche
+						drawable.drawImage(fg2,listeCentre[cj.rangee].x-demiD,listeCentre[cj.rangee].y+demiD-(demiD/3),tailleCase/3,tailleCase/3,null);	
+				}
+				
+				
+				if(!debut){//dessiner les billes
+		          for(i=0;i<5;i++){
+		        	  for(j=0;j<5;j++){
+			        		if(matrice.echiquier[i][j].contenu==1){
+			        			drawable.drawImage(bb,listeCentre[i*5+j].x-demiD/3,listeCentre[i*5+j].y-demiD/3,tailleCase/2,tailleCase/2,null);
+			        		}
+			        		if(matrice.echiquier[i][j].contenu==2){
+			        			drawable.drawImage(bn,listeCentre[i*5+j].x-demiD/3,listeCentre[i*5+j].y-demiD/3,tailleCase/2,tailleCase/2,null);
+			        		}
+		        	  }
+		          }
         		
         		}
-        	}
-        }
-    
-              
+			
+			coupdepouce=false;
+			
+			
+        }//fin if coupdepouce
+   
+	
+	
+ }//fin paint component
         
-	}
-	
-	
+        
 	public int calculNUmeroCase(int x, int y){
 		int i=0;
 		Point p=null;
@@ -364,6 +465,8 @@ public class PlateauGraphique extends JComponent{
 			return i;
 		else return -1;
 	}
+	
+	
         
     public Point  calculIndice (int i){
     	
@@ -403,6 +506,9 @@ public class PlateauGraphique extends JComponent{
     		return -1;
     	
     }
+    
+    
+  
     
     public int direction (int i){ // nord sud est ouest respectivement 1 2 3 4
     	Point p;

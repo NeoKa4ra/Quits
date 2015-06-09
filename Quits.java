@@ -27,7 +27,7 @@ public class Quits implements Runnable{
         
         
         Etats etat1= new Etats(1,H/20);
-		Etats etat2= new Etats(2,H/20);	
+	Etats etat2= new Etats(2,H/20);	
         Moteur m = new Moteur();
         Plateau matrice = new Plateau();
         matrice.init_2_joueurs();
@@ -46,27 +46,24 @@ public class Quits implements Runnable{
 		
 		
 		
-		Menu notremenu = new Menu(sauvegarde,plateau,m,etat1, etat2);
-		Menu notremenu2 = new Menu(sauvegarde,plateau,m,etat1, etat2);
-		Outils panel2 = new Outils(sauvegarde,plateau,etat1, etat2,m);
+	Menu notremenu = new Menu(sauvegarde,plateau,m,etat1, etat2);
+	Menu notremenu2 = new Menu(sauvegarde,plateau,m,etat1, etat2);
+	Outils panel2 = new Outils(sauvegarde,plateau,etat1, etat2,m);
 	
 		
+	 JPanel panel3 = new JPanel();	
+	panel3.setLayout(new BorderLayout());
 
+	panel3.add(plateau,BorderLayout.CENTER);
+
+	panel3.add(panel2,BorderLayout.SOUTH);
+	
 		fenetre.setLayout(new BorderLayout());
 		fenetre.add(etat1,BorderLayout.NORTH);
 		fenetre.add(etat2,BorderLayout.SOUTH);
-		fenetre.add(plateau,BorderLayout.CENTER);
+		fenetre.add(panel3,BorderLayout.CENTER);
 		fenetre.add(notremenu,BorderLayout.WEST);
-		//fenetre.add(notremenu2,BorderLayout.EAST);
-
-		
-		/*JPanel pane = new JPanel();
-		pane.setLayout(new BorderLayout());
 	
-		pane.add(panel1,BorderLayout.CENTER);
-		pane.add(panel2,BorderLayout.SOUTH);*/
-
-
 		
 		MyGlassPane glass = new MyGlassPane(plateau);
     	glass.addMouseMotionListener(new EcouteurDeMouvement(glass));
@@ -75,9 +72,7 @@ public class Quits implements Runnable{
     	fenetre.setGlassPane(glass);
     	glass.setVisible(true);
 		
-		
-	   /*JSplitPane hpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, notremenu, pane);
-	   fenetre.add(hpane);*/
+
 
         // Un clic sur le bouton de fermeture clos l'application
 	   fenetre.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);

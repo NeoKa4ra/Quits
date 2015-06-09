@@ -18,16 +18,16 @@ public class MonBouton extends JButton implements MouseListener {
 		//this.e=e;
 		//addActionListener(e);
 		setBorderPainted(false);
-		setPreferredSize(new Dimension(150,20));
+		setPreferredSize(new Dimension(150,40));
 	}
 	
 	public void paintComponent(Graphics g){ 
 		Graphics2D drawable = (Graphics2D) g;
 		
 		if(ok)
-			drawable.drawImage(img2,0,0,getSize().width, getSize().height, null);
+			drawable.drawImage(img2,5,0,getSize().width-5, getSize().height-5, null);
 		else
-			drawable.drawImage(img,0,0,getSize().width, getSize().height, null);
+			drawable.drawImage(img,5,0,getSize().width-5, getSize().height-5, null);
 	}
 
 	 	public void mouseReleased(MouseEvent e) {	

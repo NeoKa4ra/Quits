@@ -60,7 +60,7 @@ public class ChargerPartie extends JDialog{
 		add(panbouton, BorderLayout.SOUTH);
 		add(panFich, BorderLayout.NORTH);
 		setSize(500,taille*20+200);
-		setLocationRelativeTo(null);		
+		setLocation(200,200);			
 		setResizable(false);
 		setVisible(true);
 	}

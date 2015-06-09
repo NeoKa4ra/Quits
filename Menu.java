@@ -24,6 +24,7 @@ public class Menu extends JPanel{
 	Menu (Sauvegarde sauvegarde, PlateauGraphique p, Moteur m, Etats j1, Etats j2){
 	
 		this.m=m;
+		//setPreferredSize(new Dimension(120,40));
 		try { 
 			img1=ImageIO.read(new File("NouvPartie.png"));
 			img2=ImageIO.read(new File("SauvPartie.png"));
@@ -47,7 +48,7 @@ public class Menu extends JPanel{
 		ChargerPartie.addActionListener(new EcouteurDeBouton(-3,sauvegarde,p,m,j1,j2,SauvegarderPartie,ChargerPartie));
 		Options.addActionListener(new EcouteurDeBouton(-4,sauvegarde,p,m,j1,j2,SauvegarderPartie,ChargerPartie));
 		
-		this.setLayout (new GridLayout (15,1));
+		this.setLayout (new GridLayout (16,1));
 		for(int i=0;i<2;i++)
 			this.add(new JLabel());
 		this.add (NouvellePartie );

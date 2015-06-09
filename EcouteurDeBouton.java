@@ -27,23 +27,25 @@ public class EcouteurDeBouton implements ActionListener{
 	}
 
     	public void actionPerformed(ActionEvent e) {
+    		// NOUVELLE PARTIE
     		if(bouton==-1){
     			plateau.debut=false;
     			plateau.couleurInverse=false;
-    			plateau.clicfleche=-1;
-    			plateau.depart1.x=-1;
-        		plateau.depart1.y=-1;
-        		plateau.arrivee.x=-1;
-        		plateau.arrivee.y=-1;
         		
     			j1.debut=false;
     			j2.debut=false;
     			j1.repaint();
     	    	j2.repaint();
 
-        			System.out.println(m.niveau);
+        			
         			plateau.matrice.init_2_joueurs();
         			plateau.reinit_couleur_joueurs();
+        			m.niveau=m.dernier_niveau;
+        			plateau.clicfleche=-1;
+        			plateau.depart1.x=-1;
+            		plateau.depart1.y=-1;
+            		plateau.arrivee.x=-1;
+            		plateau.arrivee.y=-1;
         			j1.joueur=1;
         			j2.joueur=2;
         			j1.tour=1;
@@ -56,7 +58,7 @@ public class EcouteurDeBouton implements ActionListener{
         		}
         		
     		
-    		
+    		//SAUVERGARDER PARTIE
         	if(bouton==-2){
            		plateau.matrice.estinverse=plateau.couleurInverse;
         		 System.out.println("save");
@@ -80,6 +82,7 @@ public class EcouteurDeBouton implements ActionListener{
         		}
         	}
         	
+        	//CHARGER PARTIE
         	if(bouton==-3){
 				
 				if(sauvegarde.listFichier.size()!=0){
@@ -109,22 +112,31 @@ public class EcouteurDeBouton implements ActionListener{
         	}
         	     	 	
         	
-        	
+        	//OPTIONS
          	if(bouton==-4){
          		 Options opt= new Options(null, "Options", true, m, plateau, m.niveau);
         		 this.opt=opt;
         	}
         	
+         	//AIDE
         	if(bouton==0){
-        		System.out.println("Je dois afficher les regles");
+        		Aide aide=new Aide(null, "Règles du jeu", true);
         	}
         	
+        	
+        	//SUGGESTION DE COUP coupdepouce
         	if(bouton==1){
-        		System.out.println("coupdepouce");
+        		plateau.coupdepouce=true;
         	}
         	
+        	//ANNULER
         	if(bouton==2){
         		Moteur.annuler(plateau.matrice,annuler,refaire,plateau.couleurInverse);
+        		plateau.depart1.x=-1;
+        		plateau.depart1.y=-1;
+        		plateau.arrivee.x=-1;
+        		plateau.arrivee.y=-1;
+        		plateau.clicfleche=-1;
         		if(plateau.matrice.jBlanc){
 	    			j2.tour=1;
 	    			j1.tour=0;
@@ -143,9 +155,14 @@ public class EcouteurDeBouton implements ActionListener{
         	
 	        	
         	
-        	
+        	//REFAIRE
         	if(bouton==3){
         		Moteur.refaire(plateau.matrice,refaire,annuler);
+        		plateau.depart1.x=-1;
+        		plateau.depart1.y=-1;
+        		plateau.arrivee.x=-1;
+        		plateau.arrivee.y=-1;
+        		plateau.clicfleche=-1;
         		if(plateau.matrice.jBlanc){
 	    			j2.tour=1;
 	    			j1.tour=0;
