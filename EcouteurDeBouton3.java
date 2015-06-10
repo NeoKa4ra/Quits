@@ -24,23 +24,18 @@ public class EcouteurDeBouton3 implements ActionListener{
 
 	public void actionPerformed( ActionEvent e){
 		if(ok && e.getActionCommand().equals("Annuler")){
-			 if(plateau.debut){
-				 plateau.debut=true;
-			 plateau.j1.debut=true;
-			 plateau.j2.debut=true;
-		 }
-			 
 			 opt.dispose();
-			 
-			 
+	 
 		}
 		
 		if(ok && e.getActionCommand().equals("OK")){
+	 
+			
 			String couleurj1=(String) opt.j1.getSelectedItem();  // 0 noir 1 blanc 
 			String couleurj2=(String) opt.j2.getSelectedItem(); // 0 blanc et 1 noir
 			
 			
-			if(couleurj1!=couleurj2){ 
+			if(couleurj1!=couleurj2){    // CHOIX DES COULEURS 
 				
 				if(couleurj1=="Blanc" && couleurj2=="Noir"){//j1 devient blanc
 					plateau.couleurInverse=true;
@@ -85,7 +80,7 @@ public class EcouteurDeBouton3 implements ActionListener{
 				}
 				
 				
-				if(opt.listeBouton.getSelection()!=null){
+				if(opt.listeBouton.getSelection()!=null){  // choix du niveau
 					plateau.debut=false;
 					plateau.j1.debut=false;
 					plateau.j2.debut=false;
@@ -98,13 +93,13 @@ public class EcouteurDeBouton3 implements ActionListener{
 							
 						}
 						
-				}
+				}//fin if choix de niveau
 				else{
 					 JOptionPane jop = new JOptionPane();
 					 jop.showMessageDialog(null, "Veuillez choisir un niveau!", "Erreur Choix niveau", JOptionPane.ERROR_MESSAGE);
 				}
 				
-			}
+			} //FIN IF CHOIX DES COULEURS
 			else{
 				 JOptionPane jop1 = new JOptionPane();
 				 jop1.showMessageDialog(null, "Veuillez chosir deux couleurs différentes"
@@ -120,6 +115,7 @@ public class EcouteurDeBouton3 implements ActionListener{
 		}
 
 		if(!ok){
+			plateau.joueur_joue=false;
 			plateau.matrice.jBlanc=false;
 			if (current <= slowness) {
 	        	current++;
@@ -141,8 +137,8 @@ public class EcouteurDeBouton3 implements ActionListener{
 	        		Point dep=coupjouable.PointDep();
 	           		Point arr=coupjouable.PointArr();
 		            if(Moteur.pointJouable(dep,arr,plateau.matrice) ){
-		          		plateau.depart1.x=plateau.depart.x;
-	            		plateau.depart1.y=plateau.depart.y;
+		          		plateau.depart1.x=dep.x;
+	            		plateau.depart1.y=dep.y;
 	            		plateau.arrivee.x=arr.x;
 	            		plateau.arrivee.y=arr.y;
 	            		plateau.clicfleche=-1;
@@ -220,7 +216,7 @@ public class EcouteurDeBouton3 implements ActionListener{
 	    		ok=true;
 	    		plateau.annuler.setEnabled(true);
 	    		
-		
+	    		plateau.joueur_joue=true;
 	        }
 		}
 	}

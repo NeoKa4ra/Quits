@@ -42,10 +42,18 @@ public class EcouteurDeBouton2 implements ActionListener{
 		}
 		
 		if(e.getActionCommand().equals("Charger")){
-
+			
+			
 			if(cp.listeBouton.getSelection()!=null){
 				 try{
+					    plateau.refaire.setEnabled(false);
 					    Moteur.charger(cp.fichierSelectionne,cp.p.matrice);
+					    if(cp.p.matrice.historique.size()==cp.p.matrice.position)
+					 		plateau.refaire.setEnabled(false);
+						
+						if(cp.p.matrice.position==0)
+							plateau.annuler.setEnabled(false);
+						
 					    cp.p.couleurInverse=cp.p.matrice.estinverse;
 					    plateau.j2.score=plateau.matrice.nbBlancSortis;
 		    			plateau.j1.score=plateau.matrice.nbMarronSortis;
@@ -63,7 +71,24 @@ public class EcouteurDeBouton2 implements ActionListener{
 				 }
 				     catch(IOException ex) {
 						ex.printStackTrace();
-				     }		     
+				     }
+				 	plateau.j1.debut=false;
+					plateau.j2.debut=false;
+					if(plateau.matrice.jBlanc){
+		    			plateau.j2.tour=1;
+		    			plateau.j1.tour=0;
+		    			
+		    		}else{
+		    			plateau.j2.tour=0;
+		    			plateau.j1.tour=1;
+		    			
+		    		}
+		    		plateau.j1.score= plateau.matrice.nbMarronSortis;
+		    		plateau.j2.score=plateau.matrice.nbBlancSortis;
+					plateau.j1.repaint();
+		    		plateau.j2.repaint();	
+					plateau.debut=false;
+					plateau.repaint();
 			}
 			else{
 				 JOptionPane jop = new JOptionPane();

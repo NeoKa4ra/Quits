@@ -39,11 +39,12 @@ public class PlateauGraphique extends JComponent{
 	Etats j1;
 	Etats j2;
 	int itemj1, itemj2;
-	
+	boolean ok2,ok3;
 	int [] listeFlecheBlanc;
 	
 	PlateauGraphique(Plateau matrice,Moteur m,Etats j1, Etats j2){
-		
+		ok2=true;
+		ok3=true;
 		listeFlecheBlanc = new int [20];
 		itemj1=0;
 		itemj2=1;

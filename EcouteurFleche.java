@@ -11,8 +11,10 @@ import javax.swing.Timer;
 public class EcouteurFleche implements MouseListener,ActionListener {
 	PlateauGraphique plateau;
 	Timer timer;
+	Timer timer2;
 	int current;
     final int slowness = 100;
+    final int slowness2 = 5;
     Moteur m;
     Etats j1;
     Etats j2;
@@ -21,16 +23,18 @@ public class EcouteurFleche implements MouseListener,ActionListener {
 		this.plateau=plateau;
         current=0;
         timer=new Timer(10,this);
+        timer2=new Timer(10,this);
         this.m=m;
         this.j1=j1;
         this.j2=j2;
+        current=1;
 	}
 
 	
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		if(plateau.joueur_joue && !(plateau.matrice.nbBlancSortis()==3 || plateau.matrice.nbMarronSortis()==3)){
+		if(plateau.joueur_joue && !(plateau.matrice.nbBlancSortis()==3 || plateau.matrice.nbMarronSortis()==3) && plateau.ok2){
        	/* if(plateau.couleurInverse)
     		 plateau.matrice.inverser();*/
 			
@@ -80,14 +84,26 @@ public class EcouteurFleche implements MouseListener,ActionListener {
 
 			    		}
 						
-						if( m.niveau!=0 && !(plateau.matrice.nbBlancSortis()==3 || plateau.matrice.nbMarronSortis()==3))
+						if( m.niveau!=0 && !(plateau.matrice.nbBlancSortis()==3 || plateau.matrice.nbMarronSortis()==3)){
 							plateau.joueur_joue=false;
 			    	        timer.start();
 			    	        current = 1;
 			    	        plateau.fleche=2;
 			    	        plateau.annuler.setEnabled(true);
+							}
+						else if(m.niveau==0){
+							//System.out.println("mama");
+							plateau.ok3=false;
+							plateau.ok2=false;
+							timer.start();
+							current=1;
+							/*if(plateau.ok2)
+							System.out.println("true");
+							else
+								System.out.println("false");*/
 						}
-
+					}
+						
 		    		break;
 		    	case 2:
 					
@@ -119,16 +135,28 @@ public class EcouteurFleche implements MouseListener,ActionListener {
 
 			    		}
 		    			
-		    			if( m.niveau!=0 && !(plateau.matrice.nbBlancSortis()==3 || plateau.matrice.nbMarronSortis()==3))
+		    			if( m.niveau!=0 && !(plateau.matrice.nbBlancSortis()==3 || plateau.matrice.nbMarronSortis()==3)){
 							plateau.joueur_joue=false;
 			    	        timer.start();
 			    	        current = 1;
 			    	        plateau.fleche=2;
 			    	        plateau.annuler.setEnabled(true);
+		    			}else if(m.niveau==0){
+								//System.out.println("mama");
+								plateau.ok3=false;
+								plateau.ok2=false;
+								timer.start();
+								current=1;
+								/*if(plateau.ok2)
+								System.out.println("true");
+								else
+									System.out.println("false");*/
+							}
 					}
 	
 
 		    		break;
+		    		
 		    	case 3:
 		    		if(m.rangeeJouableD(c,plateau.matrice)){
 		    			plateau.clicfleche=i;
@@ -156,13 +184,23 @@ public class EcouteurFleche implements MouseListener,ActionListener {
 			    		}
 			    	
 		    			
-		    			if( m.niveau!=0 && !(plateau.matrice.nbBlancSortis()==3 || plateau.matrice.nbMarronSortis()==3))
+		    			if( m.niveau!=0 && !(plateau.matrice.nbBlancSortis()==3 || plateau.matrice.nbMarronSortis()==3)){
 							plateau.joueur_joue=false;
 			    	        timer.start();
 			    	        current = 1;
 			    	        plateau.fleche=2;
 			    	        plateau.annuler.setEnabled(true);
-						
+		    			}else if(m.niveau==0){
+							//System.out.println("mama");
+							plateau.ok3=false;
+							plateau.ok2=false;
+							timer.start();
+							current=1;
+							/*if(plateau.ok2)
+							System.out.println("true");
+							else
+								System.out.println("false");*/
+						}
 		    		}
 		    		break;	
 		    	case 4:
@@ -194,18 +232,31 @@ public class EcouteurFleche implements MouseListener,ActionListener {
 			    		}
 		    			
 		    			
-		    			if( m.niveau!=0 && !(plateau.matrice.nbBlancSortis()==3 || plateau.matrice.nbMarronSortis()==3))
+		    			if( m.niveau!=0 && !(plateau.matrice.nbBlancSortis()==3 || plateau.matrice.nbMarronSortis()==3)){
 							plateau.joueur_joue=false;
 			    	        timer.start();
 			    	        current = 1;
 			    	        plateau.fleche=2;
 			    	        plateau.annuler.setEnabled(true);
+		    			}else if(m.niveau==0){
+							//System.out.println("mama");
+							plateau.ok3=false;
+							plateau.ok2=false;
+							timer.start();
+							current=1;
+							/*if(plateau.ok2)
+							System.out.println("true");
+							else
+								System.out.println("false");*/
+						}
 					}
 		    		
 		    		break;
 				default:;
 				
 			}
+			
+	        
 			
 			j1.score= plateau.matrice.nbMarronSortis;
 			j2.score=plateau.matrice.nbBlancSortis;
@@ -220,15 +271,6 @@ public class EcouteurFleche implements MouseListener,ActionListener {
 	        j1.repaint();
 	        j2.repaint();
 			plateau.repaint();
-			
-			if(plateau.matrice.listeCoupsPossibles().size() == 0){
-	    		if(plateau.matrice.jBlanc)
-	    			plateau.matrice.jBlanc=false;
-	    		else
-	    			plateau.matrice.jBlanc=true;
-	    		
-	    	}
-			
 			
 			if(plateau.matrice.nbBlancSortis()==3 || plateau.matrice.nbMarronSortis()==3){
 				JOptionPane jop2 = new JOptionPane();
@@ -253,9 +295,6 @@ public class EcouteurFleche implements MouseListener,ActionListener {
        	 	/*if(plateau.couleurInverse)
        	 		plateau.matrice.inverser();*/
 		}	
-		
-		
-		
 	}
 	
 	@Override
@@ -289,7 +328,17 @@ public class EcouteurFleche implements MouseListener,ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		if(!plateau.joueur_joue && plateau.fleche==2){
+		if (current <= slowness2 && !plateau.ok2) {
+        	current++;
+
+        }
+        else if(!plateau.ok2){
+        	timer.stop();
+        	plateau.ok2=true;
+        	plateau.ok3=true;
+			
+        }	
+		if(!plateau.joueur_joue && plateau.fleche==2 && plateau.ok3){
 	        if (current <= slowness) {
 	        	current++;
 	        }
@@ -321,6 +370,7 @@ public class EcouteurFleche implements MouseListener,ActionListener {
 	        	}
 	        	else if(coupjouable.estColonne()){
 	    			int colonne=coupjouable.Colonne();
+	    			System.out.println("pol" + colonne);
 	        		if(coupjouable.Sens()){
 	        			if(m.colonneJouableH(colonne, plateau.matrice)){
 	        				plateau.clicfleche=plateau.colFleche(colonne,plateau.matrice.adv.Sens());
@@ -345,10 +395,12 @@ public class EcouteurFleche implements MouseListener,ActionListener {
 	        	}
 	        	else{
 	    			int rangee=coupjouable.Rangee();
+	    			System.out.println("rangee" + rangee);
 
 	        		if(coupjouable.Sens()){
 	        			if(m.rangeeJouableD(rangee, plateau.matrice)){
 	        				plateau.clicfleche=plateau.rangFleche(rangee,plateau.matrice.adv.Sens());
+	        				System.out.println("essai2 " + plateau.clicfleche);
 			    			plateau.depart1.x=-1;
 			    			plateau.depart1.y=-1;
 			    			plateau.arrivee.x=-1;
@@ -360,6 +412,7 @@ public class EcouteurFleche implements MouseListener,ActionListener {
 	        		else{
 	        			if(m.rangeeJouableG(rangee, plateau.matrice)){
 	        				plateau.clicfleche=plateau.rangFleche(rangee,plateau.matrice.adv.Sens());
+	        				System.out.println("essai2 " + plateau.clicfleche);
 			    			plateau.depart1.x=-1;
 			    			plateau.depart1.y=-1;
 			    			plateau.arrivee.x=-1;

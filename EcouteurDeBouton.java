@@ -32,13 +32,7 @@ public class EcouteurDeBouton implements ActionListener{
     			
     			plateau.couleurInverse=false;
 
-    			j1.debut=false;
-    			j2.debut=false;
     			
-
-        			
-        			plateau.matrice.init_2_joueurs();
-        			plateau.reinit_couleur_joueurs();
         			m.niveau=m.dernier_niveau;
         			plateau.clicfleche=-1;
         			plateau.depart1.x=-1;
@@ -59,7 +53,7 @@ public class EcouteurDeBouton implements ActionListener{
     	    		
     	    		 Options opt= new Options(null, "Options", true, m, plateau, m.niveau, plateau.itemj1, plateau.itemj2);
     	       		 this.opt=opt;
-
+    	       		
         		}
         		
     		
@@ -91,7 +85,7 @@ public class EcouteurDeBouton implements ActionListener{
 					 JOptionPane jop = new JOptionPane();
 					 jop.showMessageDialog(null, "Aucune partie sauvegardée", "Erreur Chargement", JOptionPane.ERROR_MESSAGE);
 				}
-				j1.debut=false;
+				/*j1.debut=false;
 				j2.debut=false;
 				if(plateau.matrice.jBlanc){
 	    			j2.tour=1;
@@ -107,7 +101,7 @@ public class EcouteurDeBouton implements ActionListener{
 				j1.repaint();
 	    		j2.repaint();	
 				plateau.debut=false;
-				plateau.repaint();
+				plateau.repaint();*/
 					
         	}
         	     	 	

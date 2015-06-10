@@ -16,7 +16,7 @@ public class Options extends JDialog {
 		
 		
 		super(parent, title, modal);
-		setUndecorated(true);
+		//setUndecorated(true);
 		niveau=i;
 		this.itemj1=itemj1;
 		this.itemj2=itemj2;
