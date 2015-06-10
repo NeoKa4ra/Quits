@@ -19,10 +19,12 @@ public class Outils extends JPanel{
 		ImageIcon icon = new ImageIcon(new ImageIcon("aide.jpeg").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT));
 		aide=new JButton(icon);
 		aide.setPreferredSize(new Dimension(30, 30));
+		aide.setToolTipText("Règles du jeu");
 		
 		icon = new ImageIcon(new ImageIcon("aide.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT));
 		coupdepouce=new JButton(icon);
 		coupdepouce.setPreferredSize(new Dimension(30, 30));
+		coupdepouce.setToolTipText("Suggestion de coup");
 		
 		icon = new ImageIcon(new ImageIcon("refaire.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT));
 		refaire=new JButton(icon);

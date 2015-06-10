@@ -29,13 +29,12 @@ public class EcouteurDeBouton implements ActionListener{
     	public void actionPerformed(ActionEvent e) {
     		// NOUVELLE PARTIE
     		if(bouton==-1){
-    			plateau.debut=false;
+    			
     			plateau.couleurInverse=false;
-        		
+
     			j1.debut=false;
     			j2.debut=false;
-    			j1.repaint();
-    	    	j2.repaint();
+    			
 
         			
         			plateau.matrice.init_2_joueurs();
@@ -46,6 +45,9 @@ public class EcouteurDeBouton implements ActionListener{
             		plateau.depart1.y=-1;
             		plateau.arrivee.x=-1;
             		plateau.arrivee.y=-1;
+            		//mise a jour des etats joueur=1 => noir joueur=2 => blanc
+            		// tout =1pour j1 ca toujours au noir de jouer
+            		
         			j1.joueur=1;
         			j2.joueur=2;
         			j1.tour=1;
@@ -53,7 +55,10 @@ public class EcouteurDeBouton implements ActionListener{
         			j1.score=0;
         			j2.score=0;
         			plateau.matrice.jBlanc=false;
-    	    		plateau.repaint();
+    	    		
+    	    		
+    	    		 Options opt= new Options(null, "Options", true, m, plateau, m.niveau, plateau.itemj1, plateau.itemj2);
+    	       		 this.opt=opt;
 
         		}
         		
@@ -61,7 +66,6 @@ public class EcouteurDeBouton implements ActionListener{
     		//SAUVERGARDER PARTIE
         	if(bouton==-2){
            		plateau.matrice.estinverse=plateau.couleurInverse;
-        		 System.out.println("save");
         		 JOptionPane jop = new JOptionPane();
  			     String nom = jop.showInputDialog(null, "Entrez un nom pour votre partie: ", "Entrez un nom pour votre partie: ", JOptionPane.QUESTION_MESSAGE);
  			     //mais ici ne sauvegarder que si on a cliqué sur ok faut chercher ca
@@ -75,12 +79,8 @@ public class EcouteurDeBouton implements ActionListener{
 				     catch(IOException ex) {
 						ex.printStackTrace();
 					}		     
-        		}else{
-        			JOptionPane jop2 = new JOptionPane();
-					jop2.showMessageDialog(null, "veuillez saisir un nom de fichier", "Erreur sauvegarde", JOptionPane.ERROR_MESSAGE);
-        			
         		}
-        	}
+ 			}
         	
         	//CHARGER PARTIE
         	if(bouton==-3){
@@ -112,11 +112,7 @@ public class EcouteurDeBouton implements ActionListener{
         	}
         	     	 	
         	
-        	//OPTIONS
-         	if(bouton==-4){
-         		 Options opt= new Options(null, "Options", true, m, plateau, m.niveau);
-        		 this.opt=opt;
-        	}
+        	
         	
          	//AIDE
         	if(bouton==0){
@@ -132,11 +128,25 @@ public class EcouteurDeBouton implements ActionListener{
         	//ANNULER
         	if(bouton==2){
         		Moteur.annuler(plateau.matrice,annuler,refaire,plateau.couleurInverse);
-        		plateau.depart1.x=-1;
-        		plateau.depart1.y=-1;
-        		plateau.arrivee.x=-1;
-        		plateau.arrivee.y=-1;
-        		plateau.clicfleche=-1;
+        		
+        		if(plateau.matrice.adv.estCase()){
+	        		plateau.depart1.x=plateau.matrice.adv.pDep.x;
+	        		plateau.depart1.y=plateau.matrice.adv.pDep.y;
+	        		plateau.arrivee.x=plateau.matrice.adv.pArr.x;
+	        		plateau.arrivee.y=plateau.matrice.adv.pArr.y;
+	        		plateau.clicfleche=-1;
+        		}
+        		else{
+	        		plateau.depart1.x=plateau.matrice.adv.pDep.x;
+	        		plateau.depart1.y=plateau.matrice.adv.pDep.y;
+	        		plateau.arrivee.x=plateau.matrice.adv.pArr.x;
+	        		plateau.arrivee.y=plateau.matrice.adv.pArr.y;
+	        		if(plateau.matrice.adv.estColonne())
+	        			plateau.clicfleche=plateau.colFleche(plateau.matrice.adv.Colonne(),plateau.matrice.adv.Sens());
+	        		else
+	        			plateau.clicfleche=plateau.rangFleche(plateau.matrice.adv.Rangee(),plateau.matrice.adv.Sens());
+        		}
+        			
         		if(plateau.matrice.jBlanc){
 	    			j2.tour=1;
 	    			j1.tour=0;
@@ -158,11 +168,24 @@ public class EcouteurDeBouton implements ActionListener{
         	//REFAIRE
         	if(bouton==3){
         		Moteur.refaire(plateau.matrice,refaire,annuler);
-        		plateau.depart1.x=-1;
-        		plateau.depart1.y=-1;
-        		plateau.arrivee.x=-1;
-        		plateau.arrivee.y=-1;
-        		plateau.clicfleche=-1;
+        		
+        		if(plateau.matrice.adv.estCase()){
+	        		plateau.depart1.x=plateau.matrice.adv.pDep.x;
+	        		plateau.depart1.y=plateau.matrice.adv.pDep.y;
+	        		plateau.arrivee.x=plateau.matrice.adv.pArr.x;
+	        		plateau.arrivee.y=plateau.matrice.adv.pArr.y;
+	        		plateau.clicfleche=-1;
+        		}
+        		else{
+	        		plateau.depart1.x=plateau.matrice.adv.pDep.x;
+	        		plateau.depart1.y=plateau.matrice.adv.pDep.y;
+	        		plateau.arrivee.x=plateau.matrice.adv.pArr.x;
+	        		plateau.arrivee.y=plateau.matrice.adv.pArr.y;
+	        		if(plateau.matrice.adv.estColonne())
+	        			plateau.clicfleche=plateau.colFleche(plateau.matrice.adv.Colonne(),plateau.matrice.adv.Sens());
+	        		else
+	        			plateau.clicfleche=plateau.rangFleche(plateau.matrice.adv.Rangee(),plateau.matrice.adv.Sens());
+        		}
         		if(plateau.matrice.jBlanc){
 	    			j2.tour=1;
 	    			j1.tour=0;

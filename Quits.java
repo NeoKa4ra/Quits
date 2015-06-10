@@ -27,7 +27,7 @@ public class Quits implements Runnable{
         
         
         Etats etat1= new Etats(1,H/20);
-	Etats etat2= new Etats(2,H/20);	
+        Etats etat2= new Etats(2,H/20);	
         Moteur m = new Moteur();
         Plateau matrice = new Plateau();
         matrice.init_2_joueurs();
@@ -66,7 +66,7 @@ public class Quits implements Runnable{
 	
 		
 		MyGlassPane glass = new MyGlassPane(plateau);
-    	glass.addMouseMotionListener(new EcouteurDeMouvement(glass));
+    	glass.addMouseMotionListener(new EcouteurDeMouvement(glass, plateau));
     	glass.addMouseListener(new EcouteurRetransmetteur(glass,
     			fenetre.getContentPane(),plateau));
     	fenetre.setGlassPane(glass);

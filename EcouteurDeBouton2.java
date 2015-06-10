@@ -18,22 +18,26 @@ public class EcouteurDeBouton2 implements ActionListener{
 
 	public void actionPerformed( ActionEvent e){
 		if(e.getActionCommand().equals("Supprimer")){
-			 try{
-				    Moteur.supp_sauv(cp.fichierSelectionne,sauvegarde);
-					sauvegarde.afficher();
-			 }
-			     catch(IOException ex) {
-					ex.printStackTrace();
-			     }		     
-			 cp.dispose();
+			
+			if(cp.listeBouton.getSelection()!=null){
+				 try{
+					    Moteur.supp_sauv(cp.fichierSelectionne,sauvegarde);
+						sauvegarde.afficher();
+				 }
+				     catch(IOException ex) {
+						ex.printStackTrace();
+				     }		
+				 cp.dispose();
+			}else{
+				JOptionPane jop = new JOptionPane();
+				 jop.showMessageDialog(null, "Veuillez choisir un fichier!", "Erreur Chargement", JOptionPane.ERROR_MESSAGE);
+			}
+			
 		}
 		
-		if(e.getActionCommand().equals("Renommer")){
-			 System.out.println("joris!!");
-		}
+		
 		
 		if(e.getActionCommand().equals("Annuler")){
-			 System.out.println("joris!!");
 			 cp.dispose();
 		}
 		

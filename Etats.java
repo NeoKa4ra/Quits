@@ -13,7 +13,7 @@ public class Etats extends JComponent{
 	int score;
 	int joueur;
 	int tour;
-	Image bb,bn,flecheN, flecheJ;
+	Image bb,bn,flecheN, flecheJ,scr;
 	boolean debut;
 	int H,i;
 	
@@ -22,7 +22,6 @@ public class Etats extends JComponent{
 		this.H=h;
 		setPreferredSize(new Dimension(100, H));
 		debut=true;
-		message="oui";
 		score=0;
 		this.i=i;
 		joueur=i;
@@ -35,6 +34,7 @@ public class Etats extends JComponent{
 			bn=ImageIO.read(new File("Boule-Noire.png"));
 			flecheN=ImageIO.read(new File("Joueur1.png"));
 			flecheJ=ImageIO.read(new File("Joueur2.png"));
+			scr=ImageIO.read(new File("Score.png"));
 			
 		} 
 		catch (IOException e) {
@@ -42,13 +42,6 @@ public class Etats extends JComponent{
 			e.printStackTrace(); 
 		}	
 	}
-	
-	public void inverserJoueur(){
-		joueur=3-joueur;
-		tour=1-tour;
-	}
-	
-
 	
 	
 	public void paintComponent(Graphics g) {
@@ -62,7 +55,7 @@ public class Etats extends JComponent{
 		drawable.setPaint(new Color(132, 46, 27));
 		drawable.fillRect(0, 0, getSize().width, getSize().height);
 		drawable.setPaint(Color.black);
-		drawable.drawString(message,0,0);
+	
 		int x=w-h;
 		int y=0;
 		if(debut==false){
@@ -77,6 +70,12 @@ public class Etats extends JComponent{
 				drawable.fillOval(x,y,h-(h/8),h-(h/8));
 				x=x-h;
 			}
+			
+			
+			//affichage image score
+			
+			drawable.drawImage(scr,w-(3*h)-w/7,h/4,w/15,h/2,null);
+			
 			
 			if(tour==1) {//c'est mon tour
 				if(joueur==1) //c'est mon tour
@@ -97,10 +96,10 @@ public class Etats extends JComponent{
 			}
 		}else{
 			if(joueur==1) //c'est mon tour
-				drawable.drawImage(flecheN,w/5,0,w/10,h,null);
+				drawable.drawImage(flecheN,w/5,0,w/8,h,null);
 		
 			if(joueur==2) //c'est mon tour
-				drawable.drawImage(flecheJ,w/5,0,w/10,h,null);
+				drawable.drawImage(flecheJ,w/5,0,w/8,h,null);
 			
 			for(int i=0;i<5;i++){
 				if(joueur==1)

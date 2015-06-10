@@ -148,6 +148,10 @@ public class CoupJouable {
 			res = (pDep.x == pArr.x+1 && pDep.y == pArr.y);
 		return res;
 	}
+	
+	
+	
+	
 	// Verifie si ce coup joue est un deplacement droite adjacent
 	public boolean estDepDroite(Plateau plateau){
 		boolean res;

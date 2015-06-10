@@ -29,7 +29,8 @@ public class Menu extends JPanel{
 			img1=ImageIO.read(new File("NouvPartie.png"));
 			img2=ImageIO.read(new File("SauvPartie.png"));
 			img3=ImageIO.read(new File("ChargerPartie.png"));
-			img4=ImageIO.read(new File("Options.png"));
+			//img4=ImageIO.read(new File("Options.png"));
+			
 		} 
 		catch (IOException e) {
 			// TODO Auto-generated catch block 
@@ -46,7 +47,7 @@ public class Menu extends JPanel{
 		NouvellePartie.addActionListener(new EcouteurDeBouton(-1,sauvegarde,p,m,j1,j2,SauvegarderPartie,ChargerPartie));
 		SauvegarderPartie.addActionListener(new EcouteurDeBouton(-2,sauvegarde,p,m,j1,j2,SauvegarderPartie,ChargerPartie));
 		ChargerPartie.addActionListener(new EcouteurDeBouton(-3,sauvegarde,p,m,j1,j2,SauvegarderPartie,ChargerPartie));
-		Options.addActionListener(new EcouteurDeBouton(-4,sauvegarde,p,m,j1,j2,SauvegarderPartie,ChargerPartie));
+		//Options.addActionListener(new EcouteurDeBouton(-4,sauvegarde,p,m,j1,j2,SauvegarderPartie,ChargerPartie));
 		
 		this.setLayout (new GridLayout (16,1));
 		for(int i=0;i<2;i++)
@@ -54,7 +55,7 @@ public class Menu extends JPanel{
 		this.add (NouvellePartie );
 		this.add (SauvegarderPartie);
 		this.add (ChargerPartie);
-		this.add (Options);
+		//this.add (Options);
 		//this.add (b);
 		
 	

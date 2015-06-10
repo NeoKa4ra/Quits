@@ -24,19 +24,25 @@ public class EcouteurDeBouton3 implements ActionListener{
 
 	public void actionPerformed( ActionEvent e){
 		if(ok && e.getActionCommand().equals("Annuler")){
+			 if(plateau.debut){
+				 plateau.debut=true;
+			 plateau.j1.debut=true;
+			 plateau.j2.debut=true;
+		 }
+			 
 			 opt.dispose();
 			 
 			 
 		}
 		
 		if(ok && e.getActionCommand().equals("OK")){
-			int couleurj1=opt.j1.getSelectedIndex();   // 0 noir 1 blanc 
-			int couleurj2=opt.j2.getSelectedIndex(); // 0 blanc et 1 noir
+			String couleurj1=(String) opt.j1.getSelectedItem();  // 0 noir 1 blanc 
+			String couleurj2=(String) opt.j2.getSelectedItem(); // 0 blanc et 1 noir
 			
 			
 			if(couleurj1!=couleurj2){ 
 				
-				if(couleurj1==1 && couleurj2==0){//j1 devient blanc
+				if(couleurj1=="Blanc" && couleurj2=="Noir"){//j1 devient blanc
 					plateau.couleurInverse=true;
 					plateau.j1.joueur=2;
 	    			plateau.j2.joueur=1;
@@ -47,12 +53,16 @@ public class EcouteurDeBouton3 implements ActionListener{
 		    		plateau.j2.tour=1;
 		    		plateau.j1.tour=0;
 		    		
+		    		
+		    		plateau.itemj1=1;
+		    		plateau.itemj2=0;
+		    	
 	    			plateau.clicfleche=-1;
         			plateau.depart1.x=-1;
             		plateau.depart1.y=-1;
             		plateau.arrivee.x=-1;
             		plateau.arrivee.y=-1;
-				}else if(couleurj1==0 && couleurj2==1){	 // j1 noir
+				}else if(couleurj1=="Noir" && couleurj2=="Blanc"){	 // j1 noir
 					plateau.couleurInverse=false;
 	    			plateau.j1.joueur=1;
 	    			plateau.j2.joueur=2;
@@ -66,6 +76,11 @@ public class EcouteurDeBouton3 implements ActionListener{
             		plateau.depart1.y=-1;
             		plateau.arrivee.x=-1;
             		plateau.arrivee.y=-1;
+            		
+            		plateau.itemj1=0;
+		    		plateau.itemj2=1;
+		    		
+		    		plateau.matrice.jBlanc=false;
 		    		
 				}
 				
@@ -74,14 +89,13 @@ public class EcouteurDeBouton3 implements ActionListener{
 					plateau.debut=false;
 					plateau.j1.debut=false;
 					plateau.j2.debut=false;
-					opt.dispose(); 
+					//opt.dispose(); 
 					
-					//System.out.println("ghj"+opt.niveau + " "+ couleurj1
-					//+" "+couleurj2);
-		
-						if(opt.niveau!=0 && couleurj1==1 && couleurj2==0){
+					
+						if(opt.niveau!=0 && couleurj1=="Noir" && couleurj2=="Blanc"){
 							timer.start();
 							ok=false;
+							
 						}
 						
 				}
@@ -96,13 +110,17 @@ public class EcouteurDeBouton3 implements ActionListener{
 				 jop1.showMessageDialog(null, "Veuillez chosir deux couleurs différentes"
 				 		+ " pour les deux joueurs", "Erreur Nouvelle Partie", JOptionPane.ERROR_MESSAGE);
 			}
-			System.out.println(couleurj1+" "+couleurj2);
+		
+			plateau.debut=false;
 			
-			 
+		plateau.j1.repaint();
+		plateau.j2.repaint();
+		plateau.repaint();
+		opt.dispose();
 		}
 
 		if(!ok){
-			plateau.matrice.jBlanc=true;
+			plateau.matrice.jBlanc=false;
 			if (current <= slowness) {
 	        	current++;
 	
@@ -116,29 +134,68 @@ public class EcouteurDeBouton3 implements ActionListener{
 	        		coupjouable=IA.normal(plateau.matrice);
 	        	}	
 	        	else //if(m.niveau==3)
-	        		coupjouable=IA.hard(plateau.matrice,1);       		
+	        		coupjouable=IA.hard(plateau.matrice,6);       		
 	
 	        	
 	        	if(coupjouable.estCase()){
 	        		Point dep=coupjouable.PointDep();
 	           		Point arr=coupjouable.PointArr();
 		            if(Moteur.pointJouable(dep,arr,plateau.matrice) ){
+		          		plateau.depart1.x=plateau.depart.x;
+	            		plateau.depart1.y=plateau.depart.y;
+	            		plateau.arrivee.x=arr.x;
+	            		plateau.arrivee.y=arr.y;
+	            		plateau.clicfleche=-1;
+	     
 	            		plateau.repaint();
 		            } 
 	        	}
 	        	else if(coupjouable.estColonne()){
 	    			int colonne=coupjouable.Colonne();
 	        		if(coupjouable.Sens())
-	        			plateau.m.colonneJouableH(colonne, plateau.matrice);
+	        			if(plateau.m.colonneJouableH(colonne, plateau.matrice)){
+	        				plateau.clicfleche=plateau.colFleche(colonne,true);
+	        			
+			    			plateau.depart1.x=-1;
+			    			plateau.depart1.y=-1;
+			    			plateau.arrivee.x=-1;
+			    			plateau.arrivee.y=-1;
+			    			
+	        			}
 	        		else
-	        			plateau.m.colonneJouableB(colonne, plateau.matrice);           					
+	        			if (plateau.m.colonneJouableB(colonne, plateau.matrice)){
+	        				plateau.clicfleche=plateau.colFleche(colonne,false);
+	        		
+			    			plateau.depart1.x=-1;
+			    			plateau.depart1.y=-1;
+			    			plateau.arrivee.x=-1;
+			    			plateau.arrivee.y=-1;
+			    			
+	        			}
 	        	}
 	        	else{
 	    			int rangee=coupjouable.Rangee();
 	        		if(coupjouable.Sens())
-	        			plateau.m.rangeeJouableD(rangee, plateau.matrice);
+	        			if( plateau.m.rangeeJouableD(rangee, plateau.matrice)){
+	        				plateau.clicfleche=plateau.rangFleche(rangee,true);
+	        			
+			    			plateau.depart1.x=-1;
+			    			plateau.depart1.y=-1;
+			    			plateau.arrivee.x=-1;
+			    			plateau.arrivee.y=-1;
+			    			
+	        			}
 	        		else
-	        			plateau.m.rangeeJouableG(rangee, plateau.matrice); 
+	        			if(plateau.m.rangeeJouableG(rangee, plateau.matrice)){
+	        				
+	        				plateau.clicfleche=plateau.rangFleche(rangee,false);
+			    			plateau.depart1.x=-1;
+			    			plateau.depart1.y=-1;
+			    			plateau.arrivee.x=-1;
+			    			plateau.arrivee.y=-1;
+			    			
+	        			}
+	        				
 	        	}
 	
 	        	plateau.joueur_joue=true;
@@ -167,6 +224,9 @@ public class EcouteurDeBouton3 implements ActionListener{
 	        }
 		}
 	}
+	
+
+
 }
 	
 	

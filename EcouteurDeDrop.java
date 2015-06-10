@@ -33,11 +33,11 @@ class EcouteurDeDrop implements MouseListener,ActionListener {
     // en a une
     public void mouseReleased(MouseEvent e) {
 
-    	
+    	plateau.coupPossible=false;
     	if(plateau.joueur_joue && !(plateau.matrice.nbBlancSortis()==3 || plateau.matrice.nbMarronSortis()==3)){
 	        if (plateau.selectionBille){
-	        	System.out.println(plateau.matrice.nbBlancSortis());
-	        	System.out.println(plateau.matrice.nbMarronSortis());
+	        	//System.out.println(plateau.matrice.nbBlancSortis());
+	        	//System.out.println(plateau.matrice.nbMarronSortis());
 	        	 
 	        	/* if(plateau.couleurInverse)
 	        		 plateau.matrice.inverser();*/
@@ -117,9 +117,9 @@ class EcouteurDeDrop implements MouseListener,ActionListener {
 							jop2.showMessageDialog(null, "VOUS AVEZ GAGNE", "Fin De Partie", JOptionPane.INFORMATION_MESSAGE);
 							
 						if(plateau.matrice.jBlanc && m.niveau==0)
-							jop2.showMessageDialog(null, "JOUEUR NOIR A GAGNE", "Fin De Partie", JOptionPane.INFORMATION_MESSAGE);
-						else if(m.niveau==0)
 							jop2.showMessageDialog(null, "JOUEUR BLANC A GAGNE", "Fin De Partie", JOptionPane.INFORMATION_MESSAGE);
+						else if(m.niveau==0)
+							jop2.showMessageDialog(null, "JOUEUR NOIR A GAGNE", "Fin De Partie", JOptionPane.INFORMATION_MESSAGE);
 				/*		plateau.matrice.init_2_joueurs();
 						j1.init();
 						j2.init();
@@ -139,7 +139,15 @@ class EcouteurDeDrop implements MouseListener,ActionListener {
 	        
 
     	}
-
+    	
+    	
+    	if(plateau.matrice.listeCoupsPossibles().size() == 0){
+    		if(plateau.matrice.jBlanc)
+    			plateau.matrice.jBlanc=false;
+    		else
+    			plateau.matrice.jBlanc=true;
+    		
+    	}
     	
     }
 
@@ -174,11 +182,11 @@ class EcouteurDeDrop implements MouseListener,ActionListener {
 	        	if(m.niveau==1)
 	        		coupjouable=IA.niveau1(plateau.matrice);
 	        	else if(m.niveau==2){
-	        		System.out.println("ici");
+	        		//System.out.println("ici");
 	        		coupjouable=IA.normal(plateau.matrice);
 	        	}	
 	        	else //if(m.niveau==3)
-	        		coupjouable=IA.hard(plateau.matrice,4);       		
+	        		coupjouable=IA.hard(plateau.matrice,6);       		
 
 	        	
 	        	if(coupjouable.estCase()){
@@ -195,11 +203,11 @@ class EcouteurDeDrop implements MouseListener,ActionListener {
 	        	}
 	        	else if(coupjouable.estColonne()){
 	    			int colonne=coupjouable.Colonne();
-	    			System.out.println("pol" + colonne);
+	    			//System.out.println("pol" + colonne);
 	        		if(coupjouable.Sens()){
 	        			if(m.colonneJouableH(colonne, plateau.matrice)){
 	        				plateau.clicfleche=plateau.colFleche(colonne,true);
-	        				System.out.println("essai " + plateau.clicfleche);
+	        				
 			    			plateau.depart1.x=-1;
 			    			plateau.depart1.y=-1;
 			    			plateau.arrivee.x=-1;
@@ -209,8 +217,8 @@ class EcouteurDeDrop implements MouseListener,ActionListener {
 	        		else{
 	        			if(m.colonneJouableB(colonne, plateau.matrice)){
 	        				plateau.clicfleche=plateau.colFleche(colonne,false);
-	        				System.out.println("essai2 " + plateau.clicfleche);
-			    			plateau.depart1.x=-1;
+	        				
+	        				plateau.depart1.x=-1;
 			    			plateau.depart1.y=-1;
 			    			plateau.arrivee.x=-1;
 			    			plateau.arrivee.y=-1;	        				
@@ -222,7 +230,6 @@ class EcouteurDeDrop implements MouseListener,ActionListener {
 	        		if(coupjouable.Sens()){
 	        			if(m.rangeeJouableD(rangee, plateau.matrice)){
 	        				plateau.clicfleche=plateau.rangFleche(rangee,true);
-	        				System.out.println("essai2 " + plateau.clicfleche);
 			    			plateau.depart1.x=-1;
 			    			plateau.depart1.y=-1;
 			    			plateau.arrivee.x=-1;
@@ -232,7 +239,6 @@ class EcouteurDeDrop implements MouseListener,ActionListener {
 	        		else{
 	        			if(m.rangeeJouableG(rangee, plateau.matrice)){
 	        				plateau.clicfleche=plateau.rangFleche(rangee,false);
-	        				System.out.println("essai2 " + plateau.clicfleche);
 			    			plateau.depart1.x=-1;
 			    			plateau.depart1.y=-1;
 			    			plateau.arrivee.x=-1;

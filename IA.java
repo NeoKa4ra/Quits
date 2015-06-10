@@ -2,6 +2,7 @@ import java.util.Random;
 import java.awt.Point;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
+import java.util.Iterator;
 
 public class IA {
 	final int largeurPt = 5;
@@ -13,7 +14,6 @@ public class IA {
 	IA(){
 	
 	}
-	
 	
 	/************************************* IA 0 *************************************/
 	
@@ -34,327 +34,112 @@ public class IA {
 		return CJ;
 	}
 	/************************************* IA 1 *************************************/
-	public CoupJouable niveau1(Plateau plateau){
+	
+	public CoupJouable niveau1(Plateau pT){
 		CoupJouable coupJouable = new CoupJouable();
-		boolean res = false; 
-		CoupJouable temp = new CoupJouable();
-		Plateau plateau2;
-		Point as = new Point(-1,-1);
-			
-		Point s = new Point(-1,-1);
+
+		Plateau pTemp = new Plateau();
+		pTemp.copie(pT);
+
 		CoupJouable[] coupJouables = new CoupJouable[1000];
 		for (int k = 0; k < (1000);k++)
 			coupJouables[k] = new CoupJouable();
 		int cmpt=0;	
-		
-		
+
 		Point pDep = new Point(-1,-1);
 		Point pArr = new Point(-1,-1);
 		
-		if (plateau.jBlanc){
-			s = plateau.sortieblanche();
-			if(plateau.echiquier[s.x][s.y].estLibre()){
-				if(plateau.echiquier[s.x-1][s.y].estBlanc()){
-					as.x = s.x-1;
-					as.y = s.y;
-					coupJouable.joueRDroite(s.y);
-					res = true;
-				} else if(plateau.echiquier[s.x][s.y-1].estBlanc()){
-					as.x = s.x;
-					as.y = s.y-1;
-					coupJouable.joueCHaut(s.x);
-					res = true;
-				}
-				else if(plateau.echiquier[s.x-1][s.y-1].estBlanc()){
-					as.x = s.x-1;
-					as.y = s.y-1;
-					coupJouable.joueCase(as,s);
-					res = true;
-					}
+		LinkedList<CoupJouable> list = new<CoupJouable> LinkedList();
+		list = pT.listeCoupsPossibles();
+
+		for(CoupJouable CJ : list){
+			pTemp.Joue(CJ,false);
+			if ((pT.jBlanc && pT.nbBlancSortis() == pTemp.nbBlancSortis()-1) || (!pT.jBlanc && pT.nbMarronSortis() == pTemp.nbMarronSortis()-1))
+				return CJ;
+		}
+		for(CoupJouable CJ : list){
+			if(CJ.pDep.x != -1)
+				coupJouables[cmpt++].joueCase(CJ.pDep,CJ.pArr);
+			if(!pT.jBlanc){
+				if (CJ.sens == false && CJ.colonne != -1)
+					coupJouables[cmpt++].joueCBas(CJ.colonne);
+				else if (CJ.sens == false && CJ.rangee != -1)
+					coupJouables[cmpt++].joueRGauche(CJ.rangee);
 			}
 			else{
-				if(!plateau.echiquier[s.x][s.y].estLibre()){
-					for (int i=0;i<largeurPt;i++) {
-						for (int j=0;j<longueurPt;j++) {
-							pDep = new Point(i,j);
-							for(int k=0; k<7; k++){
-								// Choisit un coup
-								
-								if(k<3){		// test des points
-									pArr = plateau.pointLibre(pDep,k);
-									coupJouable.joueCase(pDep,pArr);
-								}
-								else if(k==4)	// test des colonnes
-									coupJouable.coup(k-3, i);
-								else if(k==6)			// test des rangees
-									coupJouable.coup(k-3, j);
-								// Si le coup est valide
-								if(coupJouable.estValide(plateau) && k!= 3 && k!=5){
-									//System.out.println("nan");
-									if(k<3)
-										coupJouables[cmpt].joueCase(pDep,pArr);
-									else if(k==4)
-										coupJouables[cmpt].coup(k-3, i);
-									else if(k==6)
-										coupJouables[cmpt].coup(k-3, j);
-									cmpt++;
-									res = true;
-								}
-								
-							}
-						}
-					}
-				}
-				Random r = new Random();
-				if (cmpt == 1)
-					coupJouable = coupJouables[0];
-				else if (cmpt >= 1)
-					coupJouable = coupJouables[r.nextInt(cmpt-1)];
-				else
-					System.out.println("Pas de coups possible, voir programmeur." + cmpt);
-			}	
-		}
-		else if (!plateau.jBlanc){
-			s = plateau.sortiemarron();
-			if(plateau.echiquier[s.x][s.y].estLibre()){
-				
-				if(plateau.echiquier[s.x][s.y+1].estMarron()){
-					as.x = s.x;
-					as.y = s.y+1;
-					coupJouable.joueCBas(s.x);
-					res = true;
-				}
-				else if(plateau.echiquier[s.x+1][s.y].estMarron()){
-					as.x = s.x+1;
-					as.y = s.y;
-					coupJouable.joueRGauche(s.y);
-					res = true;
-				}
-				else if(plateau.echiquier[s.x+1][s.y+1].estMarron()){
-					as.x = s.x+1;
-					as.y = s.y+1;
-					coupJouable.joueCase(as,s);
-					res = true;
-				}
+				if (CJ.sens == true && CJ.colonne != -1)
+					coupJouables[cmpt++].joueCHaut(CJ.colonne);
+				else if (CJ.sens == true && CJ.rangee != -1)
+					coupJouables[cmpt++].joueRDroite(CJ.rangee);
 			}
+		}
 			
-			else{
-				if(!plateau.echiquier[s.x][s.y].estLibre()){
-					for (int i=0;i<largeurPt;i++) {
-						for (int j=0;j<longueurPt;j++) {
-							pDep = new Point(i,j);
-							for(int k=0; k<7; k++){
-								// Choisit un coup
-								
-								if(k<3){		// test des points
-									pArr = plateau.pointLibre(pDep,k);
-									coupJouable.joueCase(pDep,pArr);
-								}
-								else if(k==3)	// test des colonnes
-									coupJouable.coup(k-3, i);
-								else if(k==5)			// test des rangees
-									coupJouable.coup(k-3, j);
-								// Si le coup est valide
-								if(coupJouable.estValide(plateau) && k!=4 && k!=6){
-									if(k<3)
-										coupJouables[cmpt].joueCase(pDep,pArr);
-									else if(k==3)
-										coupJouables[cmpt].coup(k-3, i);
-									else if(k==5)
-										coupJouables[cmpt].coup(k-3, j);
-									cmpt++;
-									res = true;
-								}
-							}
-						}
-					}
-				}
-				Random r = new Random();
-				if (cmpt == 1)
-					coupJouable = coupJouables[0];
-				else if (cmpt >= 1)
-					coupJouable = coupJouables[r.nextInt(cmpt-1)];
-				else
-					System.out.println("Pas de coups possible, voir programmeur." + cmpt);
-			}	
-		}
-		if(res == false){
-			 coupJouable = niveau0(plateau);
-			 
-		}
+		Random r = new Random();
+		if(cmpt == 0)
+			 coupJouable = niveau0(pT);
+		else if (cmpt == 1)
+			coupJouable = coupJouables[0];
+		else if (cmpt > 1)
+			coupJouable = coupJouables[r.nextInt(cmpt-1)];
+		else
+			System.out.println("Pas de coups possible, voir programmeur." + cmpt);
+			
 		return coupJouable;
 	}
-
 	/************************************* IA Normal *************************************/
+
 	public CoupJouable normal(Plateau pT){
-		int indiceInitial = pT.calculIndicePoid();
 		int indiceMax = -100;
 
-		Plateau pTemp;
-		pTemp = new Plateau();
+		Plateau pTemp = new Plateau();
 		pTemp.copie(pT);
-
-		CoupJouable CJ = new CoupJouable();
+		CoupJouable coupJouable = new CoupJouable();
 		CoupJouable [] coupJouables = new CoupJouable[nbBillesMax*nbCoupsPossibleMax];
-		for (int k = 0; k < (nbBillesMax*nbCoupsPossibleMax);k++){
+		for (int k = 0; k < (nbBillesMax*nbCoupsPossibleMax);k++)
 			coupJouables[k] = new CoupJouable();
-		}
 		int cmpt = 0;
 		Point pDep = new Point(-1,-1);
 		Point pArr = new Point(-1,-1);
+		
+		LinkedList<CoupJouable> list = new<CoupJouable> LinkedList();
+		list = pT.listeCoupsPossibles();
 
-		for(int i=0; i<largeurPt; i++){
-			for(int j=0; j<longueurPt;j++){
-				if((pT.jBlanc && pT.echiquier[i][j].estBlanc()) || (!pT.jBlanc && pT.echiquier[i][j].estMarron())){
-					pDep = new Point(i,j);
-					pArr = pT.pointLibre(pDep,0);
-					CJ.joueCase(pDep,pArr);
-					if(CJ.estValide(pT)){
-						pTemp.Joue(CJ,false);
-						if (pTemp.calculIndicePoid()>indiceMax){ 
-							cmpt = 0;
-							coupJouables[cmpt].joueCase(pDep,pArr);
-							cmpt++;
-							indiceMax =pTemp.calculIndicePoid();
-						}
-						else if (pTemp.calculIndicePoid()==indiceMax){ 
-							coupJouables[cmpt].joueCase(pDep,pArr);
-							cmpt++;
-						}
-						pTemp.copie(pT);
-					}
-					pArr = pT.pointLibre(pDep,1);
-					CJ.joueCase(pDep,pArr);
-					if(CJ.estValide(pT)){
-							pTemp.Joue(CJ,false);
-						if (pTemp.calculIndicePoid()>indiceMax){ 
-							cmpt = 0;
-							coupJouables[cmpt].joueCase(pDep,pArr);
-							cmpt++;
-							indiceMax =pTemp.calculIndicePoid();
-						}
-						else if (pTemp.calculIndicePoid()== indiceMax){ 
-							coupJouables[cmpt].joueCase(pDep,pArr);
-							cmpt++;
-						}
-						pTemp.copie(pT);
-					}
-					pArr = pT.pointLibre(pDep,2);
-					CJ.joueCase(pDep,pArr);
-					if(CJ.estValide(pT)){
-						pTemp.Joue(CJ,false);
-						if (pTemp.calculIndicePoid()>indiceMax){ 
-							cmpt = 0;
-							coupJouables[cmpt].joueCase(pDep,pArr);
-							cmpt++;
-							indiceMax =pTemp.calculIndicePoid();
-						}
-						else if (pTemp.calculIndicePoid()==indiceMax){ 
-							coupJouables[cmpt].joueCase(pDep,pArr);
-							cmpt++;
-						}
-						pTemp.copie(pT);
-					}
-					CJ.joueCHaut(i);
-					if(CJ.estValide(pT)){
-						pTemp.Joue(CJ,false);
-						if (pTemp.calculIndicePoid()>indiceMax){ 
-							cmpt = 0;
-							coupJouables[cmpt].joueCHaut(i);
-							cmpt++;
-							indiceMax =pTemp.calculIndicePoid();
-						}
-						else if (pTemp.calculIndicePoid()==indiceMax){ 
-							coupJouables[cmpt].joueCHaut(i);
-							cmpt++;
-						}
-						pTemp.copie(pT);
-					}
-					CJ.joueCBas(i);
-					if(CJ.estValide(pT)){
-						pTemp.Joue(CJ,false);
-						if (pTemp.calculIndicePoid()>indiceMax){ 
-							cmpt = 0;
-							coupJouables[cmpt].joueCBas(i);
-							cmpt++;
-							indiceMax =pTemp.calculIndicePoid();
-						}
-						else if (pTemp.calculIndicePoid()==indiceMax){ 
-							coupJouables[cmpt].joueCBas(i);
-							cmpt++;
-						}
-						pTemp.copie(pT);
-					}
-					CJ.joueRDroite(j);
-					if(CJ.estValide(pT)){
-						pTemp.Joue(CJ,false);
-						if (pTemp.calculIndicePoid()>indiceMax){ 
-							cmpt = 0;
-							coupJouables[cmpt].joueRDroite(j);
-							cmpt++;
-							indiceMax =pTemp.calculIndicePoid();
-						}
-						else if (pTemp.calculIndicePoid()==indiceMax){ 
-							coupJouables[cmpt].joueRDroite(j);
-							cmpt++;
-						}
-						pTemp.copie(pT);
-					}
-					CJ.joueRGauche(j);
-					if(CJ.estValide(pT)){
-						pTemp.Joue(CJ,false);
-						if (pTemp.calculIndicePoid()>indiceMax){ 
-							cmpt = 0;
-							coupJouables[cmpt].joueRGauche(j);
-							cmpt++;
-							indiceMax =pTemp.calculIndicePoid();
-						}
-						else if (pTemp.calculIndicePoid()==indiceMax){ 
-							coupJouables[cmpt].joueRGauche(j);
-							cmpt++;
-						}
-						pTemp.copie(pT);
-					}
+		for(CoupJouable CJ : list){
+			pTemp.Joue(CJ,false);
+			if (pTemp.calculIndicePoid() >= indiceMax){ 
+				if (pTemp.calculIndicePoid() > indiceMax){
+					cmpt = 0;
+					indiceMax = pTemp.calculIndicePoid();
 				}
+				if(CJ.pDep.x != -1)
+					coupJouables[cmpt++].joueCase(CJ.pDep,CJ.pArr);
+				else if (CJ.sens == false && CJ.colonne != -1)
+					coupJouables[cmpt++].joueCBas(CJ.colonne);
+				else if (CJ.sens == false && CJ.rangee != -1)
+					coupJouables[cmpt++].joueRGauche(CJ.rangee);
+				else if (CJ.sens == true && CJ.colonne != -1)
+					coupJouables[cmpt++].joueCHaut(CJ.colonne);
+				else if (CJ.sens == true && CJ.rangee != -1)
+					coupJouables[cmpt++].joueRDroite(CJ.rangee);
 			}
+			pTemp.copie(pT);
 		}
+
 		Random r = new Random();
 		if (cmpt == 1)
-			CJ = coupJouables[0];
+			coupJouable = coupJouables[0];
 		else
-			CJ = coupJouables[r.nextInt(cmpt-1)];
-		return CJ;
+			coupJouable = coupJouables[r.nextInt(cmpt-1)];
+		return coupJouable;
 	}
 	
-	/*
-	if(k == 0){
-								System.out.println("Bille Gauche 		x : " + i + "	y : " + j + "	valeur = " + tmp);
-							}
-							else if(k == 1){
-								System.out.println("Bille Droite 		x : " + i + "	y : " + j + "	valeur = " + tmp);
-							}
-							else if(k == 2){
-								System.out.println("Bille Diagonal 		x : " + i + "	y : " + j + "	valeur = " + tmp);
-							}
-							else if(k == 3){
-								System.out.println("Colonne Haut		x : " + i + "		valeur = " + tmp);
-							}
-							else if(k == 4){
-								System.out.println("Colonne Bas		x : " + i + "		valeur = " + tmp);
-							}
-							else if(k == 5){
-								System.out.println("Ligne Droite		y : " + j + "		valeur = " + tmp);
-							}
-							else if(k == 6){
-								System.out.println("Ligne Gauche		y : " + j + "		valeur = " + tmp);
-							}
-	*/
+
 	/************************************* IA Difficile *************************************/
 	
 	public CoupJouable hard(Plateau pT, int profondeur){
 		this.isMax = true;
-		int alpha = -10000;
-		int beta = 10000;
+		int alpha = Integer.MIN_VALUE;
+		int beta = Integer.MAX_VALUE;
 		CoupJouable CJmax=new CoupJouable();
 		int tmp, max = -100000;
 		Plateau pTemp = new Plateau();
@@ -364,10 +149,8 @@ public class IA {
 		list = pT.listeCoupsPossibles();
 		for(CoupJouable CJ : list){
 			pTemp.Joue(CJ,false);
-			/*if(faireAlpha)
-				tmp = alphaBeta(pTemp, alpha, beta, profondeur-1);
-			else*/
-				tmp = Min(pTemp, profondeur);
+			tmp = alphaBetaMin(pTemp, alpha, beta, profondeur-1);
+			//tmp = Min(pTemp, profondeur);
 			if(tmp > max){
 				max = tmp;
 				CJmax.copie(CJ);
@@ -422,7 +205,6 @@ public class IA {
 	}
 	private int eval(Plateau pT, boolean max){
 		int res = 0;
-		//System.out.println(" Poids blanc : " + poidsB(pT) + " Poids Marron : " + poidsM(pT));
 		if((!pT.jBlancjoue() && max) || (pT.jBlancjoue() && !max)){
 			res = poidsM(pT) - poidsB(pT); 
 		}
@@ -487,43 +269,51 @@ public class IA {
 		}
 		return mat;
 	}
-	// alpha est toujours inférieur à beta 
-	private int alphaBeta(Plateau pT, int A, int B, int profondeur){
-		this.isMax = !isMax;
-		int val;
-		Plateau pTemp= new Plateau();
-		pTemp.copie(pT);
+	
+	private int alphaBetaMax(Plateau pT, int Alpha, int Beta, int profondeur){
+		this.isMax = true;
 		if(profondeur == 0 || partieFinie(pT))
 			return eval(pT, isMax);
-		else{
-			LinkedList<CoupJouable> list = new<CoupJouable> LinkedList();
-			list = pT.listeCoupsPossibles();
-			if(!isMax){
-				val = 100000;
-				for(CoupJouable CJ : list){
-					pTemp.Joue(CJ,false);
-					val = minimum(val, alphaBeta(pTemp, A, B, profondeur-1));
-					pTemp.copie(pT);
-				}
-				if(A >= val) // coupure alpha 
-					return val;
-				B = minimum(B, val);
-				
-			}
-			else{
-				val = -100000;
-				for(CoupJouable CJ : list){
-					pTemp.Joue(CJ,false);
-					val = maximum(val, alphaBeta(pTemp, A, B ,profondeur-1));
-					pTemp.copie(pT);
-				}
-				if(val >= B) // coupure beta 
-					return val;
-				A = maximum(A, val);
-			}
+		int max, tmp;
+		Plateau pTemp= new Plateau();
+		pTemp.copie(pT);
+		
+		LinkedList<CoupJouable> list = new<CoupJouable> LinkedList();
+		list = pT.listeCoupsPossibles();
+		for(CoupJouable CJ : list){
+			pTemp.Joue(CJ,false);
+			tmp = alphaBetaMin(pTemp, Alpha, Beta, profondeur-1);
+			if(tmp > Alpha)
+				Alpha = tmp;
+			if (Alpha >= Beta)
+				return Alpha;
+			pTemp.copie(pT);
 		}
-		return val;
+		return Alpha;
 	}
+	
+	private int alphaBetaMin(Plateau pT, int Alpha, int Beta, int profondeur){
+		this.isMax = false;
+		if(profondeur == 0 || partieFinie(pT))
+			return eval(pT, isMax);
+		int min, tmp;
+		Plateau pTemp= new Plateau();
+		pTemp.copie(pT);
+		
+		LinkedList<CoupJouable> list = new<CoupJouable> LinkedList();
+		list = pT.listeCoupsPossibles();
+		for(CoupJouable CJ : list){
+			pTemp.Joue(CJ,false);
+			tmp = alphaBetaMax(pTemp, Alpha, Beta, profondeur-1);
+			if(tmp < Beta)
+				Beta = tmp;
+			if (Alpha >= Beta)
+				return Beta;
+			pTemp.copie(pT);
+		}
+		return Beta;
+	}
+	
 	private int minimum(int A, int B){
 		if(A<B)
 			return A;

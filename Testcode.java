@@ -21,23 +21,23 @@ public class Testcode {
 		int ia1 = 0 , ia2 = 0;
 		IA bot = new IA();
 		CoupJouable CJ=new CoupJouable();
-		int nbPartie = 10000;
-		int nbTour = 300;
-		while(ia1 != nbPartie && ia2 != nbPartie && plateau.position < nbTour*2){
+		int nbPartie = 3;
+		int nbTour = 200;
+		while(ia1 != nbPartie && ia2 != nbPartie ){
 			/*//*********** VERSION AVEC AFFICHAGE ***********
 			System.out.println();
 			System.out.println("Tour " + (plateau.position/2) + " : ");
 			System.out.println();
 			//*********** JOUEUR 1 ***********
 			System.out.println("Joueur 1 (pions 2) :");
-			CJ = bot.niveau1(plateau);
+			CJ = bot.hard(plateau,4);
 			plateau.Joue(CJ,false);
 			plateau.afficheMatrice();
 
 			System.out.println();
 			//*********** JOUEUR 2 ***********
 			System.out.println("Joueur 2 (pions 1) :");
-			CJ = bot.hard(plateau,2);
+			CJ = bot.niveau0(plateau);
 			plateau.Joue(CJ,false);
 			plateau.afficheMatrice();
 			
@@ -45,28 +45,29 @@ public class Testcode {
 			*/
 			//*********** VERSION SANS AFFICHAGE ***********
 			//*********** JOUEUR 1 ***********
-			CJ = bot.niveau0(plateau);
+			CJ = bot.hard(plateau,5);
 			plateau.Joue(CJ,false);
 			//*********** JOUEUR 2 ***********
-			CJ = bot.niveau0(plateau);
+			CJ = bot.hard(plateau,3);
 			plateau.Joue(CJ,false);
-			
 			//*********** Test Fin Partie ***********
 			if (plateau.nbMarronSortis() >= 3){
 				ia2++;
 				plateau.init_2_joueurs();
-				System.out.println("Score :");
-				System.out.println("(2) Premier joueur   " + ia2 + " - " + ia1 + "   Deuxieme joueur (1)");
+				//System.out.println("Score :");
+				//System.out.println("(2) Premier joueur   " + ia2 + " - " + ia1 + "   Deuxieme joueur (1)");
 			}
 				
 			if (plateau.nbBlancSortis() >= 3){
 				ia1++;
 				plateau.init_2_joueurs();
-				System.out.println("Score :");
-				System.out.println("(2) Premier joueur   " + ia2 + " - " + ia1 + "   Deuxieme joueur (1)");
+				//System.out.println("Score :");
+				//System.out.println("(2) Premier joueur   " + ia2 + " - " + ia1 + "   Deuxieme joueur (1)");
 			}
+			if(plateau.position > nbTour*2)
+				plateau.init_2_joueurs();
 			
 		}
-		System.out.println(" Joueur 1 gagne a " + (float) ia2/(ia2+ia1) + " % du temps");
+		System.out.println(" Joueur 1 gagne a " + (float) 100*ia2/(ia2+ia1) + " % du temps");
 	}
 }

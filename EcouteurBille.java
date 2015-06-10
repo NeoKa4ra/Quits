@@ -4,18 +4,18 @@ import javax.swing.*;
 
 import java.awt.event.*;
 
-class EcouteurBille implements MouseListener {
+class EcouteurBille implements MouseListener{
     
     PlateauGraphique plateau;
 
-    // Ecouteur d'action a besoin de connaitre les donnees pour effectuer la
-    // selection!
+    
     public EcouteurBille(PlateauGraphique plateau) {
     	this.plateau=plateau;
 
     }
 
     public void mousePressed(MouseEvent e) {
+     
       int x=e.getX();
       int y=e.getY();
        
@@ -25,7 +25,8 @@ class EcouteurBille implements MouseListener {
     	  plateau.selectionBille=true;
     	  plateau.depart=p;
       }
-      
+      plateau.coupPossible=(plateau.matrice.jBlanc && plateau.matrice.echiquier[plateau.depart.x][plateau.depart.y].estBlanc()) || (!plateau.matrice.jBlanc && plateau.matrice.echiquier[plateau.depart.x][plateau.depart.y].estMarron());
+      plateau.repaint();
     }
 
     // Il faut aussi une implementation pour les autres methodes de l'interface

@@ -24,7 +24,6 @@ public class EcouteurDeFichier implements ActionListener {
 			//appel d'une fonction de joris du genre recupere le nom du fichier et dans ecouteur debouton2 quand on appuie sur ok, la il faut charger le fichier
 			
 			cp.fichierSelectionne=(String) i.next();
-			System.out.println("le fichier selectionne :"  +cp.fichierSelectionne);
 	}
 	
 	

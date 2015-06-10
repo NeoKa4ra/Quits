@@ -10,14 +10,17 @@ public class Options extends JDialog {
 	Moteur m;
 	JComboBox j1;
 	JComboBox j2;
+	int itemj1, itemj2;
 	
-	
-	Options(JFrame parent, String title, boolean modal,Moteur m, PlateauGraphique p, int i){
+	Options(JFrame parent, String title, boolean modal,Moteur m, PlateauGraphique p, int i, int itemj1, int itemj2){
 		
 		
 		super(parent, title, modal);
-		//setUndecorated(true);
+		setUndecorated(true);
 		niveau=i;
+		this.itemj1=itemj1;
+		this.itemj2=itemj2;
+		
 		listeDifficulte = new JRadioButton [4];
 		listeDifficulte [0]=new JRadioButton(" Joueur Vs Joueur ");
 		listeDifficulte [1]=new JRadioButton(" Joueur Vs Ordi (Facile) ");
@@ -61,16 +64,16 @@ public class Options extends JDialog {
 	    j2.addItem("Noir");
 	    j2.addItem("Blanc");
 	    
-	    JLabel pionLabel1 = new JLabel("Joueur 1:");
-	    JLabel pionLabel2 = new JLabel("Joueur 2:(Ordi)");
+	    JLabel pionLabel1 = new JLabel("Joueur 1: (Ordi)");
+	    JLabel pionLabel2 = new JLabel("Joueur 2:");
 	    choixJoueur.add(pionLabel1);
 	    choixJoueur.add(j1);
 	    choixJoueur.add(pionLabel2);
 	    choixJoueur.add(j2);
 		
 		
-		j1.setSelectedIndex(0);
-		j2.setSelectedIndex(1);
+		j1.setSelectedIndex(itemj1);
+		j2.setSelectedIndex(itemj2);
 		
 		
 		setLayout(new BorderLayout());

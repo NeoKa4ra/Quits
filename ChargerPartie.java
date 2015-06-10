@@ -19,7 +19,7 @@ public class ChargerPartie extends JDialog{
 		fichierSelectionne="riendutoutpourlinstant";
 		this.sauvegarde=sauvegarde;
 		taille = sauvegarde.listFichier.size();
-		System.out.println(taille);
+		
 		Iterator i = sauvegarde.listFichier.iterator();
 		
 		
@@ -51,7 +51,7 @@ public class ChargerPartie extends JDialog{
 		charger.addActionListener(new EcouteurDeBouton2(this,sauvegarde,p));
 		
 		panbouton.add(supp);
-		panbouton.add(renommer);
+		panbouton.add(new JLabel());
 		panbouton.add(annuler);
 		panbouton.add(charger);
 		

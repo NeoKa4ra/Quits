@@ -16,6 +16,8 @@ public class PlateauGraphique extends JComponent{
 	Shape [] listeCase;
 	Shape [] listeFleche;
 	Point [] listeCentre;
+	LinkedList <CoupJouable> listeColonne;
+	LinkedList <CoupJouable> listeRangee;
 	Point depart1;
 	Point depart;
 	Point arrivee;
@@ -33,11 +35,18 @@ public class PlateauGraphique extends JComponent{
 	boolean debut;
 	boolean couleurInverse;
 	boolean coupdepouce;
+	boolean coupPossible;
 	Etats j1;
 	Etats j2;
+	int itemj1, itemj2;
+	
+	int [] listeFlecheBlanc;
 	
 	PlateauGraphique(Plateau matrice,Moteur m,Etats j1, Etats j2){
-
+		
+		listeFlecheBlanc = new int [20];
+		itemj1=0;
+		itemj2=1;
 		this.j1=j1;
 		this.j2=j2;
 		couleurInverse=false;
@@ -48,6 +57,8 @@ public class PlateauGraphique extends JComponent{
 		listeCase = new Shape[25];
 		listeCentre = new Point[25];
 		listeFleche = new Shape[20];
+		listeColonne = new LinkedList();
+		listeRangee = new LinkedList();
 		tailleCase=0;
 		depart= new Point();
 		depart1= new Point();
@@ -56,6 +67,8 @@ public class PlateauGraphique extends JComponent{
 		arrivee= new Point();
 		arrivee.x=-1;
 		arrivee.y=-1;
+		coupPossible=false;
+		
 		if(!debut){
 			
 		}
@@ -71,17 +84,16 @@ public class PlateauGraphique extends JComponent{
 		try { 
 			caseG=ImageIO.read(new File("case_bois.png")); 
 			caseG1=ImageIO.read(new File("case.png")); 
-			img=ImageIO.read(new File("quits-image.jpg")); 
 			bb=ImageIO.read(new File("Boule-Blanche.png")); 
 			bn=ImageIO.read(new File("Boule-Noire.png")); 
-			fd=ImageIO.read(new File("haut.png"));
-			fh=ImageIO.read(new File("droite.png"));
-		    fb=ImageIO.read(new File("bas.png"));
-		    fg=ImageIO.read(new File("gauche.png"));
-		    fh2=ImageIO.read(new File("hautRouge.png"));
-			fd2=ImageIO.read(new File("droiteRouge.png"));
-		    fb2=ImageIO.read(new File("basRouge.png"));
-		    fg2=ImageIO.read(new File("gaucheRouge.png"));
+			fd=ImageIO.read(new File("HautDroiteOff.png"));
+			fh=ImageIO.read(new File("HautGaucheOff.png"));
+		    fb=ImageIO.read(new File("BasDroiteOff.png"));
+		    fg=ImageIO.read(new File("BasGaucheOff.png"));
+		    fh2=ImageIO.read(new File("HautGauche.png"));
+			fd2=ImageIO.read(new File("HautDroite.png"));
+		    fb2=ImageIO.read(new File("BasDroite.png"));
+		    fg2=ImageIO.read(new File("BasGauche.png"));
 		    plateau_ombre=ImageIO.read(new File("plateau_ombre.png"));
 		} 
 		catch (IOException e) {
@@ -126,9 +138,70 @@ public class PlateauGraphique extends JComponent{
 		
 	}
 
-	public void paintComponent(Graphics g) {
-	       
+	
+	
+	public void deplacementRangeeColonne(){
 		
+		LinkedList<CoupJouable> list = matrice.listeCoupsPossibles();
+		CoupJouable cj;
+		Iterator <CoupJouable> it = list.iterator();
+		Iterator <CoupJouable> it1 = listeColonne.iterator();
+		Iterator <CoupJouable> it2 = listeRangee.iterator();
+		
+		
+		
+		int i=0;
+		while(it.hasNext()){
+			cj=it.next();
+			if(cj.colonne!=-1){
+	        	if(cj.sens){
+	        		listeFlecheBlanc[i]=colFleche(cj.colonne,true);	 
+	        		i++;
+	        	}else{
+	        		listeFlecheBlanc[i]=colFleche(cj.colonne,false);
+	        		i++;
+		     
+	        	}
+			}
+			if(cj.rangee!=-1){
+				if(cj.sens){
+					listeFlecheBlanc[i]=rangFleche(cj.rangee,true);
+	        		i++;
+		        	
+		        
+	        	}else{
+	        		listeFlecheBlanc[i]=rangFleche(cj.rangee,false);
+	        		i++;
+		     
+	        	}
+			}
+			
+		}
+		
+		
+		for(int j=i;j<20;j++){
+			listeFlecheBlanc[j]=-1;		
+		}
+		
+
+	}
+	
+	
+	public boolean estDanslisteFlecheBlanc(int x){
+		int i=0;
+		while(i<20 && x!=listeFlecheBlanc[i]){			
+			i++;
+		}
+		return i!=20;
+	}
+	
+	public void paintComponent(Graphics g) {
+		//matrice.afficheMatrice();
+		//System.out.println();
+	       
+		// servira a affciher les fleches cliquables, maj des coups colonnes et rangees jouables;
+		deplacementRangeeColonne();
+	
 		// Graphics 2D est le vrai type de l'objet passe en parametre
 		// Le cast permet d'avoir acces a un peu plus de primitives de dessin
 		drawable = (Graphics2D) g;
@@ -199,7 +272,7 @@ public class PlateauGraphique extends JComponent{
 		//drawable.drawImage(plateau_ombre,margeX/2,margeY/2,d*5,d*5,null);
 		
 		///// DESSINER LE PLATEAU ///////
-		/****1ere case****/
+		////// 1ere case  ////
 		int [] init_polX= {w/2+margeX/2,w/2+demiD+margeX/2,w/2+margeX/2,w/2-demiD+margeX/2};
 		int [] init_polY= {h+margeY/2,h-demiD+margeY/2,h-d+margeY/2,h-demiD+margeY/2};
 		
@@ -225,20 +298,21 @@ public class PlateauGraphique extends JComponent{
 				}
 		}
 		
-		if(matrice.estJouableCBas(0, matrice.jBlanc))
+
+    	if(estDanslisteFlecheBlanc(0) && !debut)
 			drawable.drawImage(fb,listeCentre[0].x+(3*demiD)/4,listeCentre[0].y+(demiD)/2,tailleCase/3,tailleCase/3,null);
-    	if(matrice.estJouableRGauche(0, matrice.jBlanc))
-    		drawable.drawImage(fg,listeCentre[0].x-demiD,listeCentre[0].y+demiD-(demiD/3),tailleCase/3,tailleCase/3,null);
+    	if(estDanslisteFlecheBlanc(5) && !debut)
+    		drawable.drawImage(fg,listeCentre[0].x-demiD,listeCentre[0].y+demiD/2,tailleCase/3,tailleCase/3,null);
     	
 	    	listeFleche[0]=new Rectangle(listeCentre[0].x+(3*demiD)/4,listeCentre[0].y+demiD/2,tailleCase/3,tailleCase/3);
-	    	listeFleche[5]=new Rectangle(listeCentre[0].x-demiD,listeCentre[0].y+demiD-(demiD/3),tailleCase/3,tailleCase/3);
+	    	listeFleche[5]=new Rectangle(listeCentre[0].x-demiD,listeCentre[0].y+demiD/2,tailleCase/3,tailleCase/3);
 
 	    	
 	    	if(clicfleche==0){
         		drawable.drawImage(fb2,listeCentre[0].x+(3*demiD)/4,listeCentre[0].y+demiD/2,tailleCase/3,tailleCase/3,null);	
 	    	}
         	if(clicfleche==5){
-            	drawable.drawImage(fg2,listeCentre[0].x-demiD,listeCentre[0].y+demiD-(demiD/3),tailleCase/3,tailleCase/3,null);
+            	drawable.drawImage(fg2,listeCentre[0].x-demiD,listeCentre[0].y+demiD/2,tailleCase/3,tailleCase/3,null);
         	}
 	    	
 	    ///////////////////////////////////////
@@ -297,7 +371,85 @@ public class PlateauGraphique extends JComponent{
         			drawable.drawImage(caseG1 ,(int) (polX[0]-demiD),(int) (polY[0]-diagonale),d,d,null);
         		}
         		
+        		// afficher les cases où on peut déplacer la bille   FAUT ENCORE VERIFIER SI ILS NE SONT PAS SUR LES BORDS
+        		if(coupPossible){
         			
+        			int X,Y;
+        			Polygon p1,p2,p3;
+        			p1=null;
+        			p2=null;
+        			p3=null;
+        			
+        			X=depart.x;
+    				Y=depart.y;
+        			if(matrice.echiquier[depart.x][depart.y].contenu==2){ //noir
+        	
+	        			if(X-1>=0 && X<=24 && Y>=0 && Y<=4  && matrice.echiquier[X-1][Y].contenu==0){
+	        				p1=(Polygon) listeCase[(X-1)*5+Y];
+	        				drawable.setPaint(Color.green);
+	    	        		drawable.fillPolygon(p1);
+	    	        		drawable.setPaint(Color.black);
+	    	        		drawable.setStroke(new BasicStroke( 2.0f ));
+	    	        		drawable.drawPolygon(p1);
+
+	        			}
+	        		
+	        			if(X>=0 && X<=4 && Y-1>=0 && Y-1<=4 && matrice.echiquier[X][Y-1].contenu==0){
+	        				p2=(Polygon) listeCase[X*5+(Y-1)];
+	        				drawable.setPaint(Color.green);
+	    	        		drawable.fillPolygon(p2);
+	    	        		drawable.setPaint(Color.black);
+	    	        		drawable.setStroke(new BasicStroke( 2.0f ));
+	    	        		drawable.drawPolygon(p2);
+	        			}
+	        			
+	        		
+	        			if(X-1>=0 && X-1<=4 &&Y-1>=0 && Y-1<=4 && matrice.echiquier[X-1][Y-1].contenu==0){
+	        				
+	        				p3=(Polygon) listeCase[(X-1)*5+(Y-1)];
+	        				drawable.setPaint(Color.green);
+	    	        		drawable.fillPolygon(p3);
+	    	        		drawable.setPaint(Color.black);
+	    	        		drawable.setStroke(new BasicStroke( 2.0f ));
+	    	        		drawable.drawPolygon(p3);
+        				}
+        			}
+        			
+        			if(matrice.echiquier[depart.x][depart.y].contenu==1){ //blanc
+        		
+        				if(X+1>=0 && X+1<=4 && Y>=0 && Y<=4  && matrice.echiquier[X+1][Y].contenu==0){
+        					p1=(Polygon) listeCase[(X+1)*5+Y];
+        					drawable.setPaint(Color.green);
+	    	        		drawable.fillPolygon(p1);
+	    	        		drawable.setPaint(Color.black);
+	    	        		drawable.setStroke(new BasicStroke( 2.0f ));
+	    	        		drawable.drawPolygon(p1);
+        				}
+        				
+        				
+	        			if(X>=0 && X<=4 && Y+1>=0 && Y+1<=4 && matrice.echiquier[X][Y+1].contenu==0){
+	        				p2=(Polygon) listeCase[(X*5+(Y+1))];
+	        				drawable.setPaint(Color.green);
+	    	        		drawable.fillPolygon(p2);
+	    	        		drawable.setPaint(Color.black);
+	    	        		drawable.setStroke(new BasicStroke( 2.0f ));
+	    	        		drawable.drawPolygon(p2);
+	        			}
+	        			
+	        	
+	        			if(X+1>=0 && X+1<=4 && Y+1>=0 && Y+1<=4  && matrice.echiquier[X+1][Y+1].contenu==0) {
+	        				p3=(Polygon) listeCase[(X+1)*5+(Y+1)];
+	        				drawable.setPaint(Color.green);
+	    	        		drawable.fillPolygon(p3);
+	    	        		drawable.setPaint(Color.black);
+	    	        		drawable.setStroke(new BasicStroke( 2.0f ));
+	    	        		drawable.drawPolygon(p3);
+	        			}
+        			}
+        			
+        
+        		}
+        		
         		
         		if(!debut){
 		            //dessiner les billes
@@ -314,25 +466,33 @@ public class PlateauGraphique extends JComponent{
         		
         		
         		///////////dessiner les fleches/////////////////
-
-	            if(j==4  && matrice.estJouableCHaut(i, matrice.jBlanc)){ // vers le haut
-	            	drawable.drawImage(fh,listeCentre[c].x-demiD,listeCentre[c].y-demiD,tailleCase/3,tailleCase/3,null);
+        	
+	            if(j==4  /*&& matrice.estJouableCHaut(i, matrice.jBlanc)*/){ // vers le haut
+	            	
+	            	
 	            	if(f==5)
 	            		f++;	
 	            	listeFleche[f]=new Rectangle(listeCentre[c].x-demiD,listeCentre[c].y-demiD,tailleCase/3,tailleCase/3);
 	            	
+	            	if(estDanslisteFlecheBlanc(f) && !debut){
+	            		drawable.drawImage(fh,listeCentre[c].x-demiD,listeCentre[c].y-demiD,tailleCase/3,tailleCase/3,null);
+	            	}
 	            	if(clicfleche==f){
 	            		drawable.drawImage(fh2,listeCentre[c].x-demiD,listeCentre[c].y-demiD,tailleCase/3,tailleCase/3,null);
 	            	}
 	            	f++;	
 	            	
 	            }
-	            if(i==4 && matrice.estJouableRDroite(j, matrice.jBlanc)){ // vers la droite
-	            	drawable.drawImage(fd,listeCentre[c].x+demiD/2,listeCentre[c].y-demiD,tailleCase/3,tailleCase/3,null);
+	            if(i==4 /*&& matrice.estJouableRDroite(j, matrice.jBlanc)*/){ // vers la droite
+	            	
+	            	
 	            	if(f==5)
 	            		f++;
 	            	listeFleche[f]=new Rectangle(listeCentre[c].x+demiD/2,listeCentre[c].y-demiD,tailleCase/3,tailleCase/3);
 	            	
+	            	if(estDanslisteFlecheBlanc(f) && !debut){
+	            			drawable.drawImage(fd,listeCentre[c].x+demiD/2,listeCentre[c].y-demiD,tailleCase/3,tailleCase/3,null);
+	            	}	
 	            	if(clicfleche==f){
 	            		drawable.drawImage(fd2,listeCentre[c].x+demiD/2,listeCentre[c].y-demiD,tailleCase/3,tailleCase/3,null);
 	            	
@@ -340,29 +500,40 @@ public class PlateauGraphique extends JComponent{
 	            	f++;
 
 	            }
-	            if(j==0 && matrice.estJouableCBas(i, matrice.jBlanc)){ // vers le bas
-	            	drawable.drawImage(fb,listeCentre[c].x+(3*demiD)/4,listeCentre[c].y+demiD/2,tailleCase/3,tailleCase/3,null);
+	            if(j==0 /*&& matrice.estJouableCBas(i, matrice.jBlanc)*/){ // vers le bas
+	            	
+	            	
 	            	if(f==5)
 	            		f++;
 	            	listeFleche[f]=new Rectangle(listeCentre[c].x+(3*demiD)/4,listeCentre[c].y+demiD/2,tailleCase/3,tailleCase/3);
 	            	
+	            	if(estDanslisteFlecheBlanc(f) && !debut){
+	            		drawable.drawImage(fb,listeCentre[c].x+(3*demiD)/4,listeCentre[c].y+demiD/2,tailleCase/3,tailleCase/3,null);
+	            	}
 	            	if(clicfleche==f){	    
 	            		drawable.drawImage(fb2,listeCentre[c].x+(3*demiD)/4,listeCentre[c].y+demiD/2,tailleCase/3,tailleCase/3,null);
 	            	}
 	            	f++;
 
 	            }
-	            if(i==0 && matrice.estJouableRGauche(j, matrice.jBlanc)){ // vers la gauche
-	            	drawable.drawImage(fg,listeCentre[c].x-demiD,listeCentre[c].y+demiD-(demiD/3),tailleCase/3,tailleCase/3,null);
+	            if(i==0 /*&& matrice.estJouableRGauche(j, matrice.jBlanc)*/){ // vers la gauche
+	            	
+	            	
 	            	if(f==5)
 	            		f++;
 	            	listeFleche[f]=new Rectangle(listeCentre[c].x-demiD,listeCentre[c].y+demiD-(demiD/3),tailleCase/3,tailleCase/3);
+	            	
+	            	if(estDanslisteFlecheBlanc(f) && !debut){
+	            		drawable.drawImage(fg,listeCentre[c].x-demiD,listeCentre[c].y+demiD-(demiD/3),tailleCase/3,tailleCase/3,null);
+	            	}
 	            	
 	            	if(clicfleche==f){
 	            		drawable.drawImage(fg2,listeCentre[c].x-demiD,listeCentre[c].y+demiD-(demiD/3),tailleCase/3,tailleCase/3,null);
 	            	}
 	            	f++;
 	            }
+	            
+        	
 	            /////////////////////////////	          
         		c++;
         	}//fin if i!=0 et j!=0
@@ -376,13 +547,13 @@ public class PlateauGraphique extends JComponent{
         ///////////////////////////////////////////////////////////////////////////////////
         
         
-        ///// AFFICHER LES COUPS JOUABLES ////
+        ///// AFFICHER UNE SUGGESTION DE COUP ////
         if(coupdepouce && !debut){ // mettre en evidence la liste des coups jouables
         	Color v= new Color(0,250,0);//new Color(165, 38, 10);
         	drawable.setStroke(new BasicStroke( 2.0f ));
 			IA IA=new IA();
         	CoupJouable cj;
-        	cj=IA.normal(matrice);	  
+        	cj=IA.hard(matrice,5);	  
 			
 			Polygon p;
 				if(cj.pDep.x!=-1 && cj.pDep.y!=-1 && cj.pArr.x!=-1 && cj.pArr.x!=-1){
@@ -450,8 +621,33 @@ public class PlateauGraphique extends JComponent{
 			
         }//fin if coupdepouce
    
-	
-	
+        
+        // Remplit en blanc les fleches qui ne sont pas cliquables
+        // avec la liste des colonnes et rangees, on calcul avec colFleche et rangFleche les numeros de fleches correspondant et on remplit le Shape en blanc
+        
+       /* if(!debut){
+	       
+	        //remplir en blanc toutes les fleches qui ne font pas partie des listeColonnes et listeRangee
+
+	        for(int x=0;x<20;x++){
+	        	if(!estDanslisteFlecheBlanc(x)){
+		        	Rectangle r = (Rectangle) listeFleche[x];
+		        	drawable.fillRect(r.x,r.y,r.width,r.height);
+	        	}
+	        }
+	       
+        }  */ 
+	        //vides les listes des coup jouables
+	        for(i=0;i<listeColonne.size();i++){
+	        	listeColonne.remove(i);
+	        }
+	        for(i=0;i<listeRangee.size();i++){
+	        	listeRangee.remove(i);
+	        }
+	        
+	      
+        
+        
  }//fin paint component
         
         
